@@ -1,0 +1,561 @@
+==1013539== Memcheck, a memory error detector
+==1013539== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==1013539== Using Valgrind-3.18.1-42b08ed5bd-20211015 and LibVEX; rerun with -h for copyright info
+==1013539== Command: ./minishell
+==1013539== Parent PID: 1011365
+==1013539== 
+--1013539-- 
+--1013539-- Valgrind options:
+--1013539--    --suppressions=./rl.supp
+--1013539--    --leak-check=full
+--1013539--    --show-leak-kinds=all
+--1013539--    --track-origins=yes
+--1013539--    --track-fds=yes
+--1013539--    --verbose
+--1013539--    --log-file=valgrind-out.txt
+--1013539-- Contents of /proc/version:
+--1013539--   Linux version 5.15.0-134-generic (buildd@lcy02-amd64-081) (gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #145-Ubuntu SMP Wed Feb 12 20:08:39 UTC 2025
+--1013539-- 
+--1013539-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand-rdseed
+--1013539-- Page sizes: currently 4096, max supported 4096
+--1013539-- Valgrind library directory: /usr/libexec/valgrind
+--1013539-- Reading syms from /home/mfedorys/core/minishell/minishell
+--1013539-- Reading syms from /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+--1013539--   Considering /usr/lib/debug/.build-id/e4/de036b19e4768e7591b596c4be9f9015f2d28a.debug ..
+--1013539--   .. build-id is valid
+--1013539-- Reading syms from /usr/libexec/valgrind/memcheck-amd64-linux
+--1013539--    object doesn't have a symbol table
+--1013539--    object doesn't have a dynamic symbol table
+--1013539-- Scheduler: using generic scheduler lock implementation.
+--1013539-- Reading suppressions file: ./rl.supp
+--1013539-- Reading suppressions file: /usr/libexec/valgrind/default.supp
+==1013539== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-1013539-by-mfedorys-on-???
+==1013539== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-1013539-by-mfedorys-on-???
+==1013539== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-1013539-by-mfedorys-on-???
+==1013539== 
+==1013539== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==1013539== don't want to do, unless you know exactly what you're doing,
+==1013539== or are doing some strange experiment):
+==1013539==   /usr/bin/vgdb --pid=1013539 ...command...
+==1013539== 
+==1013539== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==1013539==   /path/to/gdb ./minishell
+==1013539== and then give GDB the following command
+==1013539==   target remote | /usr/bin/vgdb --pid=1013539
+==1013539== --pid is optional if only one valgrind process is running
+==1013539== 
+--1013539-- REDIR: 0x402aa40 (ld-linux-x86-64.so.2:strlen) redirected to 0x580bcec2 (???)
+--1013539-- REDIR: 0x402a810 (ld-linux-x86-64.so.2:index) redirected to 0x580bcedc (???)
+--1013539-- Reading syms from /usr/libexec/valgrind/vgpreload_core-amd64-linux.so
+--1013539--    object doesn't have a symbol table
+--1013539-- Reading syms from /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
+--1013539--    object doesn't have a symbol table
+==1013539== WARNING: new redirection conflicts with existing -- ignoring it
+--1013539--     old: 0x0402aa40 (strlen              ) R-> (0000.0) 0x580bcec2 ???
+--1013539--     new: 0x0402aa40 (strlen              ) R-> (2007.0) 0x0484ee30 strlen
+--1013539-- REDIR: 0x4027220 (ld-linux-x86-64.so.2:strcmp) redirected to 0x484fcd0 (strcmp)
+--1013539-- REDIR: 0x402afa0 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4853840 (mempcpy)
+--1013539-- Reading syms from /usr/lib/x86_64-linux-gnu/libreadline.so.8.1
+--1013539--    object doesn't have a symbol table
+--1013539-- Reading syms from /usr/lib/x86_64-linux-gnu/libc.so.6
+--1013539--   Considering /usr/lib/debug/.build-id/cd/410b710f0f094c6832edd95931006d883af48e.debug ..
+--1013539--   .. build-id is valid
+==1013539== WARNING: new redirection conflicts with existing -- ignoring it
+--1013539--     old: 0x0496ac60 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--1013539--     new: 0x0496ac60 (memalign            ) R-> (1017.0) 0x0484e050 aligned_alloc
+==1013539== WARNING: new redirection conflicts with existing -- ignoring it
+--1013539--     old: 0x0496ac60 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--1013539--     new: 0x0496ac60 (memalign            ) R-> (1017.0) 0x0484e020 aligned_alloc
+==1013539== WARNING: new redirection conflicts with existing -- ignoring it
+--1013539--     old: 0x0496ac60 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--1013539--     new: 0x0496ac60 (memalign            ) R-> (1017.0) 0x0484e050 aligned_alloc
+==1013539== WARNING: new redirection conflicts with existing -- ignoring it
+--1013539--     old: 0x0496ac60 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--1013539--     new: 0x0496ac60 (memalign            ) R-> (1017.0) 0x0484e020 aligned_alloc
+--1013539-- Reading syms from /usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+--1013539--    object doesn't have a symbol table
+--1013539-- REDIR: 0x496d720 (libc.so.6:strnlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496d9e0 (libc.so.6:strpbrk) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496d2e0 (libc.so.6:strcmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x498bcd0 (libc.so.6:wcsnlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496e6d0 (libc.so.6:memset) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x498a540 (libc.so.6:wcslen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496ec10 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x498a370 (libc.so.6:wcschr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496d260 (libc.so.6:index) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496d960 (libc.so.6:rindex) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496e5a0 (libc.so.6:memmove) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+==1013539== Preferring higher priority redirection:
+--1013539--     old: 0x04a657c0 (__memcpy_avx_unalign) R-> (2018.0) 0x04850f90 __memcpy_avx_unaligned_erms
+--1013539--     new: 0x04a657c0 (__memcpy_avx_unalign) R-> (2018.1) 0x04852880 memmove
+--1013539-- REDIR: 0x498a3f0 (libc.so.6:wcscmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496e9e0 (libc.so.6:stpncpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x498a9b0 (libc.so.6:wmemchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496d830 (libc.so.6:strncmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496ea70 (libc.so.6:strcasecmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496d420 (libc.so.6:strcspn) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x498a470 (libc.so.6:wcscpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496d1d0 (libc.so.6:strcat) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496eb60 (libc.so.6:strncasecmp_l) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496e480 (libc.so.6:bcmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x4976570 (libc.so.6:memrchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x4970010 (libc.so.6:strchrnul) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496d390 (libc.so.6:strcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496eb10 (libc.so.6:strcasecmp_l) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496d6a0 (libc.so.6:strlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496d8d0 (libc.so.6:strncpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496e950 (libc.so.6:stpcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496e3f0 (libc.so.6:memchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496db00 (libc.so.6:strspn) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496e7d0 (libc.so.6:mempcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496eac0 (libc.so.6:strncasecmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496ff80 (libc.so.6:rawmemchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496d7a0 (libc.so.6:strncat) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x49f9280 (libc.so.6:__memcpy_chk) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x496e310 (libc.so.6:strstr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--1013539-- REDIR: 0x4a62610 (libc.so.6:__strrchr_avx2) redirected to 0x484e810 (rindex)
+--1013539-- REDIR: 0x496a0a0 (libc.so.6:malloc) redirected to 0x4848820 (malloc)
+--1013539-- REDIR: 0x496a3e0 (libc.so.6:free) redirected to 0x484b210 (free)
+==1013539== Invalid read of size 1
+==1013539==    at 0x10EB18: ft_strlen (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10E69F: ft_strjoin (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x1094B0: get_prompt (main.c:72)
+==1013539==    by 0x1095F4: get_cmd_lst (main.c:105)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Block was alloc'd at
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BAFE: get_value (init_env.c:49)
+==1013539==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== Invalid read of size 1
+==1013539==    at 0x10EB18: ft_strlen (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10EA8C: ft_strlcpy (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10E6FA: ft_strjoin (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x1094B0: get_prompt (main.c:72)
+==1013539==    by 0x1095F4: get_cmd_lst (main.c:105)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Block was alloc'd at
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BAFE: get_value (init_env.c:49)
+==1013539==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== Invalid read of size 1
+==1013539==    at 0x10ED68: ft_memcpy (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10EADC: ft_strlcpy (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10E6FA: ft_strjoin (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x1094B0: get_prompt (main.c:72)
+==1013539==    by 0x1095F4: get_cmd_lst (main.c:105)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Block was alloc'd at
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BAFE: get_value (init_env.c:49)
+==1013539==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== Invalid free() / delete / delete[] / realloc()
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095F4: get_cmd_lst (main.c:105)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Block was alloc'd at
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BAFE: get_value (init_env.c:49)
+==1013539==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+--1013539-- REDIR: 0x4a627e0 (libc.so.6:__strlen_avx2) redirected to 0x484ed10 (strlen)
+--1013539-- REDIR: 0x4a657c0 (libc.so.6:__memcpy_avx_unaligned_erms) redirected to 0x4852880 (memmove)
+--1013539-- REDIR: 0x4a62400 (libc.so.6:__strchrnul_avx2) redirected to 0x4853330 (strchrnul)
+--1013539-- REDIR: 0x490a150 (libc.so.6:setenv) redirected to 0x48542d0 (setenv)
+--1013539-- REDIR: 0x4a62180 (libc.so.6:__strchr_avx2) redirected to 0x484e9f0 (index)
+--1013539-- REDIR: 0x4a5dd80 (libc.so.6:__strncmp_avx2) redirected to 0x484f3e0 (strncmp)
+--1013539-- REDIR: 0x496a740 (libc.so.6:realloc) redirected to 0x484dc50 (realloc)
+--1013539-- REDIR: 0x4a65780 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x4853440 (mempcpy)
+--1013539-- REDIR: 0x4a5d940 (libc.so.6:__strcmp_avx2) redirected to 0x484fbd0 (strcmp)
+--1013539-- REDIR: 0x496b520 (libc.so.6:calloc) redirected to 0x484d9d0 (calloc)
+--1013539-- REDIR: 0x4a62960 (libc.so.6:__strnlen_avx2) redirected to 0x484ecb0 (strnlen)
+--1013539-- REDIR: 0x4a63cb0 (libc.so.6:__strcpy_avx2) redirected to 0x484ee60 (strcpy)
+--1013539-- REDIR: 0x496dfc0 (libc.so.6:__GI_strstr) redirected to 0x4853ae0 (__strstr_sse2)
+--1013539-- REDIR: 0x4a65790 (libc.so.6:__memcpy_chk_avx_unaligned_erms) redirected to 0x4853940 (__memcpy_chk)
+--1013539-- REDIR: 0x4a65f80 (libc.so.6:__memset_avx2_unaligned_erms) redirected to 0x4852770 (memset)
+--1013539-- REDIR: 0x4a64040 (libc.so.6:__strncpy_avx2) redirected to 0x484efe0 (strncpy)
+--1013539-- REDIR: 0x4a5e2c0 (libc.so.6:__memchr_avx2) redirected to 0x484fd50 (memchr)
+--1013539-- REDIR: 0x4a649a0 (libc.so.6:__stpcpy_avx2) redirected to 0x4852130 (stpcpy)
+--1013539-- REDIR: 0x4a5f130 (libc.so.6:__strcasecmp_avx) redirected to 0x484f560 (strcasecmp)
+--1013539-- REDIR: 0x4a607b0 (libc.so.6:__strncasecmp_avx) redirected to 0x484f640 (strncasecmp)
+--1013539-- REDIR: 0x4a5ea80 (libc.so.6:__memcmp_avx2_movbe) redirected to 0x4852010 (bcmp)
+==1013559== Invalid read of size 1
+==1013559==    at 0x10EB18: ft_strlen (in /home/mfedorys/core/minishell/minishell)
+==1013559==    by 0x10E7AE: ft_strjoin3 (in /home/mfedorys/core/minishell/minishell)
+==1013559==    by 0x10CDC9: env_list_to_str_arr (env_list_to_arr.c:32)
+==1013559==    by 0x10A751: execute_commands (execute_commands.c:204)
+==1013559==    by 0x1097A3: main (main.c:155)
+==1013559==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013559==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013559==    by 0x1094E9: get_prompt (main.c:75)
+==1013559==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013559==    by 0x109785: main (main.c:151)
+==1013559==  Block was alloc'd at
+==1013559==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013559==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013559==    by 0x10BAFE: get_value (init_env.c:49)
+==1013559==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013559==    by 0x10BCF9: init_env (init_env.c:101)
+==1013559==    by 0x1093E3: init_shell (main.c:39)
+==1013559==    by 0x109726: main (main.c:142)
+==1013559== 
+==1013559== Invalid read of size 1
+==1013559==    at 0x10E884: ft_strjoin3 (in /home/mfedorys/core/minishell/minishell)
+==1013559==    by 0x10CDC9: env_list_to_str_arr (env_list_to_arr.c:32)
+==1013559==    by 0x10A751: execute_commands (execute_commands.c:204)
+==1013559==    by 0x1097A3: main (main.c:155)
+==1013559==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013559==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013559==    by 0x1094E9: get_prompt (main.c:75)
+==1013559==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013559==    by 0x109785: main (main.c:151)
+==1013559==  Block was alloc'd at
+==1013559==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013559==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013559==    by 0x10BAFE: get_value (init_env.c:49)
+==1013559==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013559==    by 0x10BCF9: init_env (init_env.c:101)
+==1013559==    by 0x1093E3: init_shell (main.c:39)
+==1013559==    by 0x109726: main (main.c:142)
+==1013559== 
+==1013559== Invalid read of size 1
+==1013559==    at 0x10E8A4: ft_strjoin3 (in /home/mfedorys/core/minishell/minishell)
+==1013559==    by 0x10CDC9: env_list_to_str_arr (env_list_to_arr.c:32)
+==1013559==    by 0x10A751: execute_commands (execute_commands.c:204)
+==1013559==    by 0x1097A3: main (main.c:155)
+==1013559==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013559==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013559==    by 0x1094E9: get_prompt (main.c:75)
+==1013559==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013559==    by 0x109785: main (main.c:151)
+==1013559==  Block was alloc'd at
+==1013559==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013559==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013559==    by 0x10BAFE: get_value (init_env.c:49)
+==1013559==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013559==    by 0x10BCF9: init_env (init_env.c:101)
+==1013559==    by 0x1093E3: init_shell (main.c:39)
+==1013559==    by 0x109726: main (main.c:142)
+==1013559== 
+==1013539== Invalid read of size 1
+==1013539==    at 0x10EB18: ft_strlen (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10E69F: ft_strjoin (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x1094B0: get_prompt (main.c:72)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Block was alloc'd at
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BAFE: get_value (init_env.c:49)
+==1013539==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== Invalid free() / delete / delete[] / realloc()
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Block was alloc'd at
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BAFE: get_value (init_env.c:49)
+==1013539==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== 
+==1013539== FILE DESCRIPTORS: 9 open (3 std) at exit.
+==1013539== Open file descriptor 5: /dev/pts/2
+==1013539==    at 0x49D9FEB: dup (syscall-template.S:120)
+==1013539==    by 0x10973D: main (main.c:144)
+==1013539== 
+==1013539== Open file descriptor 4: /dev/pts/2
+==1013539==    at 0x49D9FEB: dup (syscall-template.S:120)
+==1013539==    by 0x109730: main (main.c:143)
+==1013539== 
+==1013539== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==1013539==    <inherited from parent>
+==1013539== 
+==1013539== Open file descriptor 44: /dev/ptmx
+==1013539==    <inherited from parent>
+==1013539== 
+==1013539== Open file descriptor 43: /home/mfedorys/.config/Code/logs/20250331T110754/ptyhost.log
+==1013539==    <inherited from parent>
+==1013539== 
+==1013539== Open file descriptor 3: /home/mfedorys/core/minishell/valgrind-out.txt
+==1013539==    <inherited from parent>
+==1013539== 
+==1013539== 
+==1013539== HEAP SUMMARY:
+==1013539==     in use at exit: 213,002 bytes in 496 blocks
+==1013539==   total heap usage: 735 allocs, 242 frees, 234,099 bytes allocated
+==1013539== 
+==1013539== Searching for pointers to 496 not-freed blocks
+==1013539== Checked 251,112 bytes
+==1013539== 
+==1013539== 5 bytes in 1 blocks are still reachable in loss record 1 of 75
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10E5D9: ft_strdup (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x109DAB: parse_single_command (parse_input.c:111)
+==1013539==    by 0x109E74: parse_input (parse_input.c:132)
+==1013539==    by 0x10964B: get_cmd_lst (main.c:112)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539== 
+==1013539== 16 bytes in 1 blocks are still reachable in loss record 9 of 75
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10DE85: ft_lstnew (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BD36: init_env (init_env.c:105)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== 16 bytes in 1 blocks are still reachable in loss record 11 of 75
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10AE2A: add_arg (utils.c:46)
+==1013539==    by 0x109DBD: parse_single_command (parse_input.c:111)
+==1013539==    by 0x109E74: parse_input (parse_input.c:132)
+==1013539==    by 0x10964B: get_cmd_lst (main.c:112)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539== 
+==1013539== 56 bytes in 1 blocks are still reachable in loss record 22 of 75
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10982E: init_cmd_node (parse_input.c:20)
+==1013539==    by 0x109C9E: parse_single_command (parse_input.c:101)
+==1013539==    by 0x109E74: parse_input (parse_input.c:132)
+==1013539==    by 0x10964B: get_cmd_lst (main.c:112)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539== 
+==1013539== 82 bytes in 2 blocks are definitely lost in loss record 24 of 75
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10E6C8: ft_strjoin (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10953A: get_prompt (main.c:81)
+==1013539==    by 0x1095F4: get_cmd_lst (main.c:105)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539== 
+==1013539== 952 bytes in 66 blocks are still reachable in loss record 35 of 75
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10BA18: ft_get_key (init_env.c:25)
+==1013539==    by 0x10BBB9: parce_env (init_env.c:71)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== 1,040 bytes in 65 blocks are still reachable in loss record 44 of 75
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10DE85: ft_lstnew (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BD4B: init_env (init_env.c:107)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== 1,056 bytes in 66 blocks are still reachable in loss record 45 of 75
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10BB86: parce_env (init_env.c:68)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== 1,460 bytes in 65 blocks are still reachable in loss record 46 of 75
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BAFE: get_value (init_env.c:49)
+==1013539==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== LEAK SUMMARY:
+==1013539==    definitely lost: 82 bytes in 2 blocks
+==1013539==    indirectly lost: 0 bytes in 0 blocks
+==1013539==      possibly lost: 0 bytes in 0 blocks
+==1013539==    still reachable: 4,601 bytes in 266 blocks
+==1013539==         suppressed: 208,319 bytes in 228 blocks
+==1013539== 
+==1013539== ERROR SUMMARY: 82 errors from 7 contexts (suppressed: 0 from 0)
+==1013539== 
+==1013539== 1 errors in context 1 of 7:
+==1013539== Invalid free() / delete / delete[] / realloc()
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Block was alloc'd at
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BAFE: get_value (init_env.c:49)
+==1013539==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== 
+==1013539== 2 errors in context 2 of 7:
+==1013539== Invalid free() / delete / delete[] / realloc()
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095F4: get_cmd_lst (main.c:105)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Block was alloc'd at
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BAFE: get_value (init_env.c:49)
+==1013539==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== 
+==1013539== 9 errors in context 3 of 7:
+==1013539== Invalid read of size 1
+==1013539==    at 0x10EB18: ft_strlen (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10E69F: ft_strjoin (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x1094B0: get_prompt (main.c:72)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Block was alloc'd at
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BAFE: get_value (init_env.c:49)
+==1013539==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== 
+==1013539== 18 errors in context 4 of 7:
+==1013539== Invalid read of size 1
+==1013539==    at 0x10EB18: ft_strlen (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10E69F: ft_strjoin (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x1094B0: get_prompt (main.c:72)
+==1013539==    by 0x1095F4: get_cmd_lst (main.c:105)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Block was alloc'd at
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BAFE: get_value (init_env.c:49)
+==1013539==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== 
+==1013539== 24 errors in context 5 of 7:
+==1013539== Invalid read of size 1
+==1013539==    at 0x10ED68: ft_memcpy (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10EADC: ft_strlcpy (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10E6FA: ft_strjoin (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x1094B0: get_prompt (main.c:72)
+==1013539==    by 0x1095F4: get_cmd_lst (main.c:105)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Block was alloc'd at
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BAFE: get_value (init_env.c:49)
+==1013539==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+==1013539== 
+==1013539== 27 errors in context 6 of 7:
+==1013539== Invalid read of size 1
+==1013539==    at 0x10EB18: ft_strlen (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10EA8C: ft_strlcpy (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10E6FA: ft_strjoin (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x1094B0: get_prompt (main.c:72)
+==1013539==    by 0x1095F4: get_cmd_lst (main.c:105)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Address 0x4b22220 is 0 bytes inside a block of size 9 free'd
+==1013539==    at 0x484B27F: free (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x1094E9: get_prompt (main.c:75)
+==1013539==    by 0x1095DD: get_cmd_lst (main.c:103)
+==1013539==    by 0x109785: main (main.c:151)
+==1013539==  Block was alloc'd at
+==1013539==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==1013539==    by 0x10D849: ft_calloc (in /home/mfedorys/core/minishell/minishell)
+==1013539==    by 0x10BAFE: get_value (init_env.c:49)
+==1013539==    by 0x10BBF5: parce_env (init_env.c:74)
+==1013539==    by 0x10BCF9: init_env (init_env.c:101)
+==1013539==    by 0x1093E3: init_shell (main.c:39)
+==1013539==    by 0x109726: main (main.c:142)
+==1013539== 
+--1013539-- 
+--1013539-- used_suppression:     62 leak readline ./rl.supp:3 suppressed: 204,223 bytes in 221 blocks
+--1013539-- used_suppression:      4 leak add_history ./rl.supp:9 suppressed: 4,096 bytes in 7 blocks
+==1013539== 
+==1013539== ERROR SUMMARY: 82 errors from 7 contexts (suppressed: 0 from 0)

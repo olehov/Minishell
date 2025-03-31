@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
+/*   By: mfedorys <mfedorys@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 12:19:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/22 15:48:58 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/03/31 13:13:53 by mfedorys         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_get_key(char *env)
 		size++;
 	key = malloc(sizeof(char) * (size + 1));
 	if (key == NULL)
-		return (NULL);
+		return (free(key), NULL);
 	while (env[i] != '=' && env[i] != '\0')
 	{
 		key[i] = env[i];
