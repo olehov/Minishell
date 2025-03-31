@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mfedorys <mfedorys@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/31 13:22:07 by mfedorys         ###   ########.fr       */
+/*   Created: Invalid Date        by              +#+  #+#    #+#             */
+/*   Updated: 2025/03/31 13:25:30 by mfedorys         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/minishell.h"
 
@@ -73,10 +74,17 @@ char	*get_prompt(void)
 	if(user==NULL)  //checking if user is null
 		return(free(user), free(tmp), NULL);
 	free(tmp);                          //LEAK!
+
+	tmp = get_env_value("USER", g_minish.env);
+	user = ft_strjoin(tmp, "'s" RESET "-" GRN "minishell");
+	if(user==NULL)  //checking if user is null
+		return(free(user), free(tmp), NULL);
+	free(tmp);                          //LEAK!
 	if (g_minish.last_exit_code == 0)
 	{
 		tmp = ft_strjoin(CYAN, user);
 		if (tmp == NULL)
+			return (free(user), NULL);
 			return (free(user), NULL);
 		prompt = ft_strjoin(tmp, RESET "> ");
 		free(tmp);
@@ -86,10 +94,12 @@ char	*get_prompt(void)
 		tmp = ft_strjoin3(CYAN, user, " " RED "[");
 		if (tmp == NULL)
 			return (free(tmp), NULL);
+			return (free(tmp), NULL);
 		prompt = ft_strjoin3(tmp, ft_itoa(g_minish.last_exit_code),
 				"]" RESET "> ");
 		free(tmp);
 	}
+	free(user);
 	free(user);
 	return (prompt);
 }
