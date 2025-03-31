@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/28 08:48:11 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/03/31 13:12:03 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ char	*get_prompt(void)
 				"]" RESET "> ");
 		free(tmp);
 	}
+	free(user);
 	return (prompt);
 }
 
@@ -96,10 +97,7 @@ t_cmd	*get_cmd_lst(void)
 	t_cmd	*cmd_list;
 
 	prompt = get_prompt();
-	if (isatty(STDIN_FILENO))
-		line = readline(get_prompt());
-	else
-		line = readline(NULL);
+		line = readline(prompt);
 	if (!line)
 		return (NULL);
 	if (*line)
