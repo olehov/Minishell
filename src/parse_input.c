@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:48:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/23 17:28:29 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/03/29 14:25:36 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ t_cmd	*init_cmd_node(void)
 	cmd->outfile = NULL;
 	cmd->delimiter = NULL;
 	cmd->append_out = 0;
+	cmd->redirect_in = 0;
 	cmd->pipe_fd[0] = -1;
 	cmd->pipe_fd[1] = -1;
 	cmd->next = NULL;
@@ -36,7 +37,11 @@ void	parse_redirects(t_cmd *cmd, char **tokens, int *i)
 	if (!tokens[*i + 1])
 		return ;
 	if (ft_strcmp(tokens[*i], "<") == 0)
+	{
 		cmd->infile = ft_strdup(tokens[++(*i)]);
+		cmd->redirect_in = 1;
+		add_arg(cmd, ft_strdup(tokens[*i]));
+	}
 	else if (ft_strcmp(tokens[*i], ">") == 0)
 	{
 		cmd->outfile = ft_strdup(tokens[++(*i)]);
@@ -74,7 +79,8 @@ char	**split_args_handling_quotes(char *input, t_minish *msh)
 	while (tokens && tokens[i])
 	{
 		cleaned = remove_quotes(tokens[i]);
-		free(tokens[i]);
+		if (tokens[i] != NULL)
+			free(tokens[i]);
 		tokens[i] = cleaned;
 		i++;
 	}
@@ -100,11 +106,7 @@ t_cmd	*parse_single_command(char *command, t_minish *msh)
 	{
 		if (!ft_strcmp(tokens[i], "<") || !ft_strcmp(tokens[i], ">")
 			|| !ft_strcmp(tokens[i], ">>") || !ft_strcmp(tokens[i], "<<"))
-		{
 			parse_redirects(cmd, tokens, &i);
-			if (ft_strcmp(tokens[i - 1], "<<") != 0)
-				add_arg(cmd, ft_strdup(tokens[i]));
-		}
 		else
 			add_arg(cmd, ft_strdup(tokens[i]));
 	}
@@ -155,6 +157,8 @@ void free_cmd_list(t_cmd *cmd)
 				free(cmd->args[i++]);
 			free(cmd->args);
 		}
+		cmd->append_out = 0;
+		cmd->redirect_in = 0;
 		if (cmd->delimiter != NULL)
 			free(cmd->delimiter);
 		if (cmd->infile != NULL)
