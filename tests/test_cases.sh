@@ -113,6 +113,82 @@ else
     cat $TEST_DIR/minishell_out
 fi
 
+# ===== ДОДАТКОВІ ТЕСТИ =====
+
+# Комбінації пайпів і редіректів
+run_test "pipe with redir" "cat $TEST_DIR/input.txt | grep hello > $TEST_DIR/out2.txt"
+run_test "check pipe+redir output" "cat $TEST_DIR/out2.txt"
+
+# Змінні з лапками
+run_test "export with quotes" "export QSTR=\"Hello World\""
+run_test "echo quoted var" "echo \$QSTR"
+run_test "single quote test" "echo '\$QSTR'"
+run_test "double quote test" "echo \"\$QSTR\""
+
+# Command not found
+run_test "unknown command" "nonexistent_cmd"
+
+# Підряд кілька heredoc
+run_test "multiple heredoc" $'cat << END
+Hello
+END
+cat << FOO
+World
+FOO'
+
+# Підряд кілька heredoc в одному запуску
+cat <<EOF | $MINISHELL > $TEST_DIR/minishell_raw 2>&1
+cat << ONE
+a
+b
+ONE
+cat << TWO
+c
+d
+TWO
+EOF
+
+cat <<EOF | $BASH > $TEST_DIR/bash_raw 2>&1
+cat << ONE
+a
+b
+ONE
+cat << TWO
+c
+d
+TWO
+EOF
+
+tail -n 4 $TEST_DIR/minishell_raw > $TEST_DIR/minishell_out
+tail -n 4 $TEST_DIR/bash_raw > $TEST_DIR/bash_out
+((total++))
+if diff $TEST_DIR/minishell_out $TEST_DIR/bash_out > /dev/null; then
+    echo -e "${GREEN}[OK]${NC} multiple heredoc (inline)"
+    ((passed++))
+else
+    echo -e "${RED}[FAIL]${NC} multiple heredoc (inline)"
+    echo "Expected:"
+    cat $TEST_DIR/bash_out
+    echo "Got:"
+    cat $TEST_DIR/minishell_out
+fi
+
+# export з пробілами
+run_test "export with spaces" "export COMB=\"abc def ghi\""
+run_test "echo combined" "echo \$COMB"
+
+# cd та перевірка PWD
+run_test "cd into tmp" "cd $TEST_DIR || pwd"
+
+# bad syntax
+run_test "invalid pipe" "| ls"
+run_test "invalid redir" "echo hi >"
+
+# chaining commands
+run_test "chaining with &&" "false && echo fail"
+run_test "chaining with ||" "false || echo recover"
+
+
 # Result
 
 echo ""

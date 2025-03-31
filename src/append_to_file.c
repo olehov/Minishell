@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:42:26 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/02/04 17:37:17 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/03/28 10:30:08 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,27 +20,32 @@ static void	close_file(int fd)
 	}
 }
 
-int	append_to_file(int input_fd, char *outputfilename)
+int	append_to_file(char *inputFileName, char *outputFileName, int flags)
 {
-	int		output_fd;
-	char	*line;
+	int	input_fd;
+	int	output_fd;
 
-	if (outputfilename == NULL)
+	if (inputFileName != NULL && ft_strrchr(inputFileName, '.')[0] != '.')
 	{
-		errno = EINVAL;
-		return (print_file_error(), -1);
+		input_fd = open(inputFileName, O_RDONLY);
+		if (input_fd < 0)
+		{
+			return (perror("Can't open input file:"), -1);
+		}
+		dup2(input_fd, STDIN_FILENO);
 	}
-	output_fd = open(outputfilename, O_CREAT | O_WRONLY | O_APPEND, 0644);
-	if (input_fd < 0 || output_fd < 0)
-		return (print_file_error(), close_file(output_fd), -1);
-	while (true)
+	if (access(inputFileName, F_OK) == 0)
+		output_fd = open(outputFileName, flags);
+	else
+		output_fd = open(outputFileName, flags | O_CREAT, 0644);
+	// perror(strerror(errno));
+	if (output_fd < 0)
 	{
-		line = get_next_line(input_fd);
-		if (line == NULL)
-			break ;
-		ft_putstr_fd(line, output_fd);
-		free(line);
+		close(input_fd);
+		return (perror("Can't open output file:"), -1);
 	}
-	close(output_fd);
+	dup2(output_fd, STDOUT_FILENO);
+	close_file(input_fd);
+	close_file(output_fd);
 	return (0);
 }

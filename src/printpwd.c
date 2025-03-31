@@ -6,11 +6,12 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:41:35 by ogrativ           #+#    #+#             */
-/*   Updated: 2024/12/10 11:30:25 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/03/29 21:38:42 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <linux/limits.h>
 
 int	printpwd(void)
 {

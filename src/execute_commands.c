@@ -6,11 +6,12 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/23 13:07:47 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/03/29 21:55:57 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <linux/limits.h>
 
 // // --- Обробка редіректів ---
 // void handle_redirects(t_cmd *cmd)
@@ -73,14 +74,32 @@ void execute_builtin(t_cmd *cmd, t_minish *msh)
 		printerrcode(msh);
 }
 
-int	is_builtin(char *cmd)
+int	is_builtin(char **cmd)
 {
-	if (ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "pwd") == 0
-		|| ft_strcmp(cmd, "env") == 0 || ft_strcmp(cmd, "export") == 0
-		|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "exit") == 0
-		|| ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "$?") == 0)
+	if (ft_strcmp(cmd[0], "cd") == 0 || ft_strcmp(cmd[0], "pwd") == 0
+		|| ft_strcmp(cmd[0], "env") == 0 || ft_strcmp(cmd[0], "export") == 0
+		|| ft_strcmp(cmd[0], "unset") == 0 || ft_strcmp(cmd[0], "exit") == 0
+		|| ft_strcmp(cmd[0], "$?") == 0)
+		return (1);
+	else if (ft_strcmp(cmd[0], "echo") == 0 && cmd[1] != NULL && ft_strcmp(cmd[1], "-n") == 0)
 		return (1);
 	return (0);
+}
+
+size_t	get_row_size(char **args)
+{
+	size_t	i;
+
+	i = 0;
+	if (args == NULL || *args == NULL)
+	{
+		return (0);
+	}
+	while (args[i] != NULL)
+	{
+		i++;
+	}
+	return (i);
 }
 
 // --- Heredoc перед виконанням ---
@@ -89,7 +108,8 @@ void handle_heredoc(t_cmd *cmd, t_list *env)
 	if (cmd->infile && ft_strcmp(cmd->infile, "<<") == 0)
 	{
 		ft_heredoc(cmd->delimiter, env);
-		free(cmd->infile);
+		if (cmd->infile != NULL)
+			free(cmd->infile);
 		cmd->infile = ft_strdup(HEREDOC_FILENAME_PATH);
 	}
 }
@@ -121,9 +141,33 @@ char *find_executable_path(char *cmd, t_list *env)
 		}
 		free(full_path);
 	}
-
 	ft_free_2d_array(paths, -1);
 	return NULL;
+}
+
+void	print_args(char	**args)
+{
+	size_t	i;
+
+	i = 0;
+	if (args == NULL || *args == NULL)
+	{
+		return ;
+	}
+	while (args[i] != NULL)
+	{
+		printf("args[%lu]: %s\n", i, args[i]);
+		i++;
+	}
+}
+
+void	print_error(char *cmd)
+{
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	if (errno == 127)
+		ft_putstr_fd(": command not found", STDERR_FILENO);
+	else
+		perror(cmd);
 }
 
 // --- Основна функція виконання з пайпами ---
@@ -138,8 +182,9 @@ void execute_commands(t_cmd *cmd_list, t_minish *msh)
 	{
 		if (cmd->next)
 			pipe(pipe_fd);
+		handle_redirects(cmd);
 		handle_heredoc(cmd, msh->env);
-		if (is_builtin(cmd->args[0]) && !cmd->next && prev_fd == -1)
+		if (is_builtin(cmd->args) && !cmd->next && prev_fd == -1)
 		{
 			execute_builtin(cmd, msh);
 			g_minish.last_exit_code = errno;
@@ -150,26 +195,18 @@ void execute_commands(t_cmd *cmd_list, t_minish *msh)
 		{
 			if (prev_fd != -1) dup2(prev_fd, 0);
 			if (cmd->next) dup2(pipe_fd[1], 1);
-			handle_redirects(cmd);
-
-			if (is_builtin(cmd->args[0]))
+			if (is_builtin(cmd->args))
 			{
 				execute_builtin(cmd, msh);
-				rl_clear_history();
 				exit(0);
 			}
 			char *path = find_executable_path(cmd->args[0], msh->env);
-			if (!path)
-			{
-				perror("command not found");
-				msh->last_exit_code = 127;
-				exit(msh->last_exit_code);
-			}
 			char **envp = env_list_to_str_arr(msh->env);
 			execve(path, cmd->args, envp); // виклик зовнішньої команди
 			msh->last_exit_code = 127;
-			rl_clear_history();
-			perror("execve failed");
+			errno = msh->last_exit_code;
+			// perror("execve failed");
+			print_error(cmd->args[0]);
 			exit(msh->last_exit_code);
 		}
 		else

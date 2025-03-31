@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:30:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/23 12:20:39 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/03/29 14:41:24 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,46 +46,35 @@ void add_arg(t_cmd *cmd, char *arg)
 		cmd->args = malloc(sizeof(char *) * 2);
 		cmd->args[0] = arg;
 		cmd->args[1] = NULL;
-		return;
+		return ;
 	}
 	while (cmd->args[i]) i++;
 	new_args = malloc(sizeof(char *) * (i + 2));
 	for (int j = 0; j < i; j++) new_args[j] = cmd->args[j];
 	new_args[i] = arg;
 	new_args[i + 1] = NULL;
-	free(cmd->args);
+	if (cmd->args != NULL)
+		free(cmd->args);
 	cmd->args = new_args;
 }
 
 // ===== Обробка редіректів для команди =====
-void handle_redirects(t_cmd *cmd)
+void	handle_redirects(t_cmd *cmd)
 {
-	int	fd;
-
-	// if (cmd->infile && ft_strcmp(cmd->infile, "<<") != 0)
-	// {
-	// 	fd = open(HEREDOC_FILENAME_PATH, O_RDONLY);
-	// 	if (fd < 0)
-	// 	{
-	// 		perror("Input file error");
-	// 		exit(EXIT_FAILURE);
-	// 	}
-	// 	dup2(fd, STDIN_FILENO);
-	// 	close(fd);
-	// }
 	if (cmd->outfile)
 	{
 		if (cmd->append_out)
-			fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			append_to_file(cmd->infile, cmd->outfile, O_RDWR | O_APPEND);
 		else
-			fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd < 0)
+			append_to_file(cmd->infile, cmd->outfile, O_RDWR | O_TRUNC);
+	}
+	if (cmd->infile)
+	{
+		if (cmd->redirect_in)
 		{
-			perror("Output file error");
-			exit(EXIT_FAILURE);
+			append_to_file(cmd->outfile, cmd->infile,
+				O_RDONLY | O_CREAT | O_TRUNC);
 		}
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
 	}
 }
 

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 09:56:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/23 15:07:34 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/03/28 15:50:10 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_cmd
 	char			*infile;
 	char			*outfile;
 	char			*delimiter;
+	int				redirect_in;
 	int				append_out;
 	int				pipe_fd[2];
 	struct s_cmd	*next;
@@ -70,6 +71,8 @@ extern t_minish	g_minish;
 //       FUNCTIONS
 // ----------------------
 
+void	print_args(char	**args);
+
 // ===== main.c =====
 void	init_shell(t_list **env, char **envp);
 void	signal_handler(int signo);
@@ -81,7 +84,7 @@ void	free_cmd_list(t_cmd *cmd);
 // ===== execute_commands.c =====
 void	execute_commands(t_cmd *cmd_list, t_minish *msh);
 void	handle_redirects(t_cmd *cmd);
-int		is_builtin(char *cmd);
+int		is_builtin(char **cmd);
 void	execute_builtin(t_cmd *cmd, t_minish *msh);
 
 // ===== builtin_echo.c =====
@@ -98,6 +101,10 @@ void	ft_exit(char **args);
 
 // ===== heredoc.c =====
 int		ft_heredoc(char *delimiter, t_list *env);
+
+// int	append_to_file(int input_fd, char *outputfilename);
+// int		append_to_file(char *inputFileName, char *outputFileName);
+int	append_to_file(char *inputFileName, char *outputFileName, int flags);
 
 // ===== utils.c =====
 char	*remove_quotes(char *str);

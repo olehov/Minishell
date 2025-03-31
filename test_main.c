@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   test_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/31 13:12:03 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/03/28 08:46:15 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ char	*get_prompt(void)
 				"]" RESET "> ");
 		free(tmp);
 	}
-	free(user);
 	return (prompt);
 }
 
@@ -97,7 +96,10 @@ t_cmd	*get_cmd_lst(void)
 	t_cmd	*cmd_list;
 
 	prompt = get_prompt();
-		line = readline(prompt);
+	if (isatty(STDIN_FILENO))
+		line = readline(get_prompt());
+	else
+		line = readline(NULL);
 	if (!line)
 		return (NULL);
 	if (*line)
@@ -128,17 +130,12 @@ void	print_arr_of_str(char **str)
 int	main(int argc, char **argv, char **envp)
 {
 	t_cmd	*cmd_list;
-	int	std_fd[2];
 
 	(void)argc;
 	(void)argv;
 	init_shell(&g_minish.env, envp);
-	std_fd[0] = dup(STDIN_FILENO);
-	std_fd[1] = dup(STDOUT_FILENO);
 	while (1)
 	{
-		dup2(std_fd[0], STDIN_FILENO);
-		dup2(std_fd[1], STDOUT_FILENO);
 		signal(SIGINT, signal_handler);
 		signal(SIGQUIT, signal_handler);
 		cmd_list = get_cmd_lst();
