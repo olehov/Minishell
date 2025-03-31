@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
+/*   By: mfedorys <mfedorys@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/28 08:48:11 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/03/31 13:07:34 by mfedorys         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,17 @@ char	*get_prompt(void)
 	char	*tmp;
 	char	*user;
 
-	user = ft_strjoin(get_env_value("USER", g_minish.env),
-			"'s" RESET "-" GRN "minishell");
+
+	tmp = get_env_value("USER", g_minish.env);
+	user = ft_strjoin(tmp, "'s" RESET "-" GRN "minishell");
+	if(user==NULL)  //checking if user is null
+		return(free(user), free(tmp), NULL);
+	free(tmp);                          //LEAK!
 	if (g_minish.last_exit_code == 0)
 	{
 		tmp = ft_strjoin(CYAN, user);
 		if (tmp == NULL)
-			return (NULL);
+			return (free(user), NULL);
 		prompt = ft_strjoin(tmp, RESET "> ");
 		free(tmp);
 	}
@@ -81,11 +85,12 @@ char	*get_prompt(void)
 	{
 		tmp = ft_strjoin3(CYAN, user, " " RED "[");
 		if (tmp == NULL)
-			return (NULL);
+			return (free(tmp), NULL);
 		prompt = ft_strjoin3(tmp, ft_itoa(g_minish.last_exit_code),
 				"]" RESET "> ");
 		free(tmp);
 	}
+	free(user);
 	return (prompt);
 }
 
