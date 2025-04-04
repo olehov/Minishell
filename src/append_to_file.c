@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 15:42:26 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/28 10:30:08 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/04 14:23:52 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	append_to_file(char *inputFileName, char *outputFileName, int flags)
 		output_fd = open(outputFileName, flags);
 	else
 		output_fd = open(outputFileName, flags | O_CREAT, 0644);
-	// perror(strerror(errno));
 	if (output_fd < 0)
 	{
 		close(input_fd);

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:30:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/03 08:50:42 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/04 10:40:57 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ bool	is_closed_quote(char quote, int start, char *str)
 		return (false);
 	while (str[start] != '\0')
 	{
-		// printf("Satart count %i\n", start);
 		if (str[start] == single_quote || str[start] == double_quote)
 		{
 			if ((str[start] == single_quote && quote == single_quote)
@@ -52,16 +51,17 @@ char	*remove_quotes(char *str)
 
 	while (str[i])
 	{
-		if (!quote && ft_is_quote(str[i]))
+		if (!quote && ft_is_quote(str[i])
+			&& is_closed_quote(str[i], i + 1, str))
 		{
 			quote = str[i++];
-			continue;
+			continue ;
 		}
 		else if (quote && str[i] == quote)
 		{
 			quote = 0;
 			i++;
-			continue;
+			continue ;
 		}
 		else
 			res[j++] = str[i++];

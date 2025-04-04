@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 09:56:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/03 10:16:31 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/04 16:37:26 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,12 @@ typedef struct s_env
 {
 	char	*key;
 	char	*value;
+	bool	append;
 }	t_env;
 
 typedef struct s_cmd
 {
+	pid_t			pid;
 	char			**args;
 	char			*infile;
 	char			*outfile;
@@ -54,16 +56,18 @@ typedef struct s_cmd
 	int				redirect_in;
 	int				append_out;
 	int				pipe_fd[2];
+	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
 
 typedef struct s_minish
 {
 	t_list	*env;
-	int		last_exit_code;
+	t_cmd	*cmd;
 }	t_minish;
 
-extern t_minish	g_minish;
+// extern t_minish	g_minish;
+extern	int	g_last_exit_code;
 
 # define HEREDOC_FILENAME_PATH "/tmp/heredoc_tmp.txt"
 
@@ -83,15 +87,15 @@ void	print_args(char	**args);
 char	**split_outside_quotes(char *input, char delimiter);
 
 // ===== main.c =====
-void	init_shell(t_list **env, char **envp);
+void	init_shell(t_minish *msh, char **envp);
 void	signal_handler(int signo);
 
 // ===== parse_input.c =====
-t_cmd	*parse_input(char *input, t_list *env);
+t_cmd	*parse_input(char *input, t_list *env, t_minish *msh);
 void	free_cmd_list(t_cmd *cmd);
 
 // ===== execute_commands.c =====
-void	execute_commands(t_cmd *cmd_list, t_minish *msh);
+void	execute_commands(t_minish *msh);
 void	handle_redirects(t_cmd *cmd);
 int		is_builtin(char **cmd);
 void	execute_builtin(t_cmd *cmd, t_minish *msh);
@@ -111,8 +115,6 @@ void	ft_exit(char **args);
 // ===== heredoc.c =====
 int		ft_heredoc(char *delimiter, t_list *env);
 
-// int	append_to_file(int input_fd, char *outputfilename);
-// int		append_to_file(char *inputFileName, char *outputFileName);
 int	append_to_file(char *inputFileName, char *outputFileName, int flags);
 
 // ===== utils.c =====
@@ -125,9 +127,6 @@ int		init_env(t_list **lst, char *env[]);
 t_env	*ft_get_env(t_list *lst, char *key);
 char	*get_env_value(const char *var_name, t_list *lst);
 char	**env_list_to_str_arr(t_list *lst);
-void	ft_env_unset(t_list **lst, char *env);
-int		ft_set_env(t_list **lst, char *env);
-void	print_env_list(t_list *lst);
 
 // ===== process_env & expand (твій код) =====
 char	*process_env(const char *input, t_list *lst);

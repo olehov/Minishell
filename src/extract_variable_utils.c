@@ -158,7 +158,7 @@ int	extract_variable_value(const char *input, int *i, t_env_state *state)
 	exit_str = NULL;
 	if (input[*i + 1] == '?')
 	{
-		exit_str = ft_itoa(g_minish.last_exit_code);
+		exit_str = ft_itoa(g_last_exit_code);
 		if (!exit_str)
 			return (-1);
 		if (ensure_buffer_capacity(state, ft_strlen(exit_str)) == -1)
