@@ -1,30 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   append_variable_value.c                            :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/24 15:36:53 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/02 22:33:32 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/02 18:43:33 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/02 18:51:11 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-#include "../include/process_env_utils.h"
+#include "../../headers/libft.h"
 
-int	append_variable_value(const char *var_name, t_env_state *state, t_list *lst)
+int	ft_isspace(int space)
 {
-	char	*var_value;
-	int		j;
-
-	var_value = get_env_value(var_name, lst);
-	if (ft_strcmp(var_value, "\0") == 0)
+	if (space == _space || space == _tabh || space == _endl
+		|| space == _tabv || space == _formfeed
+		|| space == _carriageret)
+	{
 		return (1);
-	if (ensure_buffer_capacity(state, ft_strlen(var_value)) == -1)
-		return (-1);
-	j = 0;
-	while (var_value[j])
-		state->result[state->res_index++] = var_value[j++];
+	}
 	return (0);
 }

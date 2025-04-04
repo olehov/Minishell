@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/31 13:12:03 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/03 16:19:30 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	init_shell(t_list **env, char **envp)
 	g_minish.last_exit_code = 0;
 	if (init_env(env, envp) == -1)
 	{
-		ft_putstr_fd("Failed to initialize environment\n", 2);
+		ft_putstr_fd("Failed to initialize environment\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
 }
@@ -66,20 +66,20 @@ char	*get_prompt(void)
 	char	*prompt;
 	char	*tmp;
 	char	*user;
+	char	*user_value;
 
-	user = ft_strjoin(get_env_value("USER", g_minish.env),
-			"'s" RESET "-" GRN "minishell");
+	user_value = get_env_value("USER", g_minish.env);
+	if (ft_strcmp(user_value, "\0"))
+		user = ft_strjoin3(CYAN, user_value, "'s" RESET "-" GRN "minishell");
+	else
+		user = ft_strjoin(GRN, "minishell");
+	if (user == NULL)
+		return (NULL);
 	if (g_minish.last_exit_code == 0)
-	{
-		tmp = ft_strjoin(CYAN, user);
-		if (tmp == NULL)
-			return (NULL);
-		prompt = ft_strjoin(tmp, RESET "> ");
-		free(tmp);
-	}
+		prompt = ft_strjoin(user, RESET "> ");
 	else
 	{
-		tmp = ft_strjoin3(CYAN, user, " " RED "[");
+		tmp = ft_strjoin(user, " " RED "[");
 		if (tmp == NULL)
 			return (NULL);
 		prompt = ft_strjoin3(tmp, ft_itoa(g_minish.last_exit_code),
@@ -97,7 +97,8 @@ t_cmd	*get_cmd_lst(void)
 	t_cmd	*cmd_list;
 
 	prompt = get_prompt();
-		line = readline(prompt);
+	// line = readline(prompt);
+	line = readline("minishell> ");
 	if (!line)
 		return (NULL);
 	if (*line)
@@ -124,11 +125,23 @@ void	print_arr_of_str(char **str)
 	}
 }
 
+void	print_error(char *cmd)
+{
+	if (g_minish.last_exit_code == 0)
+		return ;
+	ft_putstr_fd(cmd, STDERR_FILENO);
+	if (g_minish.last_exit_code == 127)
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	else
+		perror(cmd);
+}
+
 // Основний цикл shell
 int	main(int argc, char **argv, char **envp)
 {
 	t_cmd	*cmd_list;
-	int	std_fd[2];
+	int		std_fd[2];
+	int		exit_code;
 
 	(void)argc;
 	(void)argv;
@@ -146,11 +159,13 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		// print_arr_of_str(cmd_list->args);
 		execute_commands(cmd_list, &g_minish);
+		print_error(cmd_list->args[0]);
 		free_cmd_list(cmd_list);
 		if (unlink(HEREDOC_FILENAME_PATH) == -1 && errno != ENOENT)
 			perror(HEREDOC_FILENAME_PATH);
 	}
+	exit_code = g_minish.last_exit_code;
 	rl_clear_history();
 	ft_lstclear(&g_minish.env, free_env);
-	return (0);
+	exit(exit_code);
 }

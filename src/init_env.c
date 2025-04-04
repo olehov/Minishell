@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 12:19:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/22 15:48:58 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/03 16:11:26 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ char	*ft_get_key(char *env)
 	size = 0;
 	while (env[size] != '=' && env[size] != '\0')
 		size++;
+	if (size == 0)
+		return (NULL);
 	key = malloc(sizeof(char) * (size + 1));
 	if (key == NULL)
 		return (NULL);
@@ -62,7 +64,9 @@ static char	*get_value(char *key, char *env)
 t_env	*parce_env(char *env)
 {
 	t_env	*var;
+	size_t	j;
 
+	j = 0;
 	if (env == NULL)
 		return (NULL);
 	var = malloc(sizeof(t_env));
@@ -71,6 +75,13 @@ t_env	*parce_env(char *env)
 	var->key = ft_get_key(env);
 	if (var->key == NULL)
 		return (free(var), NULL);
+	while (var->key[j])
+	{
+		if (var->key == NULL || ft_isdigit(var->key[0])
+			|| (var->key[j + 1] == '\0' && ft_issign(var->key[j])))
+			return (free(var->key), free(var), NULL);
+		j++;
+	}
 	var->value = get_value(var->key, env);
 	if (var->value == NULL)
 		return (free(var->key), free(var), NULL);
@@ -86,6 +97,30 @@ void	free_env(void *env)
 	if (((t_env *)env)->value != NULL)
 		free(((t_env *)env)->value);
 	free(env);
+}
+
+static void	update_shell_level(t_list **lst)
+{
+	size_t	lvl;
+	char	*shlvl;
+	char	*tmp;
+
+	if (*lst == NULL)
+		return ;
+	shlvl = get_env_value("SHLVL", *lst);
+	if (shlvl == NULL)
+		return ;
+	lvl = ft_atoi(shlvl);
+	lvl += 1;
+	tmp = ft_itoa(lvl);
+	if (tmp == NULL)
+		return ;
+	shlvl = ft_strjoin3("SHLVL", "=", tmp);
+	free(tmp);
+	if (shlvl == NULL)
+		return ;
+	ft_set_env(lst, shlvl);
+	free(shlvl);
 }
 
 int	init_env(t_list **lst, char *env[])
@@ -106,5 +141,7 @@ int	init_env(t_list **lst, char *env[])
 		else
 			ft_lstadd_back(lst, ft_lstnew(var));
 	}
+	if (*lst != NULL)
+		update_shell_level(lst);
 	return (0);
 }

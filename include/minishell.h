@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 09:56:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/28 15:50:10 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/03 10:16:31 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,13 @@
 // ----------------------
 //     GLOBAL VARIABLES
 // ----------------------
+
+typedef struct s_token
+{
+	char	*value;
+	bool	in_quotes;
+	char	quote_char;
+}	t_token;
 
 typedef struct s_env
 {
@@ -72,6 +79,8 @@ extern t_minish	g_minish;
 // ----------------------
 
 void	print_args(char	**args);
+
+char	**split_outside_quotes(char *input, char delimiter);
 
 // ===== main.c =====
 void	init_shell(t_list **env, char **envp);

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:49:02 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/22 17:25:32 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/02 18:44:38 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ int		ft_isprint(int c);
 Check whether c is space, tab, white space... 
 */
 int		ft_isblank(int c);
+
+int		ft_isspace(int c);
 /*
 Convert all letters from lowercase to uppercase
 */

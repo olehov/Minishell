@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:01:57 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/22 14:54:38 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/02 15:17:54 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ char	*find_value_from_node(t_env *envvar)
 
 char	*expand_dbl_quote(char *line, int *i, t_minish *msh)
 {
-	printf("expand_dbl_quote %i: line[i] = %c\n", *i, line[*i]);
 	char	*result;
 	char	*str1;
 	char	*str2;
@@ -103,11 +102,10 @@ char	*expand_dbl_quote(char *line, int *i, t_minish *msh)
 	{
 		if (line[*i] == '$')
 		{
-			//if (!(ft_isalpha(line[*i + 1])) && line[*i + 1] != '_')
 			if (!str1 && *i > 1)
-				str1 = copy_first_str(NULL, line, line + *i); //if there is no start point for joining, line...line + i
+				str1 = copy_first_str(NULL, line, line + *i);
 			else if (*i > 1)
-				str1 = copy_first_str(result, str1, line + *i); // joint + (no_change_str = line...line + i)
+				str1 = copy_first_str(result, str1, line + *i);
 			str2 = find_value_from_node(ft_get_env(msh->env, find_key(line + *i + 1)));
 			result = ft_strjoin(str1, str2);
 			if (str1 != NULL)
@@ -125,37 +123,102 @@ char	*expand_dbl_quote(char *line, int *i, t_minish *msh)
 	return (result);
 }
 
-char	*expand_line(char *line, t_minish *msh, int i)
+char *expand_line(char *line, t_minish *msh, int i)
 {
-	char	*result;
+	char *result = NULL;
+	char *tmp = NULL;
+	bool in_dquote = false;
+	int start = 0;
 
-	result = NULL;
 	while (line[i] != '\0')
 	{
-		// printf("i: %i\n", i);
-		//check that there are matching quotes ", ' before that
-		if (line[i] == '\'')
+		if (line[i] == '"')
 		{
-			// printf("copy_string\n");
-			result = copy_string(line, &i, NULL);
-		}
-		else if (line[i] && line[i] == '"')
-		{
+			in_dquote = !in_dquote;
 			i++;
-			// printf("expand_dbl_quote\n");
-			result = expand_dbl_quote(line, &i, msh);
+			continue;
+		}
+		else if (line[i] == '\'' && !in_dquote)
+		{
+			start = ++i;
+			while (line[i] && line[i] != '\'')
+				i++;
+			tmp = ft_substr(line, start, i - start);
+			i++;
+		}
+		else if (line[i] == '$' && in_dquote)
+		{
+			int j = i;
+			char *expanded = process_env(&line[j], msh->env);
+			if (!expanded)
+				return (free(result), NULL);
+			tmp = expanded;
+			while (line[i] && (isalnum(line[i + 1]) || line[i + 1] == '_'))
+				i++;
 			i++;
 		}
 		else
+		{
+			char *ch = ft_substr(line, i, 1);
+			if (result)
+				tmp = ft_strjoin(result, ch);
+			else
+				tmp = ft_strdup(ch);
+			free(result);
+			free(ch);
+			result = tmp;
 			i++;
+			continue;
+		}
+		if (tmp)
+		{
+			if (result)
+			{
+				char *joined = ft_strjoin(result, tmp);
+				free(result);
+				result = joined;
+			}
+			else
+				result = ft_strdup(tmp);
+			free(tmp);
+		}
 	}
-	if (result == NULL)
-	{
-		i = 0;
-		result = malloc(sizeof(char) * (ft_strlen(line) + 1));
-		if (result != NULL)
-			ft_strlcpy(result, line, ft_strlen(line) + 1);
-	}
-	// free (line);
-	return (result);
+	if (!result)
+		result = ft_strdup("");
+	return result;
 }
+
+// char	*expand_line(char *line, t_minish *msh, int i)
+// {
+// 	char	*result;
+
+// 	result = NULL;
+// 	while (line[i] != '\0')
+// 	{
+// 		// printf("i: %i\n", i);
+// 		//check that there are matching quotes ", ' before that
+// 		if (line[i] == '\'')
+// 		{
+// 			// printf("copy_string\n");
+// 			result = copy_string(line, &i, NULL);
+// 		}
+// 		else if (line[i] && line[i] == '"')
+// 		{
+// 			i++;
+// 			// printf("expand_dbl_quote\n");
+// 			result = expand_dbl_quote(line, &i, msh);
+// 			i++;
+// 		}
+// 		else
+// 			i++;
+// 	}
+// 	if (result == NULL)
+// 	{
+// 		i = 0;
+// 		result = malloc(sizeof(char) * (ft_strlen(line) + 1));
+// 		if (result != NULL)
+// 			ft_strlcpy(result, line, ft_strlen(line) + 1);
+// 	}
+// 	// free (line);
+// 	return (result);
+// }

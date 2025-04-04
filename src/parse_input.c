@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:48:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/29 14:25:36 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/03 14:06:15 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,113 +32,341 @@ t_cmd	*init_cmd_node(void)
 	return (cmd);
 }
 
-void	parse_redirects(t_cmd *cmd, char **tokens, int *i)
-{
-	if (!tokens[*i + 1])
-		return ;
-	if (ft_strcmp(tokens[*i], "<") == 0)
-	{
-		cmd->infile = ft_strdup(tokens[++(*i)]);
-		cmd->redirect_in = 1;
-		add_arg(cmd, ft_strdup(tokens[*i]));
-	}
-	else if (ft_strcmp(tokens[*i], ">") == 0)
-	{
-		cmd->outfile = ft_strdup(tokens[++(*i)]);
-		cmd->append_out = 0;
-	}
-	else if (ft_strcmp(tokens[*i], ">>") == 0)
-	{
-		cmd->outfile = ft_strdup(tokens[++(*i)]);
-		cmd->append_out = 1;
-	}
-	else if (ft_strcmp(tokens[*i], "<<") == 0)
-	{
-		cmd->infile = ft_strdup(tokens[(*i)++]);
-		add_arg(cmd, ft_strdup(HEREDOC_FILENAME_PATH));
-		cmd->delimiter = ft_strdup(tokens[*i]);
-	}
-}
+// Токенізація з обліком лапок та з'єднанням суміжних токенів
+// t_token *tokenize_with_quote_info(char *input)
+// {
+// 	t_token *tokens = malloc(sizeof(t_token) * (ft_strlen(input) / 2 + 2));
+// 	int i = 0, j = 0, start = 0;
+// 	char quote = 0;
+// 	char *accum = NULL;
+// 	char current_quote = 0;
 
-//Parsing arguments with quote handling and $VAR
-char	**split_args_handling_quotes(char *input, t_minish *msh)
-{
-	char	*expanded;
-	char	*cleaned;
-	char	**tokens;
-	int		i;
+// 	while (input[i])
+// 	{
+// 		while (input[i] && ft_isspace(input[i]))
+// 			i++;
+// 		if (!input[i]) break;
+// 		start = i;
 
-	i = 0;
-	expanded = process_env(input, msh->env);
-	if (expanded == NULL)
+// 		if (input[i] == '\'' || input[i] == '"')
+// 		{
+// 			quote = input[i++];
+// 			current_quote = quote;
+// 			start = i;
+// 			while (input[i] && input[i] != quote)
+// 				i++;
+// 			char *part = ft_substr(input, start, i - start);
+// 			accum = accum ? ft_strjoin(accum, part) : ft_strdup(part);
+// 			free(part);
+// 			if (input[i] == quote) i++;
+// 		}
+// 		else
+// 		{
+// 			start = i;
+// 			while (input[i] && !ft_isspace(input[i]) && input[i] != '\'' && input[i] != '"')
+// 				i++;
+// 			char *part = ft_substr(input, start, i - start);
+// 			accum = accum ? ft_strjoin(accum, part) : ft_strdup(part);
+// 			free(part);
+// 		}
+
+// 		if (!input[i] || ft_isspace(input[i]))
+// 		{
+// 			tokens[j].value = accum;
+// 			tokens[j].in_quotes = current_quote != 0;
+// 			tokens[j].quote_char = current_quote;
+// 			j++;
+// 			accum = NULL;
+// 			current_quote = 0;
+// 		}
+// 	}
+// 	if (accum)
+// 	{
+// 		tokens[j].value = accum;
+// 		tokens[j].in_quotes = current_quote != 0;
+// 		tokens[j].quote_char = current_quote;
+// 		j++;
+// 	}
+// 	tokens[j].value = NULL;
+// 	return tokens;
+// }
+
+// // Парсинг одного рядка команди з урахуванням токенів
+// t_cmd *parse_single_command_from_tokens(t_token *tokens)
+// {
+// 	t_cmd *cmd = init_cmd_node();
+// 	int i = 0;
+
+// 	while (tokens[i].value)
+// 	{
+// 		if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, "<") == 0 && tokens[i + 1].value)
+// 		{
+// 			cmd->infile = ft_strdup(tokens[++i].value);
+// 			cmd->redirect_in = 1;
+// 		}
+// 		else if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, ">") == 0 && tokens[i + 1].value)
+// 		{
+// 			cmd->outfile = ft_strdup(tokens[++i].value);
+// 			cmd->append_out = 0;
+// 		}
+// 		else if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, ">>") == 0 && tokens[i + 1].value)
+// 		{
+// 			cmd->outfile = ft_strdup(tokens[++i].value);
+// 			cmd->append_out = 1;
+// 		}
+// 		else if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, "<<") == 0 && tokens[i + 1].value)
+// 		{
+// 			cmd->infile = ft_strdup(tokens[i].value);
+// 			cmd->delimiter = ft_strdup(tokens[++i].value);
+// 			add_arg(cmd, ft_strdup(HEREDOC_FILENAME_PATH));
+// 		}
+// 		else
+// 		{
+// 			char *processed;
+// 			if (!(tokens[i].in_quotes && tokens[i].quote_char == '\''))
+// 			{
+// 				if (ft_strchr(tokens[i].value, '$'))
+// 				{
+// 					processed = process_env(tokens[i].value, g_minish.env);
+// 					if (!processed)
+// 						processed = ft_strdup("");
+// 				}
+// 				else
+// 					processed = ft_strdup(tokens[i].value);
+// 			}
+// 			else
+// 				processed = ft_strdup(tokens[i].value);
+
+// 			add_arg(cmd, processed);
+// 		}
+// 		i++;
+// 	}
+// 	return cmd;
+// }
+
+char **split_outside_quotes(char *input, char delimiter)
+{
+	char	**result = malloc(sizeof(char *) * (ft_strlen(input) / 2 + 2));
+	int		i = 0, j = 0, start = 0;
+	char	quote = 0;
+
+	while (input[i])
 	{
-		perror("expanded is NULL\n");
-		return (NULL);
-	}
-	tokens = ft_split(expanded, ' ');
-	while (tokens && tokens[i])
-	{
-		cleaned = remove_quotes(tokens[i]);
-		if (tokens[i] != NULL)
-			free(tokens[i]);
-		tokens[i] = cleaned;
+		if ((input[i] == '\'' || input[i] == '\"'))
+		{
+			if (!quote)
+				quote = input[i];
+			else if (quote == input[i])
+				quote = 0;
+		}
+		else if (input[i] == delimiter && !quote)
+		{
+			result[j++] = ft_substr(input, start, i - start);
+			start = i + 1;
+		}
 		i++;
 	}
-	free(expanded);
-	return (tokens);
+	if (i > start)
+		result[j++] = ft_substr(input, start, i - start);
+	result[j] = NULL;
+	return result;
 }
 
-// Parsing a single command (between pipes)
-t_cmd	*parse_single_command(char *command, t_minish *msh)
-{
-	char	**tokens;
-	t_cmd	*cmd;
-	int		i;
+// Токенізація з обліком лапок та з'єднанням суміжних токенів
+// Тепер: лапки не знімаються, вони залишаються в token->value, але помічаються quote_char
+// Після токенізації: process_env, потім remove_outer_quotes
 
-	tokens = split_args_handling_quotes(command, msh);
-	if (tokens == NULL)
-		return (NULL);
-	cmd = init_cmd_node();
-	if (cmd == NULL)
-		return (free_split(tokens), NULL);
-	i = -1;
-	while (tokens[++i] != NULL)
+char *remove_outer_quotes(char *str)
+{
+	size_t len = ft_strlen(str);
+	if ((str[0] == '"' && str[len - 1] == '"') || (str[0] == '\'' && str[len - 1] == '\''))
 	{
-		if (!ft_strcmp(tokens[i], "<") || !ft_strcmp(tokens[i], ">")
-			|| !ft_strcmp(tokens[i], ">>") || !ft_strcmp(tokens[i], "<<"))
-			parse_redirects(cmd, tokens, &i);
-		else
-			add_arg(cmd, ft_strdup(tokens[i]));
+		char *new_str = ft_substr(str, 1, len - 2);
+		return new_str;
 	}
-	return (free_split(tokens), cmd);
+	return ft_strdup(str);
+}
+
+t_token *tokenize_with_quote_info(char *input)
+{
+	t_token *tokens = malloc(sizeof(t_token) * (ft_strlen(input) / 2 + 2));
+	int i = 0, j = 0, start = 0;
+	char quote = 0;
+	char *accum = NULL;
+	char current_quote = 0;
+
+	while (input[i])
+	{
+		while (input[i] && ft_isspace(input[i]))
+			i++;
+		if (!input[i]) break;
+		start = i;
+
+		if (input[i] == '\'' || input[i] == '"')
+		{
+			quote = input[i];
+			current_quote = quote;
+			i++;
+			start = i;
+			while (input[i] && input[i] != quote)
+				i++;
+			char *part = ft_substr(input, start - 1, i - start + 2); // include quotes
+			accum = accum ? ft_strjoin(accum, part) : ft_strdup(part);
+			free(part);
+			if (input[i] == quote) i++;
+		}
+		else
+		{
+			start = i;
+			while (input[i] && !ft_isspace(input[i]) && input[i] != '\'' && input[i] != '"')
+				i++;
+			char *part = ft_substr(input, start, i - start);
+			accum = accum ? ft_strjoin(accum, part) : ft_strdup(part);
+			free(part);
+		}
+
+		if (!input[i] || ft_isspace(input[i]))
+		{
+			tokens[j].value = accum;
+			tokens[j].in_quotes = current_quote != 0;
+			tokens[j].quote_char = current_quote;
+			j++;
+			accum = NULL;
+			current_quote = 0;
+		}
+	}
+	if (accum)
+	{
+		tokens[j].value = accum;
+		tokens[j].in_quotes = current_quote != 0;
+		tokens[j].quote_char = current_quote;
+		j++;
+	}
+	tokens[j].value = NULL;
+	return tokens;
+}
+
+// Парсинг одного рядка команди з урахуванням токенів
+t_cmd *parse_single_command_from_tokens(t_token *tokens)
+{
+	t_cmd *cmd = init_cmd_node();
+	int i = 0;
+
+	while (tokens[i].value)
+	{
+		if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, "<") == 0 && tokens[i + 1].value)
+		{
+			cmd->infile = ft_strdup(tokens[++i].value);
+			cmd->redirect_in = 1;
+		}
+		else if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, ">") == 0 && tokens[i + 1].value)
+		{
+			cmd->outfile = ft_strdup(tokens[++i].value);
+			cmd->append_out = 0;
+		}
+		else if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, ">>") == 0 && tokens[i + 1].value)
+		{
+			cmd->outfile = ft_strdup(tokens[++i].value);
+			cmd->append_out = 1;
+		}
+		else if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, "<<") == 0 && tokens[i + 1].value)
+		{
+			cmd->infile = ft_strdup(tokens[i].value);
+			cmd->delimiter = ft_strdup(tokens[++i].value);
+			add_arg(cmd, ft_strdup(HEREDOC_FILENAME_PATH));
+		}
+		else
+		{
+			char *processed = NULL;
+			char *env_applied = NULL;
+			if (!(tokens[i].in_quotes && tokens[i].quote_char == '\''))
+				env_applied = process_env(tokens[i].value, g_minish.env);
+			else
+				env_applied = ft_strdup(tokens[i].value);
+
+			// Якщо токен має '=', і лапки були навколо значення — відновлюємо лапки для ft_set_env
+			if (ft_strchr(tokens[i].value, '=')) {
+				char *eq = ft_strchr(env_applied, '=');
+				if (eq && tokens[i].quote_char != 0) {
+					*eq = '\0';
+					char *quoted_value = ft_strjoin3("\"", eq + 1, "\"");
+					processed = ft_strjoin3(env_applied, "=", quoted_value);
+					free(quoted_value);
+				} else {
+					processed = ft_strdup(env_applied);
+				}
+			}
+			else if (!processed)
+			{
+				processed = remove_quotes(env_applied);
+				// processed = ft_strdup(env_applied);
+			}
+			// printf("token[%i]: %s\nprocessed: %s", i, tokens->value, processed);
+			free(env_applied);
+			add_arg(cmd, processed);
+		}
+		i++;
+	}
+	return cmd;
 }
 
 // Основний парсинг всієї лінії (з пайпами)
-t_cmd	*parse_input(char *input, t_list *env)
-{
-	t_cmd	*first;
-	t_cmd	*last;
-	t_cmd	*cmd;
-	char	**pipe_split;
-	int		i;
+// t_cmd	*parse_input(char *input, t_list *env)
+// {
+// 	t_cmd	*first;
+// 	t_cmd	*last;
+// 	t_cmd	*cmd;
+// 	t_token	*tokens;
+// 	char	**pipe_split;
+// 	int		i;
 
+// 	(void)env;
+// 	first = NULL;
+// 	last = NULL;
+// 	i = 0;
+// 	pipe_split = split_outside_quotes(input, '|');
+// 	while (pipe_split[i] != NULL)
+// 	{
+// 		// cmd = parse_single_command(pipe_split[i], &g_minish);
+// 		tokens = tokenize_with_quote_info(pipe_split[i]);
+// 		cmd = parse_single_command_from_tokens(tokens);
+// 		if (!first)
+// 			first = cmd;
+// 		else
+// 			last->next = cmd;
+// 		last = cmd;
+// 		i++;
+// 	}
+// 	free_split(pipe_split);
+// 	return (first);
+// }
+
+
+// Парсинг усієї команди з пайпами та лапками
+t_cmd *parse_input(char *input, t_list *env)
+{
+	t_cmd	*first = NULL;
+	t_cmd	*last = NULL;
+	t_cmd	*cmd;
 	(void)env;
-	first = NULL;
-	last = NULL;
-	i = 0;
-	pipe_split = ft_split(input, '|');
-	while (pipe_split[i] != NULL)
+	char **pipe_split = split_outside_quotes(input, '|');
+	int i = 0;
+
+	while (pipe_split[i])
 	{
-		cmd = parse_single_command(pipe_split[i], &g_minish);
+		t_token *tokens = tokenize_with_quote_info(pipe_split[i]);
+		cmd = parse_single_command_from_tokens(tokens);
 		if (!first)
 			first = cmd;
 		else
 			last->next = cmd;
 		last = cmd;
+		free(tokens);
+		free(pipe_split[i]);
 		i++;
 	}
-	free_split(pipe_split);
-	return (first);
+	free(pipe_split);
+	return first;
 }
 
 // Очистка командного списку

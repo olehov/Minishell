@@ -6,34 +6,129 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:30:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/29 14:41:24 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/03 08:50:42 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// ===== Видалення лапок з рядка =====
+bool	is_closed_quote(char quote, int start, char *str)
+{
+	const char	single_quote = '\'';
+	const char	double_quote = '\"';
+
+	if (str == NULL || quote == 0)
+		return (false);
+	while (str[start] != '\0')
+	{
+		// printf("Satart count %i\n", start);
+		if (str[start] == single_quote || str[start] == double_quote)
+		{
+			if ((str[start] == single_quote && quote == single_quote)
+				|| (str[start] == double_quote && quote == double_quote))
+				return (true);
+			else
+				return (false);
+		}
+		start++;
+	}
+	return (false);
+}
+
+int	ft_is_quote(char c)
+{
+	return (c == '\'' || c == '"');
+}
+
+
+/*removing quotes from line*/
+
 char	*remove_quotes(char *str)
 {
-	int		i = 0;
-	int		j = 0;
+	int		i = 0, j = 0;
 	char	quote = 0;
 	char	*res = malloc(ft_strlen(str) + 1);
 	if (!res) return NULL;
 
 	while (str[i])
 	{
-		if (!quote && (str[i] == '\'' || str[i] == '\"'))
-			quote = str[i]; // початок лапок
+		if (!quote && ft_is_quote(str[i]))
+		{
+			quote = str[i++];
+			continue;
+		}
 		else if (quote && str[i] == quote)
-			quote = 0; // кінець лапок
+		{
+			quote = 0;
+			i++;
+			continue;
+		}
 		else
-			res[j++] = str[i]; // копіюємо символ
-		i++;
+			res[j++] = str[i++];
 	}
 	res[j] = '\0';
 	return (res);
 }
+
+
+// char	*remove_quotes(char *str)
+// {
+// 	int		i = 0, j = 0;
+// 	char	quote = 0;
+// 	char	*res = malloc(ft_strlen(str) + 1);
+// 	if (!res) return NULL;
+
+// 	while (str[i])
+// 	{
+// 		if (!quote && (str[i] == '\'' || str[i] == '"'))
+// 		{
+// 			quote = str[i]; // відкрилась лапка
+// 			i++; // пропускаємо відкриваючу
+// 		}
+// 		else if (quote && str[i] == quote)
+// 		{
+// 			quote = 0; // закрилась лапка
+// 			i++; // пропускаємо закриваючу
+// 		}
+// 		else
+// 			res[j++] = str[i++];
+// 	}
+// 	res[j] = '\0';
+// 	return (res);
+// }
+
+
+// char	*remove_quotes(char *str)
+// {
+// 	int		i = 0, j = 0;
+// 	char	quote = 0;
+// 	char	*res = malloc(ft_strlen(str) + 1);
+
+// 	if (!res)
+// 		return (NULL);
+// 	while (str[i])
+// 	{
+// 		if (!quote && (str[i] == '\'' || str[i] == '\"'))
+// 		{
+// 			if (is_closed_quote(str[i], i + 1, str))
+// 			{
+// 				quote = str[i];
+// 				i++;
+// 				continue ;
+// 			}
+// 		}
+// 		else if (quote && str[i] == quote)
+// 		{
+// 			quote = 0;
+// 			i++;
+// 			continue ;
+// 		}
+// 		res[j++] = str[i++];
+// 	}
+// 	res[j] = '\0';
+// 	return (res);
+// }
+
 
 // ===== Додавання аргументу в масив =====
 void add_arg(t_cmd *cmd, char *arg)
