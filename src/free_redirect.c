@@ -1,14 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_utils.c                                    :+:      :+:    :+:   */
+/*   free_redirect.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/15 14:42:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/05 10:55:01 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/08 14:31:30 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/08 14:36:14 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../include/ft_redirection.h"
 
+void	free_redirect(void *value)
+{
+	t_redirect	*redirect;
+
+	redirect = (t_redirect *)value;
+	if (redirect == NULL)
+		return ;
+	if (redirect->filename != NULL)
+		free(redirect->filename);
+	redirect->type = _reset;
+	free(redirect);
+}

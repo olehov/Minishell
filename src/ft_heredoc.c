@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:05:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/23 15:08:41 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/07 18:54:30 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,26 +22,33 @@ static bool	check_delimiter(const char *delimiter)
 	return (true);
 }
 
-static char	*get_delimiter_without_quotes(char *delimiter, bool *in_quotes)
+char	*get_delimiter_without_quotes(char *delimiter, bool *in_quotes)
 {
 	char	*tmp;
+	char	quote;
 	size_t	i;
-	size_t	len;
+	size_t	j;
 
 	i = 0;
+	j = 0;
 	if (check_delimiter(delimiter) == 0)
 		return (NULL);
-	len = ft_strlen(delimiter);
-	tmp = ft_calloc(sizeof(char *), len);
+	tmp = ft_calloc(sizeof(char *), ft_strlen(delimiter));
 	if (tmp == NULL)
 		return (perror("Can't allocate memory"), NULL);
-	while (delimiter[i] != '\0' && i < len - 2)
+	while (delimiter[i] != '\0')
 	{
-		tmp[i] = delimiter[i + 1];
-		i++;
+		if (delimiter[i] == '\'' || delimiter[i] == '\"')
+		{
+			*in_quotes = true;
+			quote = delimiter[i++];
+			while (delimiter[i] != quote && delimiter[i] != '\0')
+				tmp[j++] = delimiter[i++];
+		}
+		else
+			tmp[j++] = delimiter[i++];
 	}
-	tmp[i] = '\0';
-	*in_quotes = true;
+	tmp[j] = '\0';
 	return (tmp);
 }
 
@@ -74,7 +81,7 @@ static int	read_line(int fd, char *delimiter, t_list *env, bool in_quotes)
 	return (1);
 }
 
-int	ft_heredoc(char *delimiter, t_list *env)
+int	ft_heredoc(t_heredoc *heredoc, t_list *env)
 {
 	int		fd;
 	int		exit_status;
@@ -83,15 +90,14 @@ int	ft_heredoc(char *delimiter, t_list *env)
 
 	in_quotes = false;
 	exit_status = 1;
-	if (check_delimiter(delimiter) == 0)
+	if (check_delimiter(heredoc->delimiter) == 0)
 		return (-1);
-	fd = open(HEREDOC_FILENAME_PATH, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	fd = open(heredoc->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
 		return (print_file_error(), -1);
-	del_without_quotes = delimiter;
-	if (delimiter[0] == '\'' || delimiter[0] == '\"')
-		del_without_quotes = get_delimiter_without_quotes(delimiter,
-				&in_quotes);
+	del_without_quotes = get_delimiter_without_quotes(heredoc->delimiter,
+			&in_quotes);
+	// del_without_quotes = process_env(heredoc->delimiter, env);
 	while (exit_status != -1 && exit_status != 0)
 		exit_status = read_line(fd, del_without_quotes, env, in_quotes);
 	close(fd);

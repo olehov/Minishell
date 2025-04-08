@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 09:56:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/04 16:37:26 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/08 15:18:58 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../ft_libft/headers/libft.h"
+# include "ft_heredoc.h"
+# include "ft_redirection.h"
 
 // ----------------------
 //     GLOBAL VARIABLES
@@ -49,13 +51,12 @@ typedef struct s_env
 typedef struct s_cmd
 {
 	pid_t			pid;
-	char			**args;
 	char			*infile;
 	char			*outfile;
+	char			**args;
 	char			*delimiter;
-	int				redirect_in;
-	int				append_out;
 	int				pipe_fd[2];
+	t_list			*redirect_lst;
 	struct s_cmd	*prev;
 	struct s_cmd	*next;
 }	t_cmd;
@@ -63,15 +64,11 @@ typedef struct s_cmd
 typedef struct s_minish
 {
 	t_list	*env;
+	t_list	*heredocs;
 	t_cmd	*cmd;
 }	t_minish;
 
-// extern t_minish	g_minish;
 extern	int	g_last_exit_code;
-
-# define HEREDOC_FILENAME_PATH "/tmp/heredoc_tmp.txt"
-
-# define ANSI_CLEAR_SCREEN "\033[H\033[J"
 
 # define RED "\033[31m"
 # define CYAN "\033[36m"
@@ -82,6 +79,9 @@ extern	int	g_last_exit_code;
 //       FUNCTIONS
 // ----------------------
 
+size_t	get_row_size(char **args);
+void	print_cd_error(void);
+int		is_directory(const char *path);
 void	print_args(char	**args);
 
 char	**split_outside_quotes(char *input, char delimiter);
@@ -92,11 +92,11 @@ void	signal_handler(int signo);
 
 // ===== parse_input.c =====
 t_cmd	*parse_input(char *input, t_list *env, t_minish *msh);
+void	free_cmd_node(t_cmd *cmd);
 void	free_cmd_list(t_cmd *cmd);
 
 // ===== execute_commands.c =====
 void	execute_commands(t_minish *msh);
-void	handle_redirects(t_cmd *cmd);
 int		is_builtin(char **cmd);
 void	execute_builtin(t_cmd *cmd, t_minish *msh);
 
@@ -111,9 +111,6 @@ void	print_env_list(t_list *lst);
 int		ft_set_env(t_list **lst, char *env);
 void	ft_env_unset(t_list **lst, char *env);
 void	ft_exit(char **args);
-
-// ===== heredoc.c =====
-int		ft_heredoc(char *delimiter, t_list *env);
 
 int	append_to_file(char *inputFileName, char *outputFileName, int flags);
 

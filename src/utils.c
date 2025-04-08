@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:30:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/04 10:40:57 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/08 16:37:19 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,66 +70,6 @@ char	*remove_quotes(char *str)
 	return (res);
 }
 
-
-// char	*remove_quotes(char *str)
-// {
-// 	int		i = 0, j = 0;
-// 	char	quote = 0;
-// 	char	*res = malloc(ft_strlen(str) + 1);
-// 	if (!res) return NULL;
-
-// 	while (str[i])
-// 	{
-// 		if (!quote && (str[i] == '\'' || str[i] == '"'))
-// 		{
-// 			quote = str[i]; // відкрилась лапка
-// 			i++; // пропускаємо відкриваючу
-// 		}
-// 		else if (quote && str[i] == quote)
-// 		{
-// 			quote = 0; // закрилась лапка
-// 			i++; // пропускаємо закриваючу
-// 		}
-// 		else
-// 			res[j++] = str[i++];
-// 	}
-// 	res[j] = '\0';
-// 	return (res);
-// }
-
-
-// char	*remove_quotes(char *str)
-// {
-// 	int		i = 0, j = 0;
-// 	char	quote = 0;
-// 	char	*res = malloc(ft_strlen(str) + 1);
-
-// 	if (!res)
-// 		return (NULL);
-// 	while (str[i])
-// 	{
-// 		if (!quote && (str[i] == '\'' || str[i] == '\"'))
-// 		{
-// 			if (is_closed_quote(str[i], i + 1, str))
-// 			{
-// 				quote = str[i];
-// 				i++;
-// 				continue ;
-// 			}
-// 		}
-// 		else if (quote && str[i] == quote)
-// 		{
-// 			quote = 0;
-// 			i++;
-// 			continue ;
-// 		}
-// 		res[j++] = str[i++];
-// 	}
-// 	res[j] = '\0';
-// 	return (res);
-// }
-
-
 // ===== Додавання аргументу в масив =====
 void add_arg(t_cmd *cmd, char *arg)
 {
@@ -154,24 +94,24 @@ void add_arg(t_cmd *cmd, char *arg)
 }
 
 // ===== Обробка редіректів для команди =====
-void	handle_redirects(t_cmd *cmd)
-{
-	if (cmd->outfile)
-	{
-		if (cmd->append_out)
-			append_to_file(cmd->infile, cmd->outfile, O_RDWR | O_APPEND);
-		else
-			append_to_file(cmd->infile, cmd->outfile, O_RDWR | O_TRUNC);
-	}
-	if (cmd->infile)
-	{
-		if (cmd->redirect_in)
-		{
-			append_to_file(cmd->outfile, cmd->infile,
-				O_RDONLY | O_CREAT | O_TRUNC);
-		}
-	}
-}
+// void	handle_redirects(t_cmd *cmd)
+// {
+// 	if (cmd->outfile)
+// 	{
+// 		if (cmd->append_out)
+// 			append_to_file(cmd->infile, cmd->outfile, O_RDWR | O_APPEND);
+// 		else
+// 			append_to_file(cmd->infile, cmd->outfile, O_RDWR | O_TRUNC);
+// 	}
+// 	if (cmd->infile)
+// 	{
+// 		if (cmd->redirect_in)
+// 		{
+// 			append_to_file(cmd->outfile, cmd->infile,
+// 				O_RDONLY | O_CREAT | O_TRUNC);
+// 		}
+// 	}
+// }
 
 // ===== Перевірка для echo -n (чи лише n) =====
 int only_n(char *str)

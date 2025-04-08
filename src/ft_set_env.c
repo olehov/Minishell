@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:15:16 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/04 16:39:05 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/05 10:57:48 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int ft_set_env(t_list **lst, char *env)
 			ft_putstr_fd("export: `", STDERR_FILENO);
 			ft_putstr_fd(tmp[i], STDERR_FILENO);
 			ft_putstr_fd("`: not a valid identifier\n", STDERR_FILENO);
-			g_last_exit_code = 1;
+			g_last_exit_code = EXIT_FAILURE;
 			i++;
 			continue ;
 		}

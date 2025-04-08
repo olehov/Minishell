@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/04 16:39:05 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/08 18:34:31 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,13 @@ void	free_split(char **str)
 void	init_shell(t_minish *msh, char **envp)
 {
 	msh->env = NULL;
+	msh->heredocs = NULL;
 	g_last_exit_code = 0;
 	if (init_env(&msh->env, envp) == -1)
 	{
+		g_last_exit_code = EXIT_FAILURE;
 		ft_putstr_fd("Failed to initialize environment\n", STDERR_FILENO);
-		exit(EXIT_FAILURE);
+		exit(g_last_exit_code);
 	}
 }
 
@@ -98,7 +100,7 @@ t_cmd	*get_cmd_lst(t_minish *msh)
 
 	prompt = get_prompt(msh);
 	// line = readline(prompt);
-	line = readline("minishell> ");
+	line = readline("MINISHELL>");
 	if (!line)
 		return (NULL);
 	if (*line)
@@ -125,17 +127,6 @@ void	print_arr_of_str(char **str)
 	}
 }
 
-void	print_error(char *cmd)
-{
-	if (g_last_exit_code == 0)
-		return ;
-	ft_putstr_fd(cmd, STDERR_FILENO);
-	if (g_last_exit_code == 127)
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-	else
-		perror(cmd);
-}
-
 // Основний цикл shell
 int	main(int argc, char **argv, char **envp)
 {
@@ -150,20 +141,17 @@ int	main(int argc, char **argv, char **envp)
 	std_fd[1] = dup(STDOUT_FILENO);
 	while (1)
 	{
-		dup2(std_fd[0], STDIN_FILENO);
-		dup2(std_fd[1], STDOUT_FILENO);
 		signal(SIGINT, signal_handler);
 		signal(SIGQUIT, signal_handler);
 		cmd_list = get_cmd_lst(&msh);
 		if (cmd_list == NULL)
 			break ;
-		// print_arr_of_str(cmd_list->args);
 		msh.cmd = cmd_list;
 		execute_commands(&msh);
-		print_error(cmd_list->args[0]);
 		free_cmd_list(cmd_list);
-		if (unlink(HEREDOC_FILENAME_PATH) == -1 && errno != ENOENT)
-			perror(HEREDOC_FILENAME_PATH);
+		unlink_heredocs(&msh.heredocs);
+		dup2(std_fd[0], STDIN_FILENO);
+		dup2(std_fd[1], STDOUT_FILENO);
 	}
 	rl_clear_history();
 	ft_lstclear(&msh.env, free_env);

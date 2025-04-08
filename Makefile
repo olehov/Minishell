@@ -43,7 +43,12 @@ SRC = main.c \
       proccess_quoted_text.c \
       env_list_to_arr.c \
       split_path.c \
-      expand_line.c
+      expand_line.c \
+      init_heredoc.c \
+      unlink_heredocs.c \
+      free_heredoc.c \
+      free_redirect.c \
+      init_redirect.c \
 
 SRC_WITH_PATH = $(addprefix $(SRC_DIR)/, $(SRC))
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))

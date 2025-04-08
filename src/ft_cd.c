@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:11:06 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/04 16:29:12 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/05 13:33:16 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,16 @@ void	change_path(t_list **lst, char *old_path)
 	}
 }
 
+void	print_cd_error(void)
+{
+	if (errno == ENOENT)
+		ft_putstr_fd(" No such file or directory\n", STDERR_FILENO);
+	else if (errno == EACCES)
+		ft_putstr_fd(" Permision denied\n", STDERR_FILENO);
+	else if (errno == ENOTDIR)
+		ft_putstr_fd(" Not a directory\n", STDERR_FILENO);
+}
+
 static int	ft_chdir(char *path, t_list **lst)
 {
 	char	old_path[PATH_MAX];
@@ -83,9 +93,15 @@ static int	ft_chdir(char *path, t_list **lst)
 	if (getcwd(old_path, PATH_MAX) == NULL)
 		return (-1);
 	if (!is_directory(path))
-		return (-1);
+	{
+		errno = ENOTDIR;
+		return (print_cd_error(), -1);
+	}
 	if (chdir(path) == 0)
+	{
+		print_cd_error();
 		return (change_path(lst, old_path), 0);
+	}
 	return (-1);
 }
 
@@ -121,6 +137,11 @@ int	ft_cd(char *path, t_list **lst)
 
 	if (*lst == NULL)
 		return (-1);
+	if (access(path, F_OK) != 0)
+	{
+		errno = ENOENT;
+		return (print_cd_error(), -1);
+	}
 	if (ft_get_env(*lst, "OLDPWD") == NULL)
 		ft_set_env(lst, ft_strjoin("OLDPWD=", getcwd(oldpwd, PATH_MAX)));
 	if (path == NULL || path[0] == '~')

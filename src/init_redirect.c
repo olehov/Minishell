@@ -1,14 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin_utils.c                                    :+:      :+:    :+:   */
+/*   init_redirect.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/15 14:42:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/05 10:55:01 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/08 14:27:39 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/08 14:30:16 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../include/ft_redirection.h"
 
+t_redirect	*init_redirect(char *filename, t_redirect_type type)
+{
+	t_redirect	*redirect;
+
+	if (filename == NULL)
+		return (NULL);
+	redirect = malloc(sizeof(t_redirect));
+	if (redirect == NULL)
+		return (NULL);
+	redirect->filename = ft_strdup(filename);
+	if (redirect->filename == NULL)
+		return (free(redirect), NULL);
+	redirect->type = type;
+	return (redirect);
+}
