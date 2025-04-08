@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/08 18:19:10 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/08 18:43:56 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -304,6 +304,8 @@ static void launch_child(t_cmd *cmd, t_minish *msh)
 	char *path = find_executable_path(cmd->args[0], msh->env);
 	char **envp = env_list_to_str_arr(msh->env);
 	execve(path, cmd->args, envp);
+	free(path);
+	free_split(envp);
 	g_last_exit_code = 127;
 	print_error(cmd->args[0]);
 	exit(g_last_exit_code);
