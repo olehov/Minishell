@@ -1,27 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   unlink_heredocs.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/07 12:32:11 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 20:15:01 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#include "../../include/ft_heredoc.h"
 
-size_t	ft_strlen(const char *str)
+void	unlink_heredocs(t_list **heredocs)
 {
-	size_t	i;
+	t_list		*node;
+	t_heredoc	*heredoc_node;
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
+	node = *heredocs;
+	if (node == NULL)
+		return ;
+	while (node)
 	{
-		i++;
+		heredoc_node = node->content;
+		unlink(heredoc_node->filename);
+		node = node->next;
 	}
-	return (i);
+	ft_lstclear(heredocs, free_heredoc);
 }

@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   free_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/07 12:11:16 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 20:05:00 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#include "../../include/ft_heredoc.h"
 
-size_t	ft_strlen(const char *str)
+void	free_heredoc(void *value)
 {
-	size_t	i;
+	t_heredoc	*heredoc;
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
+	heredoc = (t_heredoc *)value;
+	if (heredoc == NULL)
+		return ;
+	if (heredoc->delimiter != NULL)
+		free(heredoc->delimiter);
+	if (heredoc->filename != NULL)
+		free(heredoc->filename);
+	free(heredoc);
 }

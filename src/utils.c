@@ -6,30 +6,65 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:30:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/29 14:41:24 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/08 16:37:19 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// ===== Видалення лапок з рядка =====
+bool	is_closed_quote(char quote, int start, char *str)
+{
+	const char	single_quote = '\'';
+	const char	double_quote = '\"';
+
+	if (str == NULL || quote == 0)
+		return (false);
+	while (str[start] != '\0')
+	{
+		if (str[start] == single_quote || str[start] == double_quote)
+		{
+			if ((str[start] == single_quote && quote == single_quote)
+				|| (str[start] == double_quote && quote == double_quote))
+				return (true);
+			else
+				return (false);
+		}
+		start++;
+	}
+	return (false);
+}
+
+int	ft_is_quote(char c)
+{
+	return (c == '\'' || c == '"');
+}
+
+
+/*removing quotes from line*/
+
 char	*remove_quotes(char *str)
 {
-	int		i = 0;
-	int		j = 0;
+	int		i = 0, j = 0;
 	char	quote = 0;
 	char	*res = malloc(ft_strlen(str) + 1);
 	if (!res) return NULL;
 
 	while (str[i])
 	{
-		if (!quote && (str[i] == '\'' || str[i] == '\"'))
-			quote = str[i]; // початок лапок
+		if (!quote && ft_is_quote(str[i])
+			&& is_closed_quote(str[i], i + 1, str))
+		{
+			quote = str[i++];
+			continue ;
+		}
 		else if (quote && str[i] == quote)
-			quote = 0; // кінець лапок
+		{
+			quote = 0;
+			i++;
+			continue ;
+		}
 		else
-			res[j++] = str[i]; // копіюємо символ
-		i++;
+			res[j++] = str[i++];
 	}
 	res[j] = '\0';
 	return (res);
@@ -59,24 +94,24 @@ void add_arg(t_cmd *cmd, char *arg)
 }
 
 // ===== Обробка редіректів для команди =====
-void	handle_redirects(t_cmd *cmd)
-{
-	if (cmd->outfile)
-	{
-		if (cmd->append_out)
-			append_to_file(cmd->infile, cmd->outfile, O_RDWR | O_APPEND);
-		else
-			append_to_file(cmd->infile, cmd->outfile, O_RDWR | O_TRUNC);
-	}
-	if (cmd->infile)
-	{
-		if (cmd->redirect_in)
-		{
-			append_to_file(cmd->outfile, cmd->infile,
-				O_RDONLY | O_CREAT | O_TRUNC);
-		}
-	}
-}
+// void	handle_redirects(t_cmd *cmd)
+// {
+// 	if (cmd->outfile)
+// 	{
+// 		if (cmd->append_out)
+// 			append_to_file(cmd->infile, cmd->outfile, O_RDWR | O_APPEND);
+// 		else
+// 			append_to_file(cmd->infile, cmd->outfile, O_RDWR | O_TRUNC);
+// 	}
+// 	if (cmd->infile)
+// 	{
+// 		if (cmd->redirect_in)
+// 		{
+// 			append_to_file(cmd->outfile, cmd->infile,
+// 				O_RDONLY | O_CREAT | O_TRUNC);
+// 		}
+// 	}
+// }
 
 // ===== Перевірка для echo -n (чи лише n) =====
 int only_n(char *str)

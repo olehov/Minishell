@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_redirection.h                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/08 14:19:48 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 13:19:01 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#ifndef FT_REDIRECTION_H
+# define FT_REDIRECTION_H
 
-size_t	ft_strlen(const char *str)
-{
-	size_t	i;
+# include "minishell.h"
+# include "ft_minishell_types.h"
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
-}
+t_redirect	*init_redirect(char *filename, t_redirect_type type);
+
+void		handle_redirects(t_cmd *cmd);
+
+void		free_redirect(void *redirect);
+
+#endif

@@ -6,40 +6,26 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/31 13:12:03 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:59:10 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-// Глобальна змінна для обробки статусу (як $?)
-t_minish g_minish;
+// global variable for parce status (like $?)
+int	g_last_exit_code;
 
-void	free_split(char **str)
+// initialization shell: enviroment variables
+void	init_shell(t_minish *msh, char **envp)
 {
-	size_t	i;
-
-	i = 0;
-	if (str == NULL || *str == NULL)
+	msh->env = NULL;
+	msh->heredocs = NULL;
+	g_last_exit_code = 0;
+	if (init_env(&msh->env, envp) == -1)
 	{
-		return ;
-	}
-	while (str[i] != NULL)
-	{
-		free(str[i++]);
-	}
-	free(str);
-}
-
-// Ініціалізація shell: змінні середовища
-void	init_shell(t_list **env, char **envp)
-{
-	*env = NULL;
-	g_minish.last_exit_code = 0;
-	if (init_env(env, envp) == -1)
-	{
-		ft_putstr_fd("Failed to initialize environment\n", 2);
-		exit(EXIT_FAILURE);
+		g_last_exit_code = EXIT_FAILURE;
+		ft_putstr_fd("Failed to initialize environment\n", STDERR_FILENO);
+		exit(g_last_exit_code);
 	}
 }
 
@@ -51,7 +37,7 @@ void	signal_handler(int signo)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		g_minish.last_exit_code = 130;
+		g_last_exit_code = 130;
 	}
 	else if (signo == SIGQUIT)
 	{
@@ -61,48 +47,55 @@ void	signal_handler(int signo)
 	}
 }
 
-char	*get_prompt(void)
+char	*get_prompt(t_minish *msh)
 {
 	char	*prompt;
 	char	*tmp;
 	char	*user;
+	char	*user_value;
+	char	*err_code;
 
-	user = ft_strjoin(get_env_value("USER", g_minish.env),
-			"'s" RESET "-" GRN "minishell");
-	if (g_minish.last_exit_code == 0)
-	{
-		tmp = ft_strjoin(CYAN, user);
-		if (tmp == NULL)
-			return (NULL);
-		prompt = ft_strjoin(tmp, RESET "> ");
-		free(tmp);
-	}
+	user_value = get_env_value("USER", msh->env);
+	if (ft_strcmp(user_value, "\0") != 0)
+		user = ft_strjoin3(CYAN, user_value, "'s" RESET "-" GRN "minishell");
+	else
+		user = ft_strjoin(GRN, "minishell");
+	if (user == NULL)
+		return (NULL);
+	if (g_last_exit_code == 0)
+		prompt = ft_strjoin(user, RESET "> ");
 	else
 	{
-		tmp = ft_strjoin3(CYAN, user, " " RED "[");
+		tmp = ft_strjoin(user, " " RED "[");
 		if (tmp == NULL)
 			return (NULL);
-		prompt = ft_strjoin3(tmp, ft_itoa(g_minish.last_exit_code),
-				"]" RESET "> ");
+		err_code = ft_itoa(g_last_exit_code);
+		prompt = ft_strjoin3(tmp, err_code, "]" RESET "> ");
 		free(tmp);
+		free(err_code);
 	}
 	free(user);
 	return (prompt);
 }
 
-t_cmd	*get_cmd_lst(void)
+t_cmd	*get_cmd_lst(t_minish *msh)
 {
 	char	*line;
 	char	*prompt;
 	t_cmd	*cmd_list;
 
-	prompt = get_prompt();
+	prompt = get_prompt(msh);
+	// line = readline(prompt);
+	// line = readline("MINISHELL>");
+	if (isatty(STDIN_FILENO))
 		line = readline(prompt);
+	else
+		line = readline("minishell> ");
 	if (!line)
 		return (NULL);
 	if (*line)
 		add_history(line);
-	cmd_list = parse_input(line, g_minish.env);
+	cmd_list = parse_input(line, msh->env, msh);
 	free(line);
 	free(prompt);
 	return (cmd_list);
@@ -110,7 +103,7 @@ t_cmd	*get_cmd_lst(void)
 
 void	print_arr_of_str(char **str)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	if (str == NULL || *str == NULL)
@@ -127,30 +120,25 @@ void	print_arr_of_str(char **str)
 // Основний цикл shell
 int	main(int argc, char **argv, char **envp)
 {
-	t_cmd	*cmd_list;
-	int	std_fd[2];
+	t_minish	msh;
+	t_cmd		*cmd_list;
 
 	(void)argc;
 	(void)argv;
-	init_shell(&g_minish.env, envp);
-	std_fd[0] = dup(STDIN_FILENO);
-	std_fd[1] = dup(STDOUT_FILENO);
+	init_shell(&msh, envp);
 	while (1)
 	{
-		dup2(std_fd[0], STDIN_FILENO);
-		dup2(std_fd[1], STDOUT_FILENO);
 		signal(SIGINT, signal_handler);
 		signal(SIGQUIT, signal_handler);
-		cmd_list = get_cmd_lst();
+		cmd_list = get_cmd_lst(&msh);
 		if (cmd_list == NULL)
 			break ;
-		// print_arr_of_str(cmd_list->args);
-		execute_commands(cmd_list, &g_minish);
+		msh.cmd = cmd_list;
+		execute_commands(&msh);
 		free_cmd_list(cmd_list);
-		if (unlink(HEREDOC_FILENAME_PATH) == -1 && errno != ENOENT)
-			perror(HEREDOC_FILENAME_PATH);
+		unlink_heredocs(&msh.heredocs);
 	}
 	rl_clear_history();
-	ft_lstclear(&g_minish.env, free_env);
-	return (0);
+	ft_lstclear(&msh.env, free_env);
+	exit(g_last_exit_code);
 }

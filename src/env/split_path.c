@@ -1,27 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   split_path.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2024/12/11 14:41:32 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 20:18:14 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#include "../../include/minishell.h"
 
-size_t	ft_strlen(const char *str)
+char	**split_path(t_list *lst, char *key, char c)
 {
-	size_t	i;
+	t_env	*env;
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
+	env = ft_get_env(lst, key);
+	if (env == NULL)
+		return (NULL);
+	return (ft_split(env->value, c));
 }

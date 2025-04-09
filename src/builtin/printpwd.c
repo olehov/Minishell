@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   printpwd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2024/12/04 15:41:35 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 20:14:54 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#include "../../include/minishell.h"
+#include <linux/limits.h>
 
-size_t	ft_strlen(const char *str)
+int	printpwd(void)
 {
-	size_t	i;
+	char	pwd[PATH_MAX];
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
+	if (getcwd(pwd, PATH_MAX) == NULL)
 	{
-		i++;
+		if (errno == EINVAL)
+			return (perror("printpwd: some arg is null"), -1);
+		else if (errno == ENOMEM)
+			return (perror("printpwd:"), -1);
+		else if (errno == ERANGE)
+			return (perror("printpwd: buffer to small"), -1);
 	}
-	return (i);
+	printf("%s\n", pwd);
+	return (0);
 }

@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   free_split.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2024/07/02 12:46:57 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 16:49:55 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/libft.h"
 
-size_t	ft_strlen(const char *str)
+void	free_split(char **str)
 {
 	size_t	i;
 
 	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
+	if (str == NULL || *str == NULL)
 	{
-		i++;
+		return ;
 	}
-	return (i);
+	while (str[i] != NULL)
+	{
+		free(str[i++]);
+	}
+	free(str);
 }

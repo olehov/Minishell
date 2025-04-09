@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ogrativ <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/15 16:32:50 by ogrativ           #+#    #+#              #
-#    Updated: 2024/04/15 16:32:54 by ogrativ          ###   ########.fr        #
+#    Updated: 2025/04/05 12:55:31 by ogrativ          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ NAME = get_next_line.a
 LIBC = ar rcs
 CC = cc
 RM = rm -f
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fPIC
 
 .c.o:
 	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}

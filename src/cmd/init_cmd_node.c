@@ -1,27 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   init_cmd_node.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/09 13:00:32 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 13:47:28 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#include "../../include/ft_cmd.h"
 
-size_t	ft_strlen(const char *str)
+// Ініціалізація структури команди
+t_cmd	*init_cmd_node(void)
 {
-	size_t	i;
+	t_cmd	*cmd;
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
+	cmd->args = NULL;
+	cmd->pipe_fd[0] = -1;
+	cmd->pipe_fd[1] = -1;
+	cmd->redirect_lst = NULL;
+	cmd->next = NULL;
+	cmd->prev = NULL;
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	return (cmd);
 }

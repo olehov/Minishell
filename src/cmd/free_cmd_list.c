@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   free_cmd_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/09 14:01:48 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 14:02:47 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#include "../../include/ft_cmd.h"
+#include "../../include/ft_redirection.h"
 
-size_t	ft_strlen(const char *str)
+void	free_cmd_list(t_cmd *cmd)
 {
-	size_t	i;
+	t_cmd	*tmp;
+	int		i;
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
+	while (cmd != NULL)
 	{
-		i++;
+		tmp = cmd;
+		i = 0;
+		if (cmd->args != NULL)
+		{
+			while (cmd->args[i] != NULL)
+				free(cmd->args[i++]);
+			free(cmd->args);
+		}
+		if (cmd->redirect_lst != NULL)
+			ft_lstclear(&cmd->redirect_lst, free_redirect);
+		cmd = cmd->next;
+		free(tmp);
 	}
-	return (i);
 }

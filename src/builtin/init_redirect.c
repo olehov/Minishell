@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   init_redirect.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/08 14:27:39 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 20:14:45 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#include "../../include/ft_redirection.h"
 
-size_t	ft_strlen(const char *str)
+t_redirect	*init_redirect(char *filename, t_redirect_type type)
 {
-	size_t	i;
+	t_redirect	*redirect;
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
+	if (filename == NULL)
+		return (NULL);
+	redirect = malloc(sizeof(t_redirect));
+	if (redirect == NULL)
+		return (NULL);
+	redirect->filename = ft_strdup(filename);
+	if (redirect->filename == NULL)
+		return (free(redirect), NULL);
+	redirect->type = type;
+	return (redirect);
 }

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 09:56:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/28 15:50:10 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 13:20:41 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,63 +27,39 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "../ft_libft/headers/libft.h"
+# include "ft_heredoc.h"
+# include "ft_redirection.h"
+# include "ft_cmd.h"
+# include "ft_minishell_types.h"
 
 // ----------------------
 //     GLOBAL VARIABLES
 // ----------------------
 
-typedef struct s_env
-{
-	char	*key;
-	char	*value;
-}	t_env;
-
-typedef struct s_cmd
-{
-	char			**args;
-	char			*infile;
-	char			*outfile;
-	char			*delimiter;
-	int				redirect_in;
-	int				append_out;
-	int				pipe_fd[2];
-	struct s_cmd	*next;
-}	t_cmd;
-
-typedef struct s_minish
-{
-	t_list	*env;
-	int		last_exit_code;
-}	t_minish;
-
-extern t_minish	g_minish;
-
-# define HEREDOC_FILENAME_PATH "/tmp/heredoc_tmp.txt"
-
-# define ANSI_CLEAR_SCREEN "\033[H\033[J"
-
-# define RED "\033[31m"
-# define CYAN "\033[36m"
-# define RESET "\033[0m"
-# define GRN "\033[32m"
+extern	int	g_last_exit_code;
 
 // ----------------------
 //       FUNCTIONS
 // ----------------------
 
+size_t	get_row_size(char **args);
+void	print_cd_error(void);
+int		is_directory(const char *path);
 void	print_args(char	**args);
 
+char	**split_outside_quotes(char *input, char delimiter);
+
 // ===== main.c =====
-void	init_shell(t_list **env, char **envp);
+void	init_shell(t_minish *msh, char **envp);
 void	signal_handler(int signo);
 
 // ===== parse_input.c =====
-t_cmd	*parse_input(char *input, t_list *env);
-void	free_cmd_list(t_cmd *cmd);
+t_cmd	*parse_input(char *input, t_list *env, t_minish *msh);
+// void	free_cmd_node(t_cmd *cmd);
+// void	free_cmd_list(t_cmd *cmd);
 
 // ===== execute_commands.c =====
-void	execute_commands(t_cmd *cmd_list, t_minish *msh);
-void	handle_redirects(t_cmd *cmd);
+void	execute_commands(t_minish *msh);
 int		is_builtin(char **cmd);
 void	execute_builtin(t_cmd *cmd, t_minish *msh);
 
@@ -99,11 +75,6 @@ int		ft_set_env(t_list **lst, char *env);
 void	ft_env_unset(t_list **lst, char *env);
 void	ft_exit(char **args);
 
-// ===== heredoc.c =====
-int		ft_heredoc(char *delimiter, t_list *env);
-
-// int	append_to_file(int input_fd, char *outputfilename);
-// int		append_to_file(char *inputFileName, char *outputFileName);
 int	append_to_file(char *inputFileName, char *outputFileName, int flags);
 
 // ===== utils.c =====
@@ -116,9 +87,6 @@ int		init_env(t_list **lst, char *env[]);
 t_env	*ft_get_env(t_list *lst, char *key);
 char	*get_env_value(const char *var_name, t_list *lst);
 char	**env_list_to_str_arr(t_list *lst);
-void	ft_env_unset(t_list **lst, char *env);
-int		ft_set_env(t_list **lst, char *env);
-void	print_env_list(t_list *lst);
 
 // ===== process_env & expand (твій код) =====
 char	*process_env(const char *input, t_list *lst);

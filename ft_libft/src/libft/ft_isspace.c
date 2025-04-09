@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/02 18:43:33 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/02 18:51:11 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/libft.h"
 
-size_t	ft_strlen(const char *str)
+int	ft_isspace(int space)
 {
-	size_t	i;
-
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
+	if (space == _space || space == _tabh || space == _endl
+		|| space == _tabv || space == _formfeed
+		|| space == _carriageret)
 	{
-		i++;
+		return (1);
 	}
-	return (i);
+	return (0);
 }
