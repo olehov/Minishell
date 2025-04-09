@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 12:11:16 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/07 12:53:41 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:05:00 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_heredoc.h"
+#include "../../include/ft_heredoc.h"
 
 void	free_heredoc(void *value)
 {

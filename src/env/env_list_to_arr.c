@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:02:41 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/22 17:23:34 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:15:30 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 char	**env_list_to_str_arr(t_list *lst)
 {

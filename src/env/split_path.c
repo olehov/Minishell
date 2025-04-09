@@ -1,30 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_2d_array.c                                 :+:      :+:    :+:   */
+/*   split_path.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogrativ <ogrativ@student.42london.com      +#+  +:+       +#+        */
+/*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/02 12:46:57 by ogrativ           #+#    #+#             */
-/*   Updated: 2024/07/02 12:47:01 by ogrativ          ###   ########.fr       */
+/*   Created: 2024/12/11 14:41:32 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 20:18:14 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#include "../../include/minishell.h"
 
-void	ft_free_2d_array(char **arr, int row)
+char	**split_path(t_list *lst, char *key, char c)
 {
-	int	i;
+	t_env	*env;
 
-	i = 0;
-	if (*arr == NULL)
-	{
-		return ;
-	}
-	while (i < row)
-	{
-		free(arr[i]);
-		i++;
-	}
-	free(arr);
+	env = ft_get_env(lst, key);
+	if (env == NULL)
+		return (NULL);
+	return (ft_split(env->value, c));
 }

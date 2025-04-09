@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:11:06 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/05 13:33:16 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:06:23 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 #include <linux/limits.h>
 #include <dirent.h>
 

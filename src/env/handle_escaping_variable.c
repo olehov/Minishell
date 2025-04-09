@@ -6,12 +6,12 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:37:23 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/01/24 15:37:40 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:17:32 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-#include "../include/process_env_utils.h"
+#include "../../include/minishell.h"
+#include "../../include/process_env_utils.h"
 
 int	handle_escaping_variable(const char *input, int *i, t_env_state *state)
 {

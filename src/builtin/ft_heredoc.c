@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:05:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/07 18:54:30 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:27:28 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/ft_heredoc.h"
 
 static bool	check_delimiter(const char *delimiter)
 {
@@ -94,10 +94,9 @@ int	ft_heredoc(t_heredoc *heredoc, t_list *env)
 		return (-1);
 	fd = open(heredoc->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
-		return (print_file_error(), -1);
+		return (-1);
 	del_without_quotes = get_delimiter_without_quotes(heredoc->delimiter,
 			&in_quotes);
-	// del_without_quotes = process_env(heredoc->delimiter, env);
 	while (exit_status != -1 && exit_status != 0)
 		exit_status = read_line(fd, del_without_quotes, env, in_quotes);
 	close(fd);

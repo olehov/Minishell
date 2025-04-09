@@ -6,12 +6,12 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:18:08 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/01/23 18:33:22 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:18:23 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-#include "../include/process_env_utils.h"
+#include "../../include/minishell.h"
+#include "../../include/process_env_utils.h"
 
 int	ensure_buffer_capacity(t_env_state *state, int extra_length)
 {

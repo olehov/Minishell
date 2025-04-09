@@ -6,12 +6,12 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:30:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/03 09:29:26 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:18:02 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-#include "../include/process_env_utils.h"
+#include "../../include/minishell.h"
+#include "../../include/process_env_utils.h"
 
 int	handle_text(const char *input, int *i, t_env_state *state,
 	char *var_name)

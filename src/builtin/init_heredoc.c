@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:47:16 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/07 12:03:25 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:14:40 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_heredoc.h"
+#include "../../include/ft_heredoc.h"
 
 t_heredoc	*init_heredoc(char *dilimiter)
 {

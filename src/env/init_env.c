@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 12:19:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/04 16:30:05 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 22:13:33 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 char	*ft_get_key(char *env)
 {
@@ -101,7 +101,7 @@ void	free_env(void *env)
 
 static void	update_shell_level(t_list **lst)
 {
-	size_t	lvl;
+	int		lvl;
 	char	*shlvl;
 	char	*tmp;
 
@@ -111,7 +111,7 @@ static void	update_shell_level(t_list **lst)
 	if (shlvl == NULL)
 		return ;
 	lvl = ft_atoi(shlvl);
-	lvl += 1;
+	lvl++;
 	tmp = ft_itoa(lvl);
 	if (tmp == NULL)
 		return ;

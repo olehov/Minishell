@@ -6,12 +6,12 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:36:53 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/02 22:33:32 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:15:18 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-#include "../include/process_env_utils.h"
+#include "../../include/minishell.h"
+#include "../../include/process_env_utils.h"
 
 int	append_variable_value(const char *var_name, t_env_state *state, t_list *lst)
 {

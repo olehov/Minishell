@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_redirect.c                                    :+:      :+:    :+:   */
+/*   free_split.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/08 14:31:30 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/08 14:36:14 by ogrativ          ###   ########.fr       */
+/*   Created: 2024/07/02 12:46:57 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 16:49:55 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_redirection.h"
+#include "../../headers/libft.h"
 
-void	free_redirect(void *value)
+void	free_split(char **str)
 {
-	t_redirect	*redirect;
+	size_t	i;
 
-	redirect = (t_redirect *)value;
-	if (redirect == NULL)
+	i = 0;
+	if (str == NULL || *str == NULL)
+	{
 		return ;
-	if (redirect->filename != NULL)
-		free(redirect->filename);
-	redirect->type = _reset;
-	free(redirect);
+	}
+	while (str[i] != NULL)
+	{
+		free(str[i++]);
+	}
+	free(str);
 }

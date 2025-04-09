@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:43:08 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/15 15:47:01 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:26:03 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 // Функція для echo з підтримкою -n
 void ft_echo(char **args)

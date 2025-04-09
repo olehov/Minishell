@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_redirection.h                                   :+:      :+:    :+:   */
+/*   ft_cmd.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/08 14:19:48 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 13:19:01 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/09 11:42:05 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 13:18:30 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_REDIRECTION_H
-# define FT_REDIRECTION_H
+#ifndef FT_CMD_H
+# define FT_CMD_H
 
-# include "minishell.h"
+# include "../ft_libft/headers/libft.h"
 # include "ft_minishell_types.h"
+// # include "./minishell.h"
 
-t_redirect	*init_redirect(char *filename, t_redirect_type type);
+t_cmd	*init_cmd_node(void);
 
-void		handle_redirects(t_cmd *cmd);
+/**
+ * @param cmd Pointer to current cmd node
+ * @param type Redirection type from e_redirectind_type enum
+ */
+void	add_redirection(t_cmd *cmd, t_redirect_type type, char *path);
 
-void		free_redirect(void *redirect);
+void	free_cmd_node(t_cmd *cmd);
+void	free_cmd_list(t_cmd *cmd);
 
 #endif

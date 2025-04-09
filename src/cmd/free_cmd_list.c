@@ -1,23 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_path.c                                       :+:      :+:    :+:   */
+/*   free_cmd_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/11 14:41:32 by ogrativ           #+#    #+#             */
-/*   Updated: 2024/12/11 15:01:41 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/09 14:01:48 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 14:02:47 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/ft_cmd.h"
+#include "../../include/ft_redirection.h"
 
-char	**split_path(t_list *lst, char *key, char c)
+void	free_cmd_list(t_cmd *cmd)
 {
-	t_env	*env;
+	t_cmd	*tmp;
+	int		i;
 
-	env = ft_get_env(lst, key);
-	if (env == NULL)
-		return (NULL);
-	return (ft_split(env->value, c));
+	while (cmd != NULL)
+	{
+		tmp = cmd;
+		i = 0;
+		if (cmd->args != NULL)
+		{
+			while (cmd->args[i] != NULL)
+				free(cmd->args[i++]);
+			free(cmd->args);
+		}
+		if (cmd->redirect_lst != NULL)
+			ft_lstclear(&cmd->redirect_lst, free_redirect);
+		cmd = cmd->next;
+		free(tmp);
+	}
 }

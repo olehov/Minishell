@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_redirect.c                                    :+:      :+:    :+:   */
+/*   free_redirect.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/08 14:27:39 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/08 14:30:16 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/08 14:31:30 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 20:05:08 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_redirection.h"
+#include "../../include/ft_redirection.h"
 
-t_redirect	*init_redirect(char *filename, t_redirect_type type)
+void	free_redirect(void *value)
 {
 	t_redirect	*redirect;
 
-	if (filename == NULL)
-		return (NULL);
-	redirect = malloc(sizeof(t_redirect));
+	redirect = (t_redirect *)value;
 	if (redirect == NULL)
-		return (NULL);
-	redirect->filename = ft_strdup(filename);
-	if (redirect->filename == NULL)
-		return (free(redirect), NULL);
-	redirect->type = type;
-	return (redirect);
+		return ;
+	if (redirect->filename != NULL)
+		free(redirect->filename);
+	redirect->type = _reset;
+	free(redirect);
 }

@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:01:57 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/02 15:17:54 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:15:37 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
 char	*copy_string(char *line, int *i, char *res)
 {

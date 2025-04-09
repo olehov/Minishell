@@ -1,30 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_env_list.c                                   :+:      :+:    :+:   */
+/*   init_cmd_node.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/09 14:23:43 by ogrativ           #+#    #+#             */
-/*   Updated: 2024/12/10 11:30:20 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/09 13:00:32 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 13:47:28 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/ft_cmd.h"
 
-void	print_env_list(t_list *lst)
+// Ініціалізація структури команди
+t_cmd	*init_cmd_node(void)
 {
-	t_env	*env;
+	t_cmd	*cmd;
 
-	env = NULL;
-	if (lst == NULL)
-		return ;
-	while (lst != NULL)
-	{
-		env = (t_env *)(lst->content);
-		if (env == NULL)
-			return ;
-		printf("%s=%s\n", env->key, env->value);
-		lst = lst->next;
-	}
+	cmd = malloc(sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
+	cmd->args = NULL;
+	cmd->pipe_fd[0] = -1;
+	cmd->pipe_fd[1] = -1;
+	cmd->redirect_lst = NULL;
+	cmd->next = NULL;
+	cmd->prev = NULL;
+	cmd->infile = NULL;
+	cmd->outfile = NULL;
+	return (cmd);
 }

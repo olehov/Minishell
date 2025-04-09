@@ -6,33 +6,13 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:48:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/08 18:19:39 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 16:31:39 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 #include <fcntl.h>
 #include <unistd.h>
-
-// Ініціалізація структури команди
-t_cmd	*init_cmd_node(void)
-{
-	t_cmd	*cmd;
-
-	cmd = malloc(sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	cmd->args = NULL;
-	cmd->delimiter = NULL;
-	cmd->pipe_fd[0] = -1;
-	cmd->pipe_fd[1] = -1;
-	cmd->redirect_lst = NULL;
-	cmd->next = NULL;
-	cmd->prev = NULL;
-	cmd->infile = NULL;
-	cmd->outfile = NULL;
-	return (cmd);
-}
 
 void	ft_set_quote(char *quote, char value)
 {
@@ -51,11 +31,11 @@ char	**split_outside_quotes(char *input, char delimiter)
 	char	quote;
 
 	result = malloc(sizeof(char *) * (ft_strlen(input) / 2 + 2));
-	i = 0;
+	i = -1;
 	j = 0;
 	start = 0;
 	quote = 0;
-	while (input[i])
+	while (input[++i])
 	{
 		if ((input[i] == '\'' || input[i] == '\"'))
 			ft_set_quote(&quote, input[i]);
@@ -64,7 +44,6 @@ char	**split_outside_quotes(char *input, char delimiter)
 			result[j++] = ft_substr(input, start, i - start);
 			start = i + 1;
 		}
-		i++;
 	}
 	if (i > start)
 		result[j++] = ft_substr(input, start, i - start);
@@ -230,70 +209,41 @@ t_token *tokenize_with_quote_info(char *input)
 	return tokens;
 }
 
-void	add_redirection(t_cmd *cmd,
-	t_redirect_type type, bool has_pipe, char *path)
-{
-	char	*filename;
-
-	(void)has_pipe;
-	if (cmd == NULL || path == NULL)
-		return ;
-	// if (!has_pipe)
-	// {
-		filename = remove_quotes(path);
-		if (filename == NULL)
-			return ;
-		if (!has_pipe)
-		{
-			if (cmd->redirect_lst == NULL)
-				cmd->redirect_lst = ft_lstnew(
-						init_redirect(filename, type));
-			else
-				ft_lstadd_back(&cmd->redirect_lst,
-					ft_lstnew(init_redirect(filename, type)));
-		}
-		free(filename);
-	// }
-}
-
 // // Парсинг одного рядка команди з урахуванням токенів
 t_cmd *parse_single_command_from_tokens(t_token *tokens, t_minish *msh)
 {
 	t_cmd	*cmd = init_cmd_node();
 	int		i = 0;
-	bool	has_pipe = false;
 
 	while (tokens[i].value)
 	{
 		if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, "|") == 0)
 		{
-			has_pipe = true;
 			i++;
 			continue;
 		}
 		if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, "<") == 0 && tokens[i + 1].value)
 		{
-			add_redirection(cmd, _redirect_in, has_pipe, tokens[++i].value);
+			add_redirection(cmd, _redirect_in, tokens[++i].value);
 		}
 		else if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, ">") == 0 && tokens[i + 1].value)
 		{
-			add_redirection(cmd, _redirect_out, has_pipe, tokens[++i].value);
+			add_redirection(cmd, _redirect_out, tokens[++i].value);
 		}
 		else if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, ">>") == 0 && tokens[i + 1].value)
 		{
-			add_redirection(cmd, _append_to_file, has_pipe, tokens[++i].value);
+			add_redirection(cmd, _append_to_file, tokens[++i].value);
 		}
 		else if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, "<<") == 0 && tokens[i + 1].value)
 		{
 			t_heredoc	*heredoc;
-			cmd->delimiter = ft_strdup(tokens[++i].value);
-			heredoc = init_heredoc(cmd->delimiter);
+			heredoc = init_heredoc(tokens[++i].value);
 			if (heredoc == NULL)
 			{
 				g_last_exit_code = 1;
 				continue ;
 			}
-			add_redirection(cmd, _heredoc, has_pipe, heredoc->filename);
+			add_redirection(cmd, _heredoc, heredoc->filename);
 			ft_heredoc(heredoc, msh->env);
 			if (msh->heredocs == NULL)
 				msh->heredocs = ft_lstnew(heredoc);
@@ -420,30 +370,4 @@ t_cmd *parse_input(char *input, t_list *env, t_minish *msh)
 	}
 	free(pipe_split);
 	return first;
-}
-
-
-// Очистка командного списку
-void free_cmd_list(t_cmd *cmd)
-{
-	t_cmd	*tmp;
-	int		i;
-
-	while (cmd != NULL)
-	{
-		tmp = cmd;
-		i = 0;
-		if (cmd->args != NULL)
-		{
-			while (cmd->args[i] != NULL)
-				free(cmd->args[i++]);
-			free(cmd->args);
-		}
-		if (cmd->delimiter != NULL)
-			free(cmd->delimiter);
-		if (cmd->redirect_lst != NULL)
-			ft_lstclear(&cmd->redirect_lst, free_redirect);
-		cmd = cmd->next;
-		free(tmp);
-	}
 }

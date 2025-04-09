@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_env_value.c                                    :+:      :+:    :+:   */
+/*   print_env_list.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/23 14:13:25 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/01/23 18:32:52 by ogrativ          ###   ########.fr       */
+/*   Created: 2024/12/09 14:23:43 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 20:17:49 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-char	*get_env_value(const char *var_name, t_list *lst)
+void	print_env_list(t_list *lst)
 {
 	t_env	*env;
 
-	env = ft_get_env(lst, (char *)var_name);
-	if (env == NULL)
-		return ("\0");
-	return (env->value);
+	env = NULL;
+	if (lst == NULL)
+		return ;
+	while (lst != NULL)
+	{
+		env = (t_env *)(lst->content);
+		if (env == NULL)
+			return ;
+		printf("%s=%s\n", env->key, env->value);
+		lst = lst->next;
+	}
 }

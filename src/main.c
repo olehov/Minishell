@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/08 18:34:31 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 20:59:10 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,6 @@
 
 // global variable for parce status (like $?)
 int	g_last_exit_code;
-
-void	free_split(char **str)
-{
-	size_t	i;
-
-	i = 0;
-	if (str == NULL || *str == NULL)
-	{
-		return ;
-	}
-	while (str[i] != NULL)
-	{
-		free(str[i++]);
-	}
-	free(str);
-}
 
 // initialization shell: enviroment variables
 void	init_shell(t_minish *msh, char **envp)
@@ -69,9 +53,10 @@ char	*get_prompt(t_minish *msh)
 	char	*tmp;
 	char	*user;
 	char	*user_value;
+	char	*err_code;
 
 	user_value = get_env_value("USER", msh->env);
-	if (ft_strcmp(user_value, "\0"))
+	if (ft_strcmp(user_value, "\0") != 0)
 		user = ft_strjoin3(CYAN, user_value, "'s" RESET "-" GRN "minishell");
 	else
 		user = ft_strjoin(GRN, "minishell");
@@ -84,9 +69,10 @@ char	*get_prompt(t_minish *msh)
 		tmp = ft_strjoin(user, " " RED "[");
 		if (tmp == NULL)
 			return (NULL);
-		prompt = ft_strjoin3(tmp, ft_itoa(g_last_exit_code),
-				"]" RESET "> ");
+		err_code = ft_itoa(g_last_exit_code);
+		prompt = ft_strjoin3(tmp, err_code, "]" RESET "> ");
 		free(tmp);
+		free(err_code);
 	}
 	free(user);
 	return (prompt);
@@ -100,7 +86,11 @@ t_cmd	*get_cmd_lst(t_minish *msh)
 
 	prompt = get_prompt(msh);
 	// line = readline(prompt);
-	line = readline("MINISHELL>");
+	// line = readline("MINISHELL>");
+	if (isatty(STDIN_FILENO))
+		line = readline(prompt);
+	else
+		line = readline("minishell> ");
 	if (!line)
 		return (NULL);
 	if (*line)
@@ -132,13 +122,10 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_minish	msh;
 	t_cmd		*cmd_list;
-	int			std_fd[2];
 
 	(void)argc;
 	(void)argv;
 	init_shell(&msh, envp);
-	std_fd[0] = dup(STDIN_FILENO);
-	std_fd[1] = dup(STDOUT_FILENO);
 	while (1)
 	{
 		signal(SIGINT, signal_handler);
@@ -150,8 +137,6 @@ int	main(int argc, char **argv, char **envp)
 		execute_commands(&msh);
 		free_cmd_list(cmd_list);
 		unlink_heredocs(&msh.heredocs);
-		dup2(std_fd[0], STDIN_FILENO);
-		dup2(std_fd[1], STDOUT_FILENO);
 	}
 	rl_clear_history();
 	ft_lstclear(&msh.env, free_env);

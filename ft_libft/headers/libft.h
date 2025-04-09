@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:49:02 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/02 18:44:38 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 16:49:33 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -435,6 +435,6 @@ int		ft_lstsize(t_list *lst);
 /*
 Free allocate memory for 2d char array
 */
-void	ft_free_2d_array(char **arr, int row);
+void	free_split(char **str);
 
 #endif

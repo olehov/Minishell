@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/08 18:43:56 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 21:09:24 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,10 @@ void	execute_builtin(t_cmd *cmd, t_minish *msh)
 		exit(g_last_exit_code);
 	}
 	else if (ft_strcmp(cmd->args[0], "echo") == 0)
+	{
 		ft_echo(cmd->args + 1);
+		g_last_exit_code = 0;
+	}
 	else if (ft_strcmp(cmd->args[0], "$?") == 0)
 		printerrcode(msh);
 }
@@ -124,12 +127,12 @@ char *find_executable_path(char *cmd, t_list *env)
 
 		if (access(full_path, X_OK) == 0)
 		{
-			ft_free_2d_array(paths, -1);
+			free_split(paths);
 			return full_path;
 		}
 		free(full_path);
 	}
-	ft_free_2d_array(paths, -1);
+	free_split(paths);
 	return NULL;
 }
 
@@ -189,8 +192,6 @@ static int handle_redirect(t_cmd *cmd)
 			if (cmd->infile != NULL)
 				free(cmd->infile);
 			cmd->infile = ft_strdup(redirect->filename);
-			// if (dup2(fd, STDIN_FILENO) == -1)
-			// 	return (perror(redirect->filename), -1);
 		}
 		else if (redirect->type == _redirect_out)
 		{
@@ -205,8 +206,6 @@ static int handle_redirect(t_cmd *cmd)
 				free(cmd->outfile);
 			cmd->outfile = ft_strdup(redirect->filename);
 			last_out_file = redirect->type;
-			// if (dup2(fd, STDOUT_FILENO) == -1)
-			// 	return (perror(redirect->filename), -1);
 		}
 		else if (redirect->type == _append_to_file)
 		{
@@ -221,21 +220,17 @@ static int handle_redirect(t_cmd *cmd)
 				free(cmd->outfile);
 			cmd->outfile = ft_strdup(redirect->filename);
 			last_out_file = redirect->type;
-			// if (dup2(fd, STDOUT_FILENO) == -1)
-			// 	return (perror(redirect->filename), -1);
 		}
 		tmp = tmp->next;
 	}
 	if (cmd->infile)
 	{
 		fd = open(redirect->filename, O_RDONLY);
-		if (fd < 0)
+		if (fd < 0 || dup2(fd, STDIN_FILENO) == -1)
 		{
 			g_last_exit_code = 1;
 			return (perror(redirect->filename), -1);
 		}
-		if (dup2(fd, STDIN_FILENO) == -1)
-			return (perror(redirect->filename), -1);
 		close(fd);
 	}
 	if (cmd->outfile)
@@ -244,8 +239,11 @@ static int handle_redirect(t_cmd *cmd)
 			fd = open(redirect->filename, O_CREAT | O_WRONLY | O_APPEND, 0644);
 		else
 			fd = open(redirect->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (dup2(fd, STDOUT_FILENO) == -1)
+		if (fd < 0 || dup2(fd, STDOUT_FILENO) == -1)
+		{
+			g_last_exit_code = 1;
 			return (perror(redirect->filename), -1);
+		}
 		close(fd);
 	}
 	return (0);
@@ -317,9 +315,12 @@ void execute_commands(t_minish *msh)
 	pid_t pid;
 	int		status;
 	int		last_status;
+	int		std_fd[2];
 
+	std_fd[0] = dup(STDIN_FILENO);
+	std_fd[1] = dup(STDOUT_FILENO);
 
-	if (cmd && !cmd->next && is_builtin(cmd->args))
+	if (cmd && !cmd->next && cmd->args != NULL && is_builtin(cmd->args))
 	{
 		if (handle_redirect(cmd) == -1)
 		{
@@ -327,12 +328,17 @@ void execute_commands(t_minish *msh)
 				return ;
 		}
 		execute_builtin(cmd, msh);
+		dup2(std_fd[0], STDIN_FILENO);
+		dup2(std_fd[1], STDOUT_FILENO);
+		close(std_fd[0]);
+		close(std_fd[1]);
 		return ;
 	}
 	while (cmd)
 	{
 		if (cmd->args == NULL)
 		{
+			g_last_exit_code = 0;
 			cmd = cmd->next;
 			continue ;
 		}

@@ -1,30 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unlink_heredocs.c                                  :+:      :+:    :+:   */
+/*   printpwd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 12:32:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/07 12:46:14 by ogrativ          ###   ########.fr       */
+/*   Created: 2024/12/04 15:41:35 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 20:14:54 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_heredoc.h"
+#include "../../include/minishell.h"
+#include <linux/limits.h>
 
-void	unlink_heredocs(t_list **heredocs)
+int	printpwd(void)
 {
-	t_list		*node;
-	t_heredoc	*heredoc_node;
+	char	pwd[PATH_MAX];
 
-	node = *heredocs;
-	if (node == NULL)
-		return ;
-	while (node)
+	if (getcwd(pwd, PATH_MAX) == NULL)
 	{
-		heredoc_node = node->content;
-		unlink(heredoc_node->filename);
-		node = node->next;
+		if (errno == EINVAL)
+			return (perror("printpwd: some arg is null"), -1);
+		else if (errno == ENOMEM)
+			return (perror("printpwd:"), -1);
+		else if (errno == ERANGE)
+			return (perror("printpwd: buffer to small"), -1);
 	}
-	ft_lstclear(heredocs, free_heredoc);
+	printf("%s\n", pwd);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 09:56:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/08 15:18:58 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/09 13:20:41 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,51 +29,14 @@
 # include "../ft_libft/headers/libft.h"
 # include "ft_heredoc.h"
 # include "ft_redirection.h"
+# include "ft_cmd.h"
+# include "ft_minishell_types.h"
 
 // ----------------------
 //     GLOBAL VARIABLES
 // ----------------------
 
-typedef struct s_token
-{
-	char	*value;
-	bool	in_quotes;
-	char	quote_char;
-}	t_token;
-
-typedef struct s_env
-{
-	char	*key;
-	char	*value;
-	bool	append;
-}	t_env;
-
-typedef struct s_cmd
-{
-	pid_t			pid;
-	char			*infile;
-	char			*outfile;
-	char			**args;
-	char			*delimiter;
-	int				pipe_fd[2];
-	t_list			*redirect_lst;
-	struct s_cmd	*prev;
-	struct s_cmd	*next;
-}	t_cmd;
-
-typedef struct s_minish
-{
-	t_list	*env;
-	t_list	*heredocs;
-	t_cmd	*cmd;
-}	t_minish;
-
 extern	int	g_last_exit_code;
-
-# define RED "\033[31m"
-# define CYAN "\033[36m"
-# define RESET "\033[0m"
-# define GRN "\033[32m"
 
 // ----------------------
 //       FUNCTIONS
@@ -92,8 +55,8 @@ void	signal_handler(int signo);
 
 // ===== parse_input.c =====
 t_cmd	*parse_input(char *input, t_list *env, t_minish *msh);
-void	free_cmd_node(t_cmd *cmd);
-void	free_cmd_list(t_cmd *cmd);
+// void	free_cmd_node(t_cmd *cmd);
+// void	free_cmd_list(t_cmd *cmd);
 
 // ===== execute_commands.c =====
 void	execute_commands(t_minish *msh);

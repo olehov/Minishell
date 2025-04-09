@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   printpwd.c                                         :+:      :+:    :+:   */
+/*   get_env_value.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/04 15:41:35 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/29 21:38:42 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/01/23 14:13:25 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 20:17:25 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
-#include <linux/limits.h>
+#include "../../include/minishell.h"
 
-int	printpwd(void)
+char	*get_env_value(const char *var_name, t_list *lst)
 {
-	char	pwd[PATH_MAX];
+	t_env	*env;
 
-	if (getcwd(pwd, PATH_MAX) == NULL)
-	{
-		if (errno == EINVAL)
-			return (perror("printpwd: some arg is null"), -1);
-		else if (errno == ENOMEM)
-			return (perror("printpwd:"), -1);
-		else if (errno == ERANGE)
-			return (perror("printpwd: buffer to small"), -1);
-	}
-	printf("%s\n", pwd);
-	return (0);
+	env = ft_get_env(lst, (char *)var_name);
+	if (env == NULL)
+		return ("\0");
+	return (env->value);
 }
