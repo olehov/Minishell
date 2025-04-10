@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 21:09:24 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/10 17:16:07 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,124 +19,87 @@
 #include <fcntl.h>
 #include <dirent.h>
 
-size_t	get_row_size(char **args)
-{
-	size_t	i;
-
-	i = 0;
-	if (args == NULL || *args == NULL)
-	{
-		return (0);
-	}
-	while (args[i] != NULL)
-	{
-		i++;
-	}
-	return (i);
-}
-
 void	printerrcode(t_minish *msh)
 {
-	if (msh != NULL)
+	char	*exit_code;
+
+	exit_code = ft_itoa(g_last_exit_code);
+	if (msh != NULL && exit_code != NULL)
 	{
-		perror(ft_itoa(g_last_exit_code));
+		perror(exit_code);
 	}
+	free(exit_code);
+}
+
+int	run_cd(t_cmd *cmd, t_minish *msh)
+{
+	if (get_row_size(cmd->args) > 2)
+	{
+		ft_putstr_fd(" too many arguments\n", STDERR_FILENO);
+		return (-1);
+	}
+	else
+		return (ft_cd(cmd->args[1], &msh->env));
 }
 
 // // --- Вбудовані команди ---
 void	execute_builtin(t_cmd *cmd, t_minish *msh)
 {
+	int	exit_code;
+
+	exit_code = 0;
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
-	{
-		if (get_row_size(cmd->args) > 2)
-		{
-			g_last_exit_code = EXIT_FAILURE;
-			return (ft_putstr_fd(" too many arguments\n", STDERR_FILENO));
-		}
-		else if (ft_cd(cmd->args[1], &msh->env) == -1)
-			g_last_exit_code = EXIT_FAILURE;
-	}
+		exit_code = run_cd(cmd, msh);
 	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
-	{
-		if (printpwd() == -1)
-			g_last_exit_code = EXIT_FAILURE;
-	}
+		exit_code = printpwd();
 	else if (ft_strcmp(cmd->args[0], "env") == 0)
 		print_env_list(msh->env);
 	else if (ft_strcmp(cmd->args[0], "export") == 0)
-	{
-		if (ft_set_env(&msh->env, cmd->args[1]) == -1)
-		{
-			g_last_exit_code = EXIT_FAILURE;
-			return ;
-		}
-	}
+		exit_code = ft_set_env(&msh->env, cmd->args[1]);
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
-	{
 		ft_env_unset(&msh->env, cmd->args[1]);
-		g_last_exit_code = EXIT_SUCCESS;
-		return ;
-	}
 	else if (ft_strcmp(cmd->args[0], "exit") == 0)
-	{
-		if (get_row_size(cmd->args) > 2)
-		{
-			g_last_exit_code = EXIT_FAILURE;
-			return (ft_putstr_fd(" too many arguments\n", STDERR_FILENO));
-		}
 		exit(g_last_exit_code);
-	}
 	else if (ft_strcmp(cmd->args[0], "echo") == 0)
-	{
-		ft_echo(cmd->args + 1);
-		g_last_exit_code = 0;
-	}
+		exit_code = ft_echo(cmd->args + 1);
 	else if (ft_strcmp(cmd->args[0], "$?") == 0)
 		printerrcode(msh);
+	if (exit_code == -1)
+		g_last_exit_code = EXIT_FAILURE;
+	else
+		g_last_exit_code = EXIT_SUCCESS;
 }
 
-int	is_builtin(char **cmd)
+char	*find_executable_path(char *cmd, t_list *env)
 {
-	if (ft_strcmp(cmd[0], "cd") == 0 || ft_strcmp(cmd[0], "pwd") == 0
-		|| ft_strcmp(cmd[0], "env") == 0 || ft_strcmp(cmd[0], "export") == 0
-		|| ft_strcmp(cmd[0], "unset") == 0 || ft_strcmp(cmd[0], "exit") == 0
-		|| ft_strcmp(cmd[0], "$?") == 0 || ft_strcmp(cmd[0], "echo") == 0)
-		return (1);
-	return (0);
-}
+	char	**paths;
+	char	*full_path;
+	char	*tmp;
+	int		i;
 
-char *find_executable_path(char *cmd, t_list *env)
-{
+	i = 0;
 	if (ft_strchr(cmd, '/'))
 	{
 		if (access(cmd, X_OK) == 0)
-			return ft_strdup(cmd);
-		return NULL;
+			return (ft_strdup(cmd));
+		return (NULL);
 	}
-
-	char **paths = split_path(env, "PATH", ':');
+	paths = split_path(env, "PATH", ':');
 	if (!paths)
-		return NULL;
-
-	char *full_path = NULL;
-	for (int i = 0; paths[i]; i++)
+		return (NULL);
+	while (paths[i])
 	{
-		char *tmp = ft_strjoin(paths[i], "/");
+		tmp = ft_strjoin(paths[i++], "/");
 		full_path = ft_strjoin(tmp, cmd);
 		free(tmp);
-
 		if (access(full_path, X_OK) == 0)
-		{
-			free_split(paths);
-			return full_path;
-		}
+			return (free_split(paths), full_path);
 		free(full_path);
 	}
-	free_split(paths);
-	return NULL;
+	return (free_split(paths), NULL);
 }
 
-static void close_all_pipes(t_cmd *cmd)
+static void	close_all_pipes(t_cmd *cmd)
 {
 	while (cmd)
 	{
@@ -267,7 +230,7 @@ static void launch_child(t_cmd *cmd, t_minish *msh)
 		exit(g_last_exit_code);
 	if (cmd->args[0][0] == '/' || cmd->args[0][0] == '.')
 	{
-		if (is_directory(cmd->args[0]))
+		if (ft_is_directory(cmd->args[0]))
 		{
 			if (access(cmd->args[0], X_OK) == -1)
 			{

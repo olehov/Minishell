@@ -40,6 +40,8 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/$(ENV_DIR)/env_list_to_arr.c \
       $(SRC_DIR)/$(ENV_DIR)/split_path.c \
       $(SRC_DIR)/$(ENV_DIR)/expand_line.c \
+      $(SRC_DIR)/$(ENV_DIR)/expand_dbl_quote.c \
+      $(SRC_DIR)/$(ENV_DIR)/free_env.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/printpwd.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/builtin_echo.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/ft_heredoc.c \
@@ -49,9 +51,11 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/free_heredoc.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/free_redirect.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/init_redirect.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/ft_is_directory.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/is_builtin.c \
       $(SRC_DIR)/$(CMD_DIR)/init_cmd_node.c \
-	  $(SRC_DIR)/$(CMD_DIR)/add_redirection.c \
-	  $(SRC_DIR)/$(CMD_DIR)/free_cmd_list.c
+	$(SRC_DIR)/$(CMD_DIR)/add_redirection.c \
+	$(SRC_DIR)/$(CMD_DIR)/free_cmd_list.c
 
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:05:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 20:27:28 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/10 14:36:37 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,18 @@ static bool	check_delimiter(const char *delimiter)
 	return (true);
 }
 
+static char	*allocate_delimitter(char *delimiter)
+{
+	char	*tmp;
+
+	if (check_delimiter(delimiter) == 0)
+		return (NULL);
+	tmp = ft_calloc(sizeof(char *), ft_strlen(delimiter));
+	if (tmp == NULL)
+		return (NULL);
+	return (tmp);
+}
+
 char	*get_delimiter_without_quotes(char *delimiter, bool *in_quotes)
 {
 	char	*tmp;
@@ -31,11 +43,9 @@ char	*get_delimiter_without_quotes(char *delimiter, bool *in_quotes)
 
 	i = 0;
 	j = 0;
-	if (check_delimiter(delimiter) == 0)
-		return (NULL);
-	tmp = ft_calloc(sizeof(char *), ft_strlen(delimiter));
+	tmp = allocate_delimitter(delimiter);
 	if (tmp == NULL)
-		return (perror("Can't allocate memory"), NULL);
+		return (NULL);
 	while (delimiter[i] != '\0')
 	{
 		if (delimiter[i] == '\'' || delimiter[i] == '\"')
