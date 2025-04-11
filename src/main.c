@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/10 13:43:06 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:17:33 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,21 +105,6 @@ char	*get_line(t_minish *msh)
 	return (line);
 }
 
-t_cmd	*get_cmd_lst(t_minish *msh)
-{
-	char	*line;
-	t_cmd	*cmd_list;
-
-	line = get_line(msh);
-	if (!line)
-		return (NULL);
-	if (*line)
-		add_history(line);
-	cmd_list = parse_input(line, msh->env, msh);
-	free(line);
-	return (cmd_list);
-}
-
 void	print_arr_of_str(char **str)
 {
 	size_t	i;
@@ -134,6 +119,22 @@ void	print_arr_of_str(char **str)
 		printf("str[%lu]: %s\n", i, str[i]);
 		i++;
 	}
+}
+
+t_cmd	*get_cmd_lst(t_minish *msh)
+{
+	char	*line;
+	t_cmd	*cmd_list;
+
+	line = get_line(msh);
+	if (!line)
+		return (NULL);
+	if (*line)
+		add_history(line);
+	cmd_list = parse_input(line, msh->env, msh);
+	// print_arr_of_str(cmd_list->args);
+	free(line);
+	return (cmd_list);
 }
 
 // Основний цикл shell

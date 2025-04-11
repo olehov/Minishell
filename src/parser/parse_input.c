@@ -6,210 +6,15 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:48:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 16:31:39 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:29:18 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 #include <fcntl.h>
 #include <unistd.h>
 
-void	ft_set_quote(char *quote, char value)
-{
-	if (!(*quote))
-		*quote = value;
-	else if (*quote == value)
-		*quote = 0;
-}
 
-char	**split_outside_quotes(char *input, char delimiter)
-{
-	char	**result;
-	int		i;
-	int		j;
-	int		start;
-	char	quote;
-
-	result = malloc(sizeof(char *) * (ft_strlen(input) / 2 + 2));
-	i = -1;
-	j = 0;
-	start = 0;
-	quote = 0;
-	while (input[++i])
-	{
-		if ((input[i] == '\'' || input[i] == '\"'))
-			ft_set_quote(&quote, input[i]);
-		else if (input[i] == delimiter && !quote)
-		{
-			result[j++] = ft_substr(input, start, i - start);
-			start = i + 1;
-		}
-	}
-	if (i > start)
-		result[j++] = ft_substr(input, start, i - start);
-	result[j] = NULL;
-	return (result);
-}
-
-// Токенізація з обліком лапок та з'єднанням суміжних токенів
-// Тепер: лапки не знімаються, вони залишаються в token->value, але помічаються quote_char
-// Після токенізації: process_env, потім remove_outer_quotes
-
-char	*remove_outer_quotes(char *str)
-{
-	char	*new_str;
-	size_t	len;
-
-	len = ft_strlen(str);
-	if ((str[0] == '"' && str[len - 1] == '"')
-		|| (str[0] == '\'' && str[len - 1] == '\''))
-	{
-		new_str = ft_substr(str, 1, len - 2);
-		return (new_str);
-	}
-	return (ft_strdup(str));
-}
-
-bool	is_reddirect(char c)
-{
-	if (c == '<' || c == '>')
-	{
-		return (1);
-	}
-	return (0);
-}
-
-t_token *tokenize_with_quote_info(char *input)
-{
-	t_token *tokens = malloc(sizeof(t_token) * (ft_strlen(input) + 2));
-	int i = 0, j = 0;
-	char quote = 0;
-	char *accum = NULL;
-	char *part;
-	int in_quotes = 0;
-	char quote_char = 0;
-
-	while (input[i])
-	{
-		while (input[i] && ft_isspace(input[i]))
-			i++;
-		if (!input[i])
-			break;
-
-		if (input[i] == '\'' || input[i] == '"')
-		{
-			int start = i;
-			quote = input[i++];
-			quote_char = quote;
-			in_quotes = 1;
-			while (input[i] && input[i] != quote)
-				i++;
-			part = ft_substr(input, start, (i + 1) - start);
-			accum = accum ? ft_strjoin(accum, part) : ft_strdup(part);
-			free(part);
-			if (input[i] == quote)
-				i++;
-			quote = 0;
-		}
-		else if ((input[i] == '<' || input[i] == '>') && input[i + 1] == input[i])
-		{
-			if (accum)
-			{
-				tokens[j].value = accum;
-				tokens[j].in_quotes = in_quotes;
-				tokens[j].quote_char = quote_char;
-				j++;
-				accum = NULL;
-				in_quotes = 0;
-				quote_char = 0;
-			}
-			// Heredoc token
-			tokens[j].value = ft_substr(input, i, 2);
-			tokens[j].in_quotes = 0;
-			tokens[j].quote_char = 0;
-			j++;
-			i += 2;
-
-			// Handle inline delimeter with quotes (e.g., <<EOF"" or <<EOF'')
-			if (input[i] == '\'' || input[i] == '"')
-			{
-				quote = input[i++];
-				quote_char = quote;
-				in_quotes = 1;
-				int start = i;
-				while (input[i] && input[i] != quote)
-					i++;
-				part = ft_substr(input, start, i - start);
-				accum = ft_strdup(part);
-				free(part);
-				if (input[i] == quote)
-					i++;
-				// Store the full quoted token
-				tokens[j].value = accum;
-				tokens[j].in_quotes = 1;
-				tokens[j].quote_char = quote_char;
-				j++;
-				accum = NULL;
-				in_quotes = 0;
-				quote_char = 0;
-			}
-		}
-		else if (input[i] == '<' || input[i] == '>')
-		{
-			if (accum)
-			{
-				tokens[j].value = accum;
-				tokens[j].in_quotes = in_quotes;
-				tokens[j].quote_char = quote_char;
-				j++;
-				accum = NULL;
-				in_quotes = 0;
-				quote_char = 0;
-			}
-			tokens[j].value = ft_substr(input, i, 1);
-			tokens[j].in_quotes = 0;
-			tokens[j].quote_char = 0;
-			j++;
-			i++;
-		}
-		else
-		{
-			int start = i;
-			while (input[i] && !ft_isspace(input[i]) && input[i] != '<' && input[i] != '>' && input[i] != '\'' && input[i] != '"')
-				i++;
-			part = ft_substr(input, start, i - start);
-			accum = accum ? ft_strjoin(accum, part) : ft_strdup(part);
-			free(part);
-		}
-
-		if (!input[i] || ft_isspace(input[i]) || input[i] == '<' || input[i] == '>')
-		{
-			if (accum)
-			{
-				tokens[j].value = accum;
-				tokens[j].in_quotes = in_quotes;
-				tokens[j].quote_char = quote_char;
-				j++;
-				accum = NULL;
-				in_quotes = 0;
-				quote_char = 0;
-			}
-		}
-	}
-
-	if (accum)
-	{
-		tokens[j].value = accum;
-		tokens[j].in_quotes = in_quotes;
-		tokens[j].quote_char = quote_char;
-		j++;
-	}
-
-	tokens[j].value = NULL;
-	return tokens;
-}
-
-// // Парсинг одного рядка команди з урахуванням токенів
 t_cmd *parse_single_command_from_tokens(t_token *tokens, t_minish *msh)
 {
 	t_cmd	*cmd = init_cmd_node();
@@ -351,7 +156,6 @@ t_cmd *parse_input(char *input, t_list *env, t_minish *msh)
 	formated_input = ft_get_input(input);
 	if (formated_input == NULL)
 		return (NULL);
-	// free(input);
 	char **pipe_split = split_outside_quotes(formated_input, '|');
 	free(formated_input);
 	while (pipe_split[i])

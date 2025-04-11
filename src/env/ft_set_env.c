@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:15:16 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/10 15:20:28 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/11 12:27:35 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ static int	set_env_loop(t_list	**lst, char **tmp)
 		if (var == NULL)
 			return (free_split(tmp), -1);
 		add_or_update_env(lst, var);
+		free_env(var);
 		i++;
 	}
 	return (exit_code);

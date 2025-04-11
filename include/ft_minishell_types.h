@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:14:36 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/10 15:58:38 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/11 15:43:27 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,24 @@
 # define GRN "\001\033[32m\002"
 # define RESET "\001\033[0m\002"
 
+# define PERMISSION_DENIED	127
+# define IS_A_DIRECTORY	126
+
 typedef struct s_heredoc
 {
 	char	*filename;
 	char	*delimiter;
 }	t_heredoc;
+
+typedef struct s_tokenizer_ctx
+{
+	char	*accum;
+	int		in_quotes;
+	char	quote_char;
+	int		i;
+	int		j;
+}	t_tokenizer_ctx;
+
 
 typedef struct s_token
 {

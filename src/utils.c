@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:30:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/10 16:47:58 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/11 13:38:19 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,4 +105,5 @@ void	ft_safe_free(void	*ptr)
 	{
 		free(ptr);
 	}
+	ptr = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 09:56:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/10 17:04:59 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/11 16:55:27 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,16 @@ void	signal_handler(int signo);
 
 // ===== parse_input.c =====
 t_cmd	*parse_input(char *input, t_list *env, t_minish *msh);
+char	**split_outside_quotes(char *input, char delimiter);
+char	*remove_outer_quotes(char *str);
+
+int		handle_double_redirect(char *input,
+			t_token *tokens, t_tokenizer_ctx *ctx);
+void	handle_quote(char *input, t_tokenizer_ctx *ctx);
+char	*append_part(char *accum, char *part);
+void	reset_quote_state(t_tokenizer_ctx *ctx);
+void	set_token(t_token *token, t_tokenizer_ctx *ctx);
+t_token	*tokenize_with_quote_info(char *input);
 
 // ===== execute_commands.c =====
 void	execute_commands(t_minish *msh);
@@ -87,13 +97,20 @@ void	print_env_list(t_list *lst);
 int		ft_set_env(t_list **lst, char *env);
 void	ft_env_unset(t_list **lst, char *env);
 void	ft_exit(char **args);
+void	execute_builtin(t_cmd *cmd, t_minish *msh);
+
+void	launch_child(t_cmd *cmd, t_minish *msh);
+
+int		ft_decode_wstatus(int wstatus);
 
 int		append_to_file(char *inputFileName, char *outputFileName, int flags);
 
-// ===== utils.c =====
+// ===== utils =====
 char	*remove_quotes(char *str);
 void	add_arg(t_cmd *cmd, char *arg);
 char	**split_path(t_list *lst, char *key, char c);
+void	close_all_pipes(t_cmd *cmd);
+void	set_pipe_fds(t_cmd *cmd);
 
 // ===== env management (твій готовий функціонал) =====
 int		init_env(t_list **lst, char *env[]);

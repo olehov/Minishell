@@ -16,6 +16,7 @@ OBJ_DIR = build
 ENV_DIR = env
 BUILTIN_DIR = builtin
 CMD_DIR = cmd
+PARSER_DIR = parser
 
 # -------------------------
 #     SOURCE FILES
@@ -24,7 +25,15 @@ CMD_DIR = cmd
 SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/execute_commands.c \
       $(SRC_DIR)/utils.c \
-      $(SRC_DIR)/parse_input.c \
+      $(SRC_DIR)/execute_builtin.c \
+      $(SRC_DIR)/pipe_utils.c \
+      $(SRC_DIR)/launch_child.c \
+      $(SRC_DIR)/ft_decode_wstatus.c \
+      $(SRC_DIR)/$(PARSER_DIR)/parse_input.c \
+      $(SRC_DIR)/$(PARSER_DIR)/split_outside_quotes.c \
+      $(SRC_DIR)/$(PARSER_DIR)/parser_utils.c \
+      $(SRC_DIR)/$(PARSER_DIR)/tokenize_utils.c \
+      $(SRC_DIR)/$(PARSER_DIR)/tokenize_with_quote_info.c \
       $(SRC_DIR)/$(ENV_DIR)/print_env_list.c \
       $(SRC_DIR)/$(ENV_DIR)/ft_env_unset.c \
       $(SRC_DIR)/$(ENV_DIR)/ft_set_env.c \
@@ -53,6 +62,7 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/init_redirect.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/ft_is_directory.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/is_builtin.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/handle_redirect.c \
       $(SRC_DIR)/$(CMD_DIR)/init_cmd_node.c \
 	$(SRC_DIR)/$(CMD_DIR)/add_redirection.c \
 	$(SRC_DIR)/$(CMD_DIR)/free_cmd_list.c
