@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 20:59:10 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:17:33 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,37 +68,41 @@ char	*get_prompt(t_minish *msh)
 	{
 		tmp = ft_strjoin(user, " " RED "[");
 		if (tmp == NULL)
-			return (NULL);
+			return (free(user), NULL);
 		err_code = ft_itoa(g_last_exit_code);
 		prompt = ft_strjoin3(tmp, err_code, "]" RESET "> ");
 		free(tmp);
-		free(err_code);
+		if (err_code != NULL)
+			free(err_code);
 	}
 	free(user);
 	return (prompt);
 }
 
-t_cmd	*get_cmd_lst(t_minish *msh)
+char	*get_line(t_minish *msh)
 {
 	char	*line;
 	char	*prompt;
-	t_cmd	*cmd_list;
 
 	prompt = get_prompt(msh);
-	// line = readline(prompt);
-	// line = readline("MINISHELL>");
 	if (isatty(STDIN_FILENO))
-		line = readline(prompt);
+	{
+		if (prompt == NULL)
+			line = readline(GRN "minishell> " RESET);
+		else
+			line = readline(prompt);
+	}
 	else
 		line = readline("minishell> ");
-	if (!line)
+	if (line == NULL)
+	{
+		if (prompt != NULL)
+			free(prompt);
 		return (NULL);
-	if (*line)
-		add_history(line);
-	cmd_list = parse_input(line, msh->env, msh);
-	free(line);
-	free(prompt);
-	return (cmd_list);
+	}
+	if (prompt != NULL)
+		free(prompt);
+	return (line);
 }
 
 void	print_arr_of_str(char **str)
@@ -115,6 +119,22 @@ void	print_arr_of_str(char **str)
 		printf("str[%lu]: %s\n", i, str[i]);
 		i++;
 	}
+}
+
+t_cmd	*get_cmd_lst(t_minish *msh)
+{
+	char	*line;
+	t_cmd	*cmd_list;
+
+	line = get_line(msh);
+	if (!line)
+		return (NULL);
+	if (*line)
+		add_history(line);
+	cmd_list = parse_input(line, msh->env, msh);
+	// print_arr_of_str(cmd_list->args);
+	free(line);
+	return (cmd_list);
 }
 
 // Основний цикл shell

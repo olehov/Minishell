@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/18 14:02:41 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 20:15:30 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/10 14:38:09 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ char	**env_list_to_str_arr(t_list *lst)
 		lst = lst->next;
 		size++;
 	}
-	// printf("SIZE: %lu\n", size);
 	env[size] = NULL;
 	return (env);
 }

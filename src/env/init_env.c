@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 12:19:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 22:13:33 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/10 15:21:25 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,17 +86,6 @@ t_env	*parce_env(char *env)
 	if (var->value == NULL)
 		return (free(var->key), free(var), NULL);
 	return (var);
-}
-
-void	free_env(void *env)
-{
-	if (env == NULL)
-		return ;
-	if (((t_env *)env)->key != NULL)
-		free(((t_env *)env)->key);
-	if (((t_env *)env)->value != NULL)
-		free(((t_env *)env)->value);
-	free(env);
 }
 
 static void	update_shell_level(t_list **lst)

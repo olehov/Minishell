@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_redirection.h                                   :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/08 14:19:48 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/11 11:47:38 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/11 15:19:20 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/11 15:31:45 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_REDIRECTION_H
-# define FT_REDIRECTION_H
+#include "../../include/minishell.h"
 
-# include "minishell.h"
-# include "ft_minishell_types.h"
+char	*remove_outer_quotes(char *str)
+{
+	char	*new_str;
+	size_t	len;
 
-t_redirect	*init_redirect(char *filename, t_redirect_type type);
-
-int			handle_redirect(t_cmd *cmd);
-
-void		free_redirect(void *redirect);
-
-#endif
+	len = ft_strlen(str);
+	if ((str[0] == '"' && str[len - 1] == '"')
+		|| (str[0] == '\'' && str[len - 1] == '\''))
+	{
+		new_str = ft_substr(str, 1, len - 2);
+		return (new_str);
+	}
+	return (ft_strdup(str));
+}

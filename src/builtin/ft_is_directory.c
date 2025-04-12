@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_redirection.h                                   :+:      :+:    :+:   */
+/*   ft_is_directory.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/08 14:19:48 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/11 11:47:38 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/10 14:37:21 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/10 14:37:27 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_REDIRECTION_H
-# define FT_REDIRECTION_H
+#include "../../include/minishell.h"
+#include <dirent.h>
 
-# include "minishell.h"
-# include "ft_minishell_types.h"
+bool	ft_is_directory(const char *path)
+{
+	DIR	*dir;
 
-t_redirect	*init_redirect(char *filename, t_redirect_type type);
-
-int			handle_redirect(t_cmd *cmd);
-
-void		free_redirect(void *redirect);
-
-#endif
+	dir = opendir(path);
+	if (dir)
+	{
+		closedir(dir);
+		return (1);
+	}
+	return (0);
+}

@@ -1,25 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_redirection.h                                   :+:      :+:    :+:   */
+/*   free_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/08 14:19:48 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/11 11:47:38 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/10 15:21:16 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/10 15:21:47 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_REDIRECTION_H
-# define FT_REDIRECTION_H
+#include "../../include/minishell.h"
 
-# include "minishell.h"
-# include "ft_minishell_types.h"
-
-t_redirect	*init_redirect(char *filename, t_redirect_type type);
-
-int			handle_redirect(t_cmd *cmd);
-
-void		free_redirect(void *redirect);
-
-#endif
+void	free_env(void *env)
+{
+	if (env == NULL)
+		return ;
+	if (((t_env *)env)->key != NULL)
+		free(((t_env *)env)->key);
+	if (((t_env *)env)->value != NULL)
+		free(((t_env *)env)->value);
+	free(env);
+}
