@@ -1,0 +1,14 @@
+build
+CMD.txt
+ft_libft
+include
+Makefile
+minishell
+minishell_tester
+rl.supp
+src
+test1.txt
+test_ls.txt
+tests
+valgrind-out1.txt
+valgrind-out.txt

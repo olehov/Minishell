@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/11 17:17:33 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/12 18:48:31 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,6 @@ t_cmd	*get_cmd_lst(t_minish *msh)
 	if (*line)
 		add_history(line);
 	cmd_list = parse_input(line, msh->env, msh);
-	// print_arr_of_str(cmd_list->args);
 	free(line);
 	return (cmd_list);
 }
@@ -141,7 +140,8 @@ t_cmd	*get_cmd_lst(t_minish *msh)
 int	main(int argc, char **argv, char **envp)
 {
 	t_minish	msh;
-	t_cmd		*cmd_list;
+	// t_cmd		*cmd_list;
+	char		*line;
 
 	(void)argc;
 	(void)argv;
@@ -150,12 +150,22 @@ int	main(int argc, char **argv, char **envp)
 	{
 		signal(SIGINT, signal_handler);
 		signal(SIGQUIT, signal_handler);
-		cmd_list = get_cmd_lst(&msh);
-		if (cmd_list == NULL)
+		// cmd_list = get_cmd_lst(&msh);
+		line = get_line(&msh);
+		if (!line)
+		{
+			g_last_exit_code = 0;
 			break ;
-		msh.cmd = cmd_list;
+		}
+		if (*line)
+			add_history(line);
+		msh.cmd = parse_input(line, msh.env, &msh);
+		free(line);
+		if (msh.cmd == NULL)
+			continue ;
+		// msh.cmd = cmd_list;
 		execute_commands(&msh);
-		free_cmd_list(cmd_list);
+		free_cmd_list(msh.cmd);
 		unlink_heredocs(&msh.heredocs);
 	}
 	rl_clear_history();

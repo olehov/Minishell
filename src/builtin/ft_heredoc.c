@@ -6,18 +6,34 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:05:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/10 14:36:37 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:57:52 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/ft_heredoc.h"
 
+void	heredoc_signal_handler(int signo)
+{
+	if (signo == SIGINT)
+	{
+		ft_putendl_fd("", STDOUT_FILENO);
+		exit(130); // 128 + SIGINT
+	}
+	else if (signo == SIGQUIT)
+	{
+		exit(131); // 128 + SIGQUIT
+	}
+}
+
+
 static bool	check_delimiter(const char *delimiter)
 {
-	if (delimiter == NULL)
+	if (delimiter == NULL || delimiter[0] == '\0')
 	{
 		errno = EINVAL;
-		return (perror("delimiter can't be NULL"), false);
+		ft_putstr_fd("syntax error near unexpected token `newline'\n",
+			STDERR_FILENO);
+		return (false);
 	}
 	return (true);
 }
@@ -73,7 +89,12 @@ static int	read_line(int fd, char *delimiter, t_list *env, bool in_quotes)
 		buffer = readline(NULL);
 	if (buffer == NULL)
 	{
-		return (0);
+		ft_putstr_fd(" here-document delimited by end-of-file ",
+			STDERR_FILENO);
+		ft_putstr_fd("(wanted `", STDERR_FILENO);
+		ft_putstr_fd(delimiter, STDERR_FILENO);
+		ft_putstr_fd("\')\n", STDERR_FILENO);
+		exit (0);
 	}
 	if (ft_strcmp(buffer, delimiter) == 0)
 	{
@@ -91,7 +112,7 @@ static int	read_line(int fd, char *delimiter, t_list *env, bool in_quotes)
 	return (1);
 }
 
-int	ft_heredoc(t_heredoc *heredoc, t_list *env)
+void	run_heredoc(t_heredoc *heredoc, t_list *env)
 {
 	int		fd;
 	int		exit_status;
@@ -101,16 +122,80 @@ int	ft_heredoc(t_heredoc *heredoc, t_list *env)
 	in_quotes = false;
 	exit_status = 1;
 	if (check_delimiter(heredoc->delimiter) == 0)
-		return (-1);
+		exit(1);
 	fd = open(heredoc->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	if (fd < 0)
-		return (-1);
+		exit(1);
 	del_without_quotes = get_delimiter_without_quotes(heredoc->delimiter,
 			&in_quotes);
 	while (exit_status != -1 && exit_status != 0)
 		exit_status = read_line(fd, del_without_quotes, env, in_quotes);
 	close(fd);
-	if (in_quotes == true)
-		free(del_without_quotes);
+	free(del_without_quotes);
+	exit(0);
+}
+
+int	ft_heredoc(t_heredoc *heredoc, t_list *env)
+{
+	int		status;
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		signal(SIGINT, heredoc_signal_handler);
+		// signal(SIGQUIT, SIG_IGN);
+		run_heredoc(heredoc, env);
+	}
+	else
+	{
+		signal(SIGINT, SIG_IGN);
+		waitpid(pid, &status, 0);
+		signal(SIGINT, signal_handler);
+		g_last_exit_code = ft_decode_wstatus(status);
+		if (g_last_exit_code != 0)
+			return (-1);
+	}
 	return (0);
 }
+
+
+// int	ft_heredoc(t_heredoc *heredoc, t_list *env)
+// {
+// 	int		fd;
+// 	int		exit_status;
+// 	bool	in_quotes;
+// 	char	*del_without_quotes;
+// 	int		status;
+// 	pid_t	pid;
+
+// 	pid = fork();
+// 	if (pid == 0)
+// 	{
+// 		signal(SIGINT, heredoc_signal_handler);
+// 		in_quotes = false;
+// 		exit_status = 1;
+// 		if (check_delimiter(heredoc->delimiter) == 0)
+// 			exit(1);
+// 		fd = open(heredoc->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+// 		if (fd < 0)
+// 			exit(1);
+// 		del_without_quotes = get_delimiter_without_quotes(heredoc->delimiter,
+// 				&in_quotes);
+// 		while (exit_status != -1 && exit_status != 0)
+// 			exit_status = read_line(fd, del_without_quotes, env, in_quotes);
+// 		close(fd);
+// 		free(del_without_quotes);
+// 		exit(0);
+// 	}
+// 	else
+// 	{
+// 		signal(SIGINT, SIG_IGN); // тимчасово ігноруємо Ctrl+C
+// 		waitpid(pid, &status, 0);
+// 		signal(SIGINT, signal_handler);
+// 		g_last_exit_code = ft_decode_wstatus(status);
+// 		if (g_last_exit_code != 0)
+// 			return (-1);
+// 	}
+// 	return (0);
+// }

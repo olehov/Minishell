@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 09:56:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/12 13:42:29 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/12 15:11:43 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ extern int	g_last_exit_code;
 size_t	get_row_size(char **args);
 bool	ft_is_directory(const char *path);
 void	print_args(char	**args);
+bool	is_closed_quote(char quote, int start, char *str);
 
 int		is_builtin(char **cmd);
 char	**split_outside_quotes(char *input, char delimiter);

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:14:36 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/11 15:43:27 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/12 19:44:43 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,13 @@ typedef struct s_heredoc
 typedef struct s_tokenizer_ctx
 {
 	char	*accum;
-	int		in_quotes;
-	char	quote_char;
 	int		i;
 	int		j;
+	int		in_quotes;
+	char	quote_char;
+	int		skip_next_token_quote_handling;
 }	t_tokenizer_ctx;
+
 
 
 typedef struct s_token
@@ -97,6 +99,7 @@ typedef struct s_minish
 	t_list	*env;
 	t_list	*heredocs;
 	t_cmd	*cmd;
+	int		exit_code;
 }	t_minish;
 
 #endif
