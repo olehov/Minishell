@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 09:56:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/11 16:55:27 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/12 13:42:29 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,19 @@ int		printpwd(void);
 void	print_env_list(t_list *lst);
 int		ft_set_env(t_list **lst, char *env);
 void	ft_env_unset(t_list **lst, char *env);
-void	ft_exit(char **args);
+
+/**
+ * @brief ft_exit doing clean exit from program if is_child equal false.
+ * If is_child equal true just use ft_exit for exit from child proccess.
+ * Function should change msh->exit_code to code from args[1] or add own
+ * exit code if args more than 2 or args[1] not integer type
+ * 
+ * @param args args[0]= "exit"
+ * @param msh pointer to main minishell structure
+ * @param is_child if is_child true do exit without clear all data
+ */
+void	ft_exit(char **args, t_minish *msh, bool is_child);
+
 void	execute_builtin(t_cmd *cmd, t_minish *msh);
 
 void	launch_child(t_cmd *cmd, t_minish *msh);
