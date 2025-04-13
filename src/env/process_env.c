@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:17:14 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 20:18:09 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:26:15 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	check_unsupported_line(const char *input)
 	return (1);
 }
 
-char	*process_env(const char *input, t_list *lst)
+char	*process_env(const char *input, t_list *lst, t_minish *msh)
 {
 	int			i;
 	t_env_state	state;
@@ -56,7 +56,7 @@ char	*process_env(const char *input, t_list *lst)
 	state.res_index = 0;
 	i = 0;
 	state.lst = lst;
-	if (extract_variable(input, &i, &state) == -1)
+	if (extract_variable(input, &i, &state, msh) == -1)
 		return (NULL);
 	state.result[state.res_index] = '\0';
 	return (state.result);

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 12:11:16 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 20:05:00 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 13:31:38 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ void	free_heredoc(void *value)
 		free(heredoc->delimiter);
 	if (heredoc->filename != NULL)
 		free(heredoc->filename);
-	free(heredoc);
+	// free(heredoc);
+	ft_safe_free(heredoc);
 }

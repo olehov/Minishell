@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:14:36 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/11 15:43:27 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 18:13:21 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <sys/types.h>
 # include <stdbool.h>
+# include <signal.h>
 # include "../ft_libft/headers/libft.h"
 
 # define RED "\001\033[31m\002"
@@ -26,6 +27,8 @@
 # define PERMISSION_DENIED	127
 # define IS_A_DIRECTORY	126
 
+extern volatile sig_atomic_t g_received_signal;
+
 typedef struct s_heredoc
 {
 	char	*filename;
@@ -35,12 +38,12 @@ typedef struct s_heredoc
 typedef struct s_tokenizer_ctx
 {
 	char	*accum;
-	int		in_quotes;
-	char	quote_char;
 	int		i;
 	int		j;
+	int		in_quotes;
+	char	quote_char;
+	int		skip_next_token_quote_handling;
 }	t_tokenizer_ctx;
-
 
 typedef struct s_token
 {
@@ -97,6 +100,9 @@ typedef struct s_minish
 	t_list	*env;
 	t_list	*heredocs;
 	t_cmd	*cmd;
+	t_token	*tokens;
+	char	**pipe_split;
+	int		exit_code;
 }	t_minish;
 
 #endif

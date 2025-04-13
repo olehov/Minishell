@@ -6,18 +6,100 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:05:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/10 14:36:37 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:33:30 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/ft_heredoc.h"
+
+void	heredoc_signal_handler(int signo)
+{
+	if (signo == SIGINT)
+	{
+		ft_putendl_fd("", STDOUT_FILENO);
+		exit(128 + SIGINT);
+	}
+}
+
+static char	*get_new_delimiter(char *delimiter, char quote)
+{
+	char	*tmp;
+	char	*old_str;
+	char	*new_str;
+
+	tmp = readline("> ");
+	if (tmp == NULL)
+	{
+		ft_putstr_fd(" unexpected EOF while looking for matching `",
+			STDERR_FILENO);
+		ft_putchar_fd(quote, STDERR_FILENO);
+		ft_putendl_fd("'", STDERR_FILENO);
+		return (NULL);
+	}
+	old_str = ft_strdup(delimiter);
+	new_str = ft_strjoin3(old_str, "\n", tmp);
+	free(old_str);
+	free(tmp);
+	return (new_str);
+}
+
+static void	get_delimiter(t_heredoc *heredoc)
+{
+	size_t	i;
+	char	quote;
+	bool	is_closed_quote;
+	char	*delimiter;
+
+	i = 0;
+	quote = 0;
+	is_closed_quote = true;
+	if (heredoc->delimiter == NULL)
+		return ;
+	while (heredoc->delimiter[i] != '\0')
+	{
+		while (heredoc->delimiter[i] != '\'' && heredoc->delimiter[i] != '\"'
+			&& heredoc->delimiter[i] != '\0')
+			i++;
+		if (heredoc->delimiter[i] == '\'' || heredoc->delimiter[i] == '\"')
+		{
+			quote = heredoc->delimiter[i++];
+			is_closed_quote = false;
+		}
+		while (heredoc->delimiter[i] != quote && heredoc->delimiter[i] != '\0')
+			i++;
+		if (heredoc->delimiter[i] == '\'' || heredoc->delimiter[i] == '\"')
+		{
+			quote = 0;
+			is_closed_quote = true;
+			i++;
+		}
+	}
+	if (!is_closed_quote)
+	{
+		delimiter = ft_strdup(heredoc->delimiter);
+		ft_safe_free(heredoc->delimiter);
+		heredoc->delimiter = get_new_delimiter(delimiter, quote);
+		free(delimiter);
+		if (heredoc->delimiter == NULL)
+			return ;
+		get_delimiter(heredoc);
+	}
+}
 
 static bool	check_delimiter(const char *delimiter)
 {
 	if (delimiter == NULL)
 	{
 		errno = EINVAL;
-		return (perror("delimiter can't be NULL"), false);
+		ft_putendl_fd(" unexpected end of file", STDERR_FILENO);
+		return (false);
+	}
+	if (delimiter[0] == '\0')
+	{
+		errno = EINVAL;
+		ft_putstr_fd("syntax error near unexpected token `newline'\n",
+			STDERR_FILENO);
+		return (false);
 	}
 	return (true);
 }
@@ -28,7 +110,7 @@ static char	*allocate_delimitter(char *delimiter)
 
 	if (check_delimiter(delimiter) == 0)
 		return (NULL);
-	tmp = ft_calloc(sizeof(char *), ft_strlen(delimiter));
+	tmp = ft_calloc(sizeof(char), ft_strlen(delimiter) + 1);
 	if (tmp == NULL)
 		return (NULL);
 	return (tmp);
@@ -62,7 +144,17 @@ char	*get_delimiter_without_quotes(char *delimiter, bool *in_quotes)
 	return (tmp);
 }
 
-static int	read_line(int fd, char *delimiter, t_list *env, bool in_quotes)
+static void	print_err(char *delimiter)
+{
+	ft_putstr_fd(" here-document delimited by end-of-file ",
+		STDERR_FILENO);
+	ft_putstr_fd("(wanted `", STDERR_FILENO);
+	ft_putstr_fd(delimiter, STDERR_FILENO);
+	ft_putstr_fd("\')\n", STDERR_FILENO);
+}
+
+static int	read_line(int fd, char *delimiter,
+	t_minish *msh, bool in_quotes)
 {
 	char	*buffer;
 	char	*tmp;
@@ -73,15 +165,14 @@ static int	read_line(int fd, char *delimiter, t_list *env, bool in_quotes)
 		buffer = readline(NULL);
 	if (buffer == NULL)
 	{
-		return (0);
+		print_err(delimiter);
+		return (-1);
 	}
 	if (ft_strcmp(buffer, delimiter) == 0)
-	{
 		return (free(buffer), 0);
-	}
 	if (in_quotes == false)
 	{
-		tmp = process_env(buffer, env);
+		tmp = process_env(buffer, msh->env, msh);
 		ft_putendl_fd(tmp, fd);
 		free(tmp);
 	}
@@ -91,7 +182,7 @@ static int	read_line(int fd, char *delimiter, t_list *env, bool in_quotes)
 	return (1);
 }
 
-int	ft_heredoc(t_heredoc *heredoc, t_list *env)
+int	ft_heredoc(t_heredoc *heredoc, t_minish *msh)
 {
 	int		fd;
 	int		exit_status;
@@ -100,6 +191,7 @@ int	ft_heredoc(t_heredoc *heredoc, t_list *env)
 
 	in_quotes = false;
 	exit_status = 1;
+	get_delimiter(heredoc);
 	if (check_delimiter(heredoc->delimiter) == 0)
 		return (-1);
 	fd = open(heredoc->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
@@ -108,9 +200,8 @@ int	ft_heredoc(t_heredoc *heredoc, t_list *env)
 	del_without_quotes = get_delimiter_without_quotes(heredoc->delimiter,
 			&in_quotes);
 	while (exit_status != -1 && exit_status != 0)
-		exit_status = read_line(fd, del_without_quotes, env, in_quotes);
+		exit_status = read_line(fd, del_without_quotes, msh, in_quotes);
 	close(fd);
-	if (in_quotes == true)
-		free(del_without_quotes);
+	free(del_without_quotes);
 	return (0);
 }

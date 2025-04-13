@@ -6,27 +6,40 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/11 17:17:33 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 19:10:53 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#include <signal.h>
 
-// global variable for parce status (like $?)
-int	g_last_exit_code;
+volatile sig_atomic_t	g_received_signal = 0;
 
 // initialization shell: enviroment variables
 void	init_shell(t_minish *msh, char **envp)
 {
 	msh->env = NULL;
 	msh->heredocs = NULL;
-	g_last_exit_code = 0;
+	msh->cmd = NULL;
+	msh->pipe_split = NULL;
+	msh->tokens = NULL;
+	msh->exit_code = 0;
 	if (init_env(&msh->env, envp) == -1)
 	{
-		g_last_exit_code = EXIT_FAILURE;
+		msh->exit_code = EXIT_FAILURE;
 		ft_putstr_fd("Failed to initialize environment\n", STDERR_FILENO);
-		exit(g_last_exit_code);
+		exit(msh->exit_code);
 	}
+}
+
+void	free_shell(t_minish *msh)
+{
+	if (msh == NULL)
+		return ;
+	if (msh->env)
+		ft_lstclear(&msh->env, free_env);
+	if (msh->heredocs)
+		ft_lstclear(&msh->heredocs, free_heredoc);
 }
 
 void	signal_handler(int signo)
@@ -37,13 +50,14 @@ void	signal_handler(int signo)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		g_last_exit_code = 130;
+		g_received_signal = SIGINT;
 	}
 	else if (signo == SIGQUIT)
 	{
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		g_received_signal = SIGQUIT;
 	}
 }
 
@@ -62,14 +76,14 @@ char	*get_prompt(t_minish *msh)
 		user = ft_strjoin(GRN, "minishell");
 	if (user == NULL)
 		return (NULL);
-	if (g_last_exit_code == 0)
+	if (msh->exit_code == 0)
 		prompt = ft_strjoin(user, RESET "> ");
 	else
 	{
 		tmp = ft_strjoin(user, " " RED "[");
 		if (tmp == NULL)
 			return (free(user), NULL);
-		err_code = ft_itoa(g_last_exit_code);
+		err_code = ft_itoa(msh->exit_code);
 		prompt = ft_strjoin3(tmp, err_code, "]" RESET "> ");
 		free(tmp);
 		if (err_code != NULL)
@@ -132,7 +146,6 @@ t_cmd	*get_cmd_lst(t_minish *msh)
 	if (*line)
 		add_history(line);
 	cmd_list = parse_input(line, msh->env, msh);
-	// print_arr_of_str(cmd_list->args);
 	free(line);
 	return (cmd_list);
 }
@@ -141,24 +154,39 @@ t_cmd	*get_cmd_lst(t_minish *msh)
 int	main(int argc, char **argv, char **envp)
 {
 	t_minish	msh;
-	t_cmd		*cmd_list;
+	int			exit_code;
+	char		*line;
 
 	(void)argc;
 	(void)argv;
 	init_shell(&msh, envp);
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, signal_handler);
 	while (1)
 	{
-		signal(SIGINT, signal_handler);
-		signal(SIGQUIT, signal_handler);
-		cmd_list = get_cmd_lst(&msh);
-		if (cmd_list == NULL)
+		line = get_line(&msh);
+		if (!line)
+		{
+			msh.exit_code = 0;
 			break ;
-		msh.cmd = cmd_list;
+		}
+		if (g_received_signal == SIGINT)
+		{
+			msh.exit_code = 128 + SIGINT;
+			g_received_signal = 0;
+		}
+		if (*line)
+			add_history(line);
+		msh.cmd = parse_input(line, msh.env, &msh);
+		free(line);
+		if (msh.cmd == NULL)
+			continue ;
 		execute_commands(&msh);
-		free_cmd_list(cmd_list);
+		free_cmd_list(msh.cmd);
 		unlink_heredocs(&msh.heredocs);
 	}
 	rl_clear_history();
-	ft_lstclear(&msh.env, free_env);
-	exit(g_last_exit_code);
+	exit_code = msh.exit_code;
+	free_shell(&msh);
+	exit(exit_code);
 }
