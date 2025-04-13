@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/11 14:51:43 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 13:14:44 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ int	run_single_cmd(t_cmd *cmd, t_minish *msh)
 {
 	int		std_fd[2];
 
-	std_fd[0] = dup(STDIN_FILENO);
-	std_fd[1] = dup(STDOUT_FILENO);
 	if (cmd && !cmd->next && cmd->args != NULL && is_builtin(cmd->args))
 	{
+		std_fd[0] = dup(STDIN_FILENO);
+		std_fd[1] = dup(STDOUT_FILENO);
 		if (handle_redirect(cmd) == -1)
 		{
 			return (-1);

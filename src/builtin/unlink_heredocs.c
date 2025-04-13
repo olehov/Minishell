@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 12:32:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 20:15:01 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 13:32:28 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,5 @@ void	unlink_heredocs(t_list **heredocs)
 		node = node->next;
 	}
 	ft_lstclear(heredocs, free_heredoc);
+	heredocs = NULL;
 }

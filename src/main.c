@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/12 18:48:31 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 13:42:23 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,17 @@ void	init_shell(t_minish *msh, char **envp)
 		ft_putstr_fd("Failed to initialize environment\n", STDERR_FILENO);
 		exit(g_last_exit_code);
 	}
+}
+
+void	free_shell(t_minish *msh)
+{
+	if (msh == NULL)
+		return ;
+	if (msh->env)
+		ft_lstclear(&msh->env, free_env);
+	if (msh->heredocs)
+		ft_lstclear(&msh->heredocs, free_heredoc);
+	// ft_safe_free(msh);
 }
 
 void	signal_handler(int signo)
@@ -146,11 +157,10 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	init_shell(&msh, envp);
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, signal_handler);
 	while (1)
 	{
-		signal(SIGINT, signal_handler);
-		signal(SIGQUIT, signal_handler);
-		// cmd_list = get_cmd_lst(&msh);
 		line = get_line(&msh);
 		if (!line)
 		{
@@ -163,12 +173,11 @@ int	main(int argc, char **argv, char **envp)
 		free(line);
 		if (msh.cmd == NULL)
 			continue ;
-		// msh.cmd = cmd_list;
 		execute_commands(&msh);
 		free_cmd_list(msh.cmd);
 		unlink_heredocs(&msh.heredocs);
 	}
 	rl_clear_history();
-	ft_lstclear(&msh.env, free_env);
+	free_shell(&msh);
 	exit(g_last_exit_code);
 }

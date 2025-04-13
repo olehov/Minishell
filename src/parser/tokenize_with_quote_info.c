@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:16:31 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/12 19:52:57 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 13:45:48 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,41 +46,6 @@ static int	handle_word(char *input, int *i, char **accum)
 	return (1);
 }
 
-// static void	set_token_reset_qoute(t_token *tokens, t_tokenizer_ctx *ctx)
-// {
-// 	if (ctx->accum)
-// 	{
-// 		set_token(&tokens[ctx->j++], ctx);
-// 		reset_quote_state(ctx);
-// 	}
-// }
-
-// static void	process_tokenization_loop(char *input,
-// 	t_token *tokens, t_tokenizer_ctx *ctx)
-// {
-// 	while (input[ctx->i])
-// 	{
-// 		while (input[ctx->i] && ft_isspace(input[ctx->i]))
-// 			ctx->i++;
-// 		if (!input[ctx->i])
-// 			break ;
-// 		if (input[ctx->i] == '\'' || input[ctx->i] == '"')
-// 			handle_quote(input, ctx);
-// 		else if ((input[ctx->i] == '<' || input[ctx->i] == '>')
-// 			&& input[ctx->i + 1] == input[ctx->i])
-// 			handle_double_redirect(input, tokens, ctx);
-// 		else if (input[ctx->i] == '<' || input[ctx->i] == '>')
-// 			handle_single_redirect(input, tokens, ctx);
-// 		else
-// 			handle_word(input, &ctx->i, &ctx->accum);
-// 		if (!input[ctx->i] || ft_isspace(input[ctx->i])
-// 			|| input[ctx->i] == '<' || input[ctx->i] == '>')
-// 			set_token_reset_qoute(tokens, ctx);
-// 	}
-// 	if (ctx->accum)
-// 		set_token(&tokens[ctx->j++], ctx);
-// }
-
 static void	handle_next_token_literal(char *input, t_tokenizer_ctx *ctx)
 {
 	char	*part;
@@ -109,7 +74,6 @@ static void	handle_next_token_literal(char *input, t_tokenizer_ctx *ctx)
 	free(part);
 }
 
-
 static void	process_tokenization_loop(char *input,
 	t_token *tokens, t_tokenizer_ctx *ctx)
 {
@@ -135,29 +99,34 @@ static void	process_tokenization_loop(char *input,
 			handle_single_redirect(input, tokens, ctx);
 		else
 			handle_word(input, &ctx->i, &ctx->accum);
+		if (!input[ctx->i] || ft_isspace(input[ctx->i])
+			|| input[ctx->i] == '<' || input[ctx->i] == '>')
+		{
+			if (ctx->accum)
+			{
+				set_token(&tokens[ctx->j++], ctx);
+				reset_quote_state(ctx);
+			}
+		}
 	}
 	if (ctx->accum)
 		set_token(&tokens[ctx->j++], ctx);
 }
-
-
-
-
-
 
 t_token	*tokenize_with_quote_info(char *input)
 {
 	t_token			*tokens;
 	t_tokenizer_ctx	ctx;
 
+	ft_bzero(&ctx, sizeof(t_tokenizer_ctx));
 	tokens = ft_calloc(sizeof(t_token), (ft_strlen(input) + 2));
 	if (!tokens)
 		return (NULL);
-	ctx.i = 0;
-	ctx.j = 0;
-	ctx.accum = NULL;
-	ctx.in_quotes = 0;
-	ctx.quote_char = 0;
+	// ctx.i = 0;
+	// ctx.j = 0;
+	// ctx.accum = NULL;
+	// ctx.in_quotes = 0;
+	// ctx.quote_char = 0;
 	process_tokenization_loop(input, tokens, &ctx);
 	tokens[ctx.j].value = NULL;
 	return (tokens);

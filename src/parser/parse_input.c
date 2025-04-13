@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:48:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/12 19:54:13 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 13:52:53 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,15 +122,22 @@ static char	*insert_quotes_around_delim(char *input, size_t start, size_t end)
 
 static void	find_delimiter_bounds(char *input, size_t *start, size_t *end)
 {
-	size_t	i = *start;
+	size_t	i;
 	char	quote;
 
+	i = *start;
+	quote = 0;
 	while (input[i])
 	{
 		if (input[i] == '\"' || input[i] == '\'')
-			quote = input[i];
-		while (input[i] != '\0' && input[i] != quote)
-			i++;
+		{
+			quote = input[i++];
+			while (input[i] != '\0' && input[i] != quote)
+				i++;
+			if (input[i] == quote)
+				i++;
+			continue ;
+		}
 		if (input[i] == '\0' || ft_isspace(input[i]) || input[i] == '<'
 			|| input[i] == '>' || input[i] == '|'
 			|| input[i] == '&' || input[i] == ';')
@@ -143,18 +150,6 @@ static void	find_delimiter_bounds(char *input, size_t *start, size_t *end)
 
 
 
-// static void	find_delimiter_bounds(char *input, size_t *start, size_t *end)
-// {
-// 	size_t	i = *start;
-
-// 	while (input[i])
-// 	{
-// 		if (input[i] == '\'' || input[i] == '"')
-// 			break;
-// 		i++;
-// 	}
-// 	*end = i;
-// }
 
 char	*ft_get_input(char *input)
 {
@@ -163,35 +158,105 @@ char	*ft_get_input(char *input)
 	size_t	end;
 	char	quote;
 	int		in_quote;
+	char	*result;
+	char	*tmp;
 
 	if (!input)
 		return (NULL);
+
+	result = ft_strdup(input);
+	if (!result)
+		return (NULL);
+
 	i = 0;
 	in_quote = 0;
 	quote = 0;
-	while (input[i])
+
+	while (result[i])
 	{
-		if ((input[i] == '\'' || input[i] == '"') && !in_quote)
+		if ((result[i] == '\'' || result[i] == '"') && !in_quote)
 		{
 			in_quote = 1;
-			quote = input[i];
+			quote = result[i];
 		}
-		else if (in_quote && input[i] == quote)
+		else if (in_quote && result[i] == quote)
 			in_quote = 0;
-		if (!in_quote && input[i] == '<' && input[i + 1] == '<')
+
+		if (!in_quote && result[i] == '<' && result[i + 1] == '<')
 		{
 			i += 2;
-			while (input[i] && ft_isspace(input[i]))
+			while (result[i] && ft_isspace(result[i]))
 				i++;
 			start = i;
-			find_delimiter_bounds(input, &start, &end);
-			return (insert_quotes_around_delim(input, start, end));
+			find_delimiter_bounds(result, &start, &end);
+
+			// обгортаємо в лапки, якщо делімітер не має їх сам
+			if (result[start] != '\'' && result[start] != '"')
+			{
+				tmp = insert_quotes_around_delim(result, start, end);
+				ft_safe_free(result);
+				result = tmp;
+				i = end + 2; // враховуємо вставлені лапки
+				continue;
+			}
 		}
-		else
-			i++;
+		i++;
 	}
-	return (ft_strdup(input));
+	return (result);
 }
+
+// char	*ft_get_input(char *input)
+// {
+// 	size_t	i;
+// 	size_t	start;
+// 	size_t	end;
+// 	char	quote;
+// 	int		in_quote;
+
+// 	if (!input)
+// 		return (NULL);
+// 	i = 0;
+// 	in_quote = 0;
+// 	quote = 0;
+// 	end = 0;
+// 	start = 0;
+// 	while (input[i])
+// 	{
+// 		if ((input[i] == '\'' || input[i] == '"') && !in_quote)
+// 		{
+// 			in_quote = 1;
+// 			quote = input[i];
+// 		}
+// 		else if (in_quote && input[i] == quote)
+// 			in_quote = 0;
+// 		if (!in_quote && input[i] == '<' && input[i + 1] == '<')
+// 		{
+// 			i += 2;
+// 			while (input[i] && ft_isspace(input[i]))
+// 				i++;
+// 			start = i;
+// 			find_delimiter_bounds(input, &start, &end);
+// 			return (insert_quotes_around_delim(input, start, end));
+// 		}
+// 		else
+// 			i++;
+// 	}
+// 	return (ft_strdup(input));
+// }
+
+void	free_tokens(t_token *tokens)
+{
+	size_t	i;
+
+	i = 0;
+	while (tokens && tokens[i].value)
+	{
+		ft_safe_free(tokens[i].value);
+		i++;
+	}
+	ft_safe_free(tokens);
+}
+
 
 
 t_cmd *parse_input(char *input, t_list *env, t_minish *msh)
@@ -206,21 +271,22 @@ t_cmd *parse_input(char *input, t_list *env, t_minish *msh)
 	formated_input = ft_get_input(input);
 	if (formated_input == NULL)
 		return (NULL);
+	// printf("formated_input: %s\n", formated_input);
 	char **pipe_split = split_outside_quotes(formated_input, '|');
 	ft_safe_free(formated_input);
 	while (pipe_split[i])
 	{
 		t_token *tokens = tokenize_with_quote_info(pipe_split[i]);
 		cmd = parse_single_command_from_tokens(tokens, msh);
+		free_tokens(tokens);
 		if (cmd == NULL)
-			return (free_cmd_list(first), free(tokens), free_split(pipe_split), NULL);
+			return (free_cmd_list(first), free_split(pipe_split), NULL);
 		cmd->prev = last;
 		if (!first)
 			first = cmd;
 		else
 			last->next = cmd;
 		last = cmd;
-		ft_safe_free(tokens);
 		ft_safe_free(pipe_split[i]);
 		i++;
 	}
