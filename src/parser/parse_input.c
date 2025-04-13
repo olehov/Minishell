@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:48:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 13:52:53 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:33:47 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,58 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+void	free_tokens(t_token *tokens)
+{
+	size_t	i;
+
+	i = 0;
+	while (tokens && tokens[i].value)
+	{
+		ft_safe_free(tokens[i].value);
+		i++;
+	}
+	ft_safe_free(tokens);
+}
+
+int	parce_heredoc(t_minish *msh, int *i, t_cmd *cmd)
+{
+	t_heredoc	*heredoc;
+	pid_t		pid;
+	int			status;
+
+	heredoc = init_heredoc(remove_outer_quotes(msh->tokens[++(*i)].value));
+	if (heredoc == NULL)
+	{
+		msh->exit_code = 1;
+		return (1);
+	}
+	pid = fork();
+	if (pid == -1)
+		return (1);
+	if (pid == 0)
+	{
+		signal(SIGINT, heredoc_signal_handler);
+		status = ft_heredoc(heredoc, msh);
+		free_cmd_node(cmd);
+		free_tokens(msh->tokens);
+		free_heredoc(heredoc);
+		free_cmd_list(msh->cmd);
+		free_split(msh->pipe_split);
+		free_shell(msh);
+		if (status == -1)
+			exit(1);
+		exit(0);
+	}
+	signal(SIGINT, SIG_IGN);
+	waitpid(pid, &status, 0);
+	msh->exit_code = ft_decode_wstatus(status);
+	add_redirection(cmd, _heredoc, heredoc->filename);
+	if (msh->heredocs == NULL)
+		msh->heredocs = ft_lstnew(heredoc);
+	else
+		ft_lstadd_back(&msh->heredocs, ft_lstnew(heredoc));
+	return (0);
+}
 
 t_cmd *parse_single_command_from_tokens(t_token *tokens, t_minish *msh)
 {
@@ -26,7 +78,7 @@ t_cmd *parse_single_command_from_tokens(t_token *tokens, t_minish *msh)
 		if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, "|") == 0)
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, "<") == 0 && tokens[i + 1].value)
 		{
@@ -42,29 +94,20 @@ t_cmd *parse_single_command_from_tokens(t_token *tokens, t_minish *msh)
 		}
 		else if (!tokens[i].in_quotes && ft_strcmp(tokens[i].value, "<<") == 0 && tokens[i + 1].value)
 		{
-			t_heredoc	*heredoc;
-			heredoc = init_heredoc(remove_outer_quotes(tokens[++i].value));
-			if (heredoc == NULL)
-			{
-				g_last_exit_code = 1;
+			int	status;
+
+			status = parce_heredoc(msh, &i, cmd);
+			if (status == -1)
+				return (free_cmd_node(cmd), NULL);
+			else if (status == 1)
 				continue ;
-			}
-			if (ft_heredoc(heredoc, msh->env) == -1)
-			{
-				return (free_cmd_node(cmd), free_heredoc(heredoc), NULL);
-			}
-			add_redirection(cmd, _heredoc, heredoc->filename);
-			if (msh->heredocs == NULL)
-				msh->heredocs = ft_lstnew(heredoc);
-			else
-				ft_lstadd_back(&msh->heredocs, ft_lstnew(heredoc));
 		}
 		else
 		{
 			char *processed = NULL;
 			char *env_applied = NULL;
 			if (!(tokens[i].in_quotes && tokens[i].quote_char == '\''))
-				env_applied = process_env(tokens[i].value, msh->env);
+				env_applied = process_env(tokens[i].value, msh->env, msh);
 			else
 				env_applied = ft_strdup(tokens[i].value);
 			if (ft_strchr(tokens[i].value, '='))
@@ -189,15 +232,13 @@ char	*ft_get_input(char *input)
 				i++;
 			start = i;
 			find_delimiter_bounds(result, &start, &end);
-
-			// обгортаємо в лапки, якщо делімітер не має їх сам
 			if (result[start] != '\'' && result[start] != '"')
 			{
 				tmp = insert_quotes_around_delim(result, start, end);
 				ft_safe_free(result);
 				result = tmp;
-				i = end + 2; // враховуємо вставлені лапки
-				continue;
+				i = end + 2;
+				continue ;
 			}
 		}
 		i++;
@@ -244,20 +285,6 @@ char	*ft_get_input(char *input)
 // 	return (ft_strdup(input));
 // }
 
-void	free_tokens(t_token *tokens)
-{
-	size_t	i;
-
-	i = 0;
-	while (tokens && tokens[i].value)
-	{
-		ft_safe_free(tokens[i].value);
-		i++;
-	}
-	ft_safe_free(tokens);
-}
-
-
 
 t_cmd *parse_input(char *input, t_list *env, t_minish *msh)
 {
@@ -271,25 +298,24 @@ t_cmd *parse_input(char *input, t_list *env, t_minish *msh)
 	formated_input = ft_get_input(input);
 	if (formated_input == NULL)
 		return (NULL);
-	// printf("formated_input: %s\n", formated_input);
-	char **pipe_split = split_outside_quotes(formated_input, '|');
+	msh->pipe_split = split_outside_quotes(formated_input, '|');
 	ft_safe_free(formated_input);
-	while (pipe_split[i])
+	while (msh->pipe_split[i])
 	{
-		t_token *tokens = tokenize_with_quote_info(pipe_split[i]);
-		cmd = parse_single_command_from_tokens(tokens, msh);
-		free_tokens(tokens);
+		msh->tokens = tokenize_with_quote_info(msh->pipe_split[i]);
+		cmd = parse_single_command_from_tokens(msh->tokens, msh);
+		free_tokens(msh->tokens);
 		if (cmd == NULL)
-			return (free_cmd_list(first), free_split(pipe_split), NULL);
+			return (free_cmd_list(first),
+				free_split(msh->pipe_split), NULL);
 		cmd->prev = last;
 		if (!first)
 			first = cmd;
 		else
 			last->next = cmd;
 		last = cmd;
-		ft_safe_free(pipe_split[i]);
 		i++;
 	}
-	ft_safe_free(pipe_split);
-	return first;
+	free_split(msh->pipe_split);
+	return (first);
 }

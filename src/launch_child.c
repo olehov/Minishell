@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:05:57 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/11 14:26:30 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:11:29 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ char	*find_executable_path(char *cmd, t_list *env)
 	return (free_split(paths), NULL);
 }
 
-void	print_error(char *cmd)
+void	print_error(char *cmd, t_minish *msh)
 {
-	if (g_last_exit_code == 0)
+	if (msh->exit_code == 0)
 		return ;
 	ft_putstr_fd(cmd, STDERR_FILENO);
-	if (g_last_exit_code == 127)
+	if (msh->exit_code == 127)
 		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 	else
 		perror(cmd);
@@ -79,13 +79,13 @@ static int	is_exists(char *path)
 	return (0);
 }
 
-void	check_is_directory_permission(char **args)
+void	check_is_directory_permission(char **args, t_minish *msh)
 {
 	int	exist;
 
 	if (args == NULL || args[0] == NULL
 		|| (args[0][0] == '\0' && args[1] == NULL))
-		exit(g_last_exit_code);
+		exit(msh->exit_code);
 	if (args[0][0] == '/' || args[0][0] == '.')
 	{
 		exist = is_exists(args[0]);
@@ -101,20 +101,20 @@ void	launch_child(t_cmd *cmd, t_minish *msh)
 	char	*path;
 	char	**envp;
 
-	check_is_directory_permission(cmd->args);
-	set_pipe_fds(cmd);
+	check_is_directory_permission(cmd->args, msh);
+	set_pipe_fds(cmd, msh);
 	close_all_pipes(msh->cmd);
 	if (is_builtin(cmd->args))
 	{
 		execute_builtin(cmd, msh);
-		exit(g_last_exit_code);
+		exit(msh->exit_code);
 	}
 	path = find_executable_path(cmd->args[0], msh->env);
 	envp = env_list_to_str_arr(msh->env);
 	execve(path, cmd->args, envp);
 	ft_safe_free(path);
 	free_split(envp);
-	g_last_exit_code = 127;
-	print_error(cmd->args[0]);
-	exit(g_last_exit_code);
+	msh->exit_code = 127;
+	print_error(cmd->args[0], msh);
+	exit(msh->exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:16:31 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 13:45:48 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 16:26:14 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,11 +122,6 @@ t_token	*tokenize_with_quote_info(char *input)
 	tokens = ft_calloc(sizeof(t_token), (ft_strlen(input) + 2));
 	if (!tokens)
 		return (NULL);
-	// ctx.i = 0;
-	// ctx.j = 0;
-	// ctx.accum = NULL;
-	// ctx.in_quotes = 0;
-	// ctx.quote_char = 0;
 	process_tokenization_loop(input, tokens, &ctx);
 	tokens[ctx.j].value = NULL;
 	return (tokens);

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 14:53:42 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/10 15:01:16 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:30:54 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char	*expand_dollar(const char *line, int *i, t_minish *msh)
 	int		j;
 
 	j = *i;
-	expanded = process_env(&line[j], msh->env);
+	expanded = process_env(&line[j], msh->env, msh);
 	if (!expanded)
 		return (NULL);
 	while (line[*i] && (ft_isalnum(line[*i + 1]) || line[*i + 1] == '_'))

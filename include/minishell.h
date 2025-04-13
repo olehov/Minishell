@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 09:56:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/12 15:11:43 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:26:46 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,12 @@
 # include "ft_minishell_types.h"
 
 // ----------------------
-//     GLOBAL VARIABLES
-// ----------------------
-
-extern int	g_last_exit_code;
-
-// ----------------------
 //       FUNCTIONS
 // ----------------------
 
+
+void	free_shell(t_minish *msh);
+void	heredoc_signal_handler(int signo);
 size_t	get_row_size(char **args);
 bool	ft_is_directory(const char *path);
 void	print_args(char	**args);
@@ -116,14 +113,12 @@ void	launch_child(t_cmd *cmd, t_minish *msh);
 
 int		ft_decode_wstatus(int wstatus);
 
-int		append_to_file(char *inputFileName, char *outputFileName, int flags);
-
 // ===== utils =====
 char	*remove_quotes(char *str);
 void	add_arg(t_cmd *cmd, char *arg);
 char	**split_path(t_list *lst, char *key, char c);
 void	close_all_pipes(t_cmd *cmd);
-void	set_pipe_fds(t_cmd *cmd);
+void	set_pipe_fds(t_cmd *cmd, t_minish *msh);
 
 // ===== env management (твій готовий функціонал) =====
 int		init_env(t_list **lst, char *env[]);
@@ -132,7 +127,7 @@ char	*get_env_value(const char *var_name, t_list *lst);
 char	**env_list_to_str_arr(t_list *lst);
 
 // ===== process_env & expand (твій код) =====
-char	*process_env(const char *input, t_list *lst);
+char	*process_env(const char *input, t_list *lst, t_minish *msh);
 char	*expand_line(char *line, t_minish *msh, int i);
 
 // ===== other env/utils (твій код) =====

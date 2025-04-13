@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 13:14:44 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:36:50 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int	run_single_cmd(t_cmd *cmd, t_minish *msh)
 		std_fd[1] = dup(STDOUT_FILENO);
 		if (handle_redirect(cmd) == -1)
 		{
+			msh->exit_code = EXIT_FAILURE;
 			return (-1);
 		}
 		execute_builtin(cmd, msh);
@@ -50,17 +51,16 @@ void	run_child(t_cmd *cmd, t_minish *msh, pid_t pid)
 {
 	if (pid == -1)
 	{
-		g_last_exit_code = EXIT_FAILURE;
-		exit(g_last_exit_code);
+		msh->exit_code = EXIT_FAILURE;
+		exit(msh->exit_code);
 	}
 	if (pid == 0)
 	{
-		g_last_exit_code = 0;
+		msh->exit_code = 0;
 		if (handle_redirect(cmd) == -1)
 		{
-			cmd = cmd->next;
-			if (g_last_exit_code != 0)
-				exit(g_last_exit_code);
+			msh->exit_code = EXIT_FAILURE;
+			exit(msh->exit_code);
 		}
 		launch_child(cmd, msh);
 	}
@@ -81,7 +81,7 @@ void	wait_all_proccesses(t_minish *msh)
 			last_status = ft_decode_wstatus(status);
 		cmd = cmd->next;
 	}
-	g_last_exit_code = last_status;
+	msh->exit_code = last_status;
 }
 
 void	execute_commands(t_minish *msh)
@@ -96,7 +96,7 @@ void	execute_commands(t_minish *msh)
 	{
 		if (cmd->args == NULL)
 		{
-			g_last_exit_code = 0;
+			msh->exit_code = 0;
 			cmd = cmd->next;
 			continue ;
 		}

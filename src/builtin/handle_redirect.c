@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:28:35 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/11 12:21:37 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:34:47 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ int	handle_redirect(t_cmd *cmd)
 	{
 		if (redirect_loop(tmp, cmd, &last_out_file) == -1)
 		{
-			g_last_exit_code = EXIT_FAILURE;
 			ft_safe_free(cmd->infile);
 			ft_safe_free(cmd->outfile);
 			return (-1);
@@ -114,7 +113,6 @@ int	handle_redirect(t_cmd *cmd)
 	}
 	if (redirect_fd(cmd, last_out_file) == -1)
 	{
-		g_last_exit_code = EXIT_FAILURE;
 		ft_safe_free(cmd->infile);
 		ft_safe_free(cmd->outfile);
 		return (-1);
