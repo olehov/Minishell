@@ -17,6 +17,12 @@ ENV_DIR = env
 BUILTIN_DIR = builtin
 CMD_DIR = cmd
 PARSER_DIR = parser
+READLINE_FLAGS = -lreadline
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+  CFLAGS += -I/opt/homebrew/Cellar/readline/8.2.13/include
+  READLINE_FLAGS += -L/opt/homebrew/Cellar/readline/8.2.13/lib 
+endif
 
 # -------------------------
 #     SOURCE FILES
@@ -63,6 +69,7 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/ft_is_directory.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/is_builtin.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/handle_redirect.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/ft_exit.c \
       $(SRC_DIR)/$(CMD_DIR)/init_cmd_node.c \
 	$(SRC_DIR)/$(CMD_DIR)/add_redirection.c \
 	$(SRC_DIR)/$(CMD_DIR)/free_cmd_list.c
@@ -75,7 +82,7 @@ OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(READLINE_FLAGS) -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)

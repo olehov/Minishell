@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
+/*   By: marta <marta@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 19:10:53 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 22:58:11 by marta            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	init_shell(t_minish *msh, char **envp)
 	msh->pipe_split = NULL;
 	msh->tokens = NULL;
 	msh->exit_code = 0;
+	msh->should_exit = 0;
 	if (init_env(&msh->env, envp) == -1)
 	{
 		msh->exit_code = EXIT_FAILURE;
@@ -162,7 +163,7 @@ int	main(int argc, char **argv, char **envp)
 	init_shell(&msh, envp);
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, signal_handler);
-	while (1)
+	while (!msh.should_exit)
 	{
 		line = get_line(&msh);
 		if (!line)
