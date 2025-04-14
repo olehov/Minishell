@@ -17,6 +17,12 @@ ENV_DIR = env
 BUILTIN_DIR = builtin
 CMD_DIR = cmd
 PARSER_DIR = parser
+READLINE_FLAGS = -lreadline
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+  CFLAGS += -I/opt/homebrew/Cellar/readline/8.2.13/include
+  READLINE_FLAGS += -L/opt/homebrew/Cellar/readline/8.2.13/lib 
+endif
 
 # -------------------------
 #     SOURCE FILES
@@ -78,7 +84,7 @@ OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) $(READLINE_FLAGS) -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(dir $@)

@@ -7,6 +7,10 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 19:19:51 by ogrativ           #+#    #+#             */
 /*   Updated: 2025/04/14 11:28:57 by ogrativ          ###   ########.fr       */
+/*   By: marta <marta@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/13 22:33:32 by marta             #+#    #+#             */
+/*   Updated: 2025/04/13 23:03:55 by marta            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,4 +116,3 @@ int	ft_exit(char **args, t_minish *msh, bool is_child)
 	exit_code = parce_exit_code(args[1]);
 	clear_data(msh);
 	exit(exit_code);
-}

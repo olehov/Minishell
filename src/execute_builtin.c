@@ -3,10 +3,11 @@
 /*                                                        :::      ::::::::   */
 /*   execute_builtin.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
+/*   By: marta <marta@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:50:46 by ogrativ           #+#    #+#             */
 /*   Updated: 2025/04/14 11:08:16 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 22:57:18 by marta            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +56,8 @@ void	execute_builtin(t_cmd *cmd, t_minish *msh)
 		exit_code = ft_echo(cmd->args + 1);
 	else if (ft_strcmp(cmd->args[0], "$?") == 0)
 		printerrcode(msh);
+	else if (ft_strcmp(cmd->args[0], "exit") == 0)
+		ft_exit(cmd->args, msh, 0);
 	if (exit_code == -1)
 		msh->exit_code = EXIT_FAILURE;
 	else

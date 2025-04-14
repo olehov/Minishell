@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
+/*   By: marta <marta@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:11:06 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/10 14:30:48 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 23:05:13 by marta            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#ifdef __linux__
 #include <linux/limits.h>
+#else
+#include <limits.h>
+#endif
 
 void	change_path(t_list **lst, char *old_path)
 {
