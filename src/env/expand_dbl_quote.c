@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:01:57 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 12:50:01 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 17:29:40 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,10 +84,6 @@ char	*expand_dbl_quote(char *line, int *i, t_minish *msh)
 	{
 		if (line[*i] == '$')
 		{
-			// if (!str1 && *i > 1)
-			// 	str1 = copy_first_str(NULL, line, line + *i);
-			// else if (*i > 1)
-			// 	str1 = copy_first_str(result, str1, line + *i);
 			str1 = get_copy_str(result, str1, line, *i);
 			str2 = get_env_value(find_key(line + *i + 1), msh->env);
 			result = ft_strjoin(str1, str2);

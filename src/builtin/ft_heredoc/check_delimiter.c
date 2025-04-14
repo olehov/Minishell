@@ -1,24 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_env.c                                         :+:      :+:    :+:   */
+/*   check_delimiter.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 15:21:16 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 17:29:54 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/14 17:18:40 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/14 17:19:00 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/ft_heredoc.h"
 
-void	free_env(void *env)
+bool	check_delimiter(const char *delimiter)
 {
-	if (env == NULL)
-		return ;
-	if (((t_env *)env)->key != NULL)
-		free(((t_env *)env)->key);
-	if (((t_env *)env)->value != NULL)
-		free(((t_env *)env)->value);
-	free(env);
+	if (delimiter == NULL)
+	{
+		errno = EINVAL;
+		ft_putendl_fd(" unexpected end of file", STDERR_FILENO);
+		return (false);
+	}
+	if (delimiter[0] == '\0')
+	{
+		errno = EINVAL;
+		ft_putstr_fd("syntax error near unexpected token `newline'\n",
+			STDERR_FILENO);
+		return (false);
+	}
+	return (true);
 }

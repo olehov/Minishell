@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_env.c                                         :+:      :+:    :+:   */
+/*   free_tokens.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 15:21:16 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 17:29:54 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/14 17:58:22 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/14 17:58:39 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	free_env(void *env)
+void	free_tokens(t_token *tokens)
 {
-	if (env == NULL)
-		return ;
-	if (((t_env *)env)->key != NULL)
-		free(((t_env *)env)->key);
-	if (((t_env *)env)->value != NULL)
-		free(((t_env *)env)->value);
-	free(env);
+	size_t	i;
+
+	i = 0;
+	while (tokens && tokens[i].value)
+	{
+		free(tokens[i].value);
+		i++;
+	}
+	free(tokens);
+	tokens = NULL;
 }

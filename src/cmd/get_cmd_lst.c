@@ -6,14 +6,14 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:45:35 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 14:49:17 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 16:20:27 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 #include "../../include/ft_cmd.h"
 
-static char	*get_line(t_minish *msh)
+char	*get_line(t_minish *msh)
 {
 	char	*line;
 	char	*prompt;

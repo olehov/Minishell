@@ -6,45 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:16:31 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 12:38:00 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 17:51:00 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-static int	handle_single_redirect(char *input,
-	t_token *tokens, t_tokenizer_ctx *ctx)
-{
-	t_tokenizer_ctx	tmp;
-
-	if (ctx->accum)
-	{
-		set_token(&tokens[ctx->j++], ctx);
-		reset_quote_state(ctx);
-	}
-	tmp.accum = ft_substr(input, ctx->i, 1);
-	tmp.in_quotes = 0;
-	tmp.quote_char = 0;
-	set_token(&tokens[ctx->j++], &tmp);
-	free(tmp.accum);
-	ctx->i++;
-	return (1);
-}
-
-static int	handle_word(char *input, int *i, char **accum)
-{
-	int		start;
-	char	*part;
-
-	start = *i;
-	while (input[*i] && !ft_isspace(input[*i]) && input[*i] != '<'
-		&& input[*i] != '>' && input[*i] != '\'' && input[*i] != '"')
-		(*i)++;
-	part = ft_substr(input, start, *i - start);
-	*accum = append_part(*accum, part);
-	free(part);
-	return (1);
-}
 
 static void	handle_next_token_literal(char *input, t_tokenizer_ctx *ctx)
 {
@@ -74,19 +40,33 @@ static void	handle_next_token_literal(char *input, t_tokenizer_ctx *ctx)
 	free(part);
 }
 
+static void	skip_space(char	*input, t_tokenizer_ctx *ctx)
+{
+	while (input[ctx->i] && ft_isspace(input[ctx->i]))
+		ctx->i++;
+}
+
+static void	reset_quote_state_set_token(t_token *tokens,
+	t_tokenizer_ctx *ctx)
+{
+	if (ctx->accum)
+	{
+		set_token(&tokens[ctx->j++], ctx);
+		reset_quote_state(ctx);
+	}
+}
+
 static void	process_tokenization_loop(char *input,
 	t_token *tokens, t_tokenizer_ctx *ctx)
 {
 	while (input[ctx->i])
 	{
-		while (input[ctx->i] && ft_isspace(input[ctx->i]))
-			ctx->i++;
+		skip_space(input, ctx);
 		if (!input[ctx->i])
 			break ;
 		if (ctx->skip_next_token_quote_handling)
 		{
-			while (input[ctx->i] && ft_isspace(input[ctx->i]))
-				ctx->i++;
+			skip_space(input, ctx);
 			handle_next_token_literal(input, ctx);
 			ctx->skip_next_token_quote_handling = 0;
 		}
@@ -101,16 +81,8 @@ static void	process_tokenization_loop(char *input,
 			handle_word(input, &ctx->i, &ctx->accum);
 		if (!input[ctx->i] || ft_isspace(input[ctx->i])
 			|| input[ctx->i] == '<' || input[ctx->i] == '>')
-		{
-			if (ctx->accum)
-			{
-				set_token(&tokens[ctx->j++], ctx);
-				reset_quote_state(ctx);
-			}
-		}
+			reset_quote_state_set_token(tokens, ctx);
 	}
-	if (ctx->accum)
-		set_token(&tokens[ctx->j++], ctx);
 }
 
 t_token	*tokenize_with_quote_info(char *input)
@@ -123,6 +95,8 @@ t_token	*tokenize_with_quote_info(char *input)
 	if (!tokens)
 		return (NULL);
 	process_tokenization_loop(input, tokens, &ctx);
+	if (ctx.accum)
+		set_token(&tokens[ctx.j++], &ctx);
 	tokens[ctx.j].value = NULL;
 	return (tokens);
 }

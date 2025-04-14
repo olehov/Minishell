@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:18:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 12:37:37 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 17:37:03 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,25 +72,6 @@ void	handle_quote(char *input, t_tokenizer_ctx *ctx)
 	if (input[ctx->i] == quote)
 		ctx->i++;
 }
-
-// int	handle_double_redirect(char *input, t_token *tokens, t_tokenizer_ctx *ctx)
-// {
-// 	t_tokenizer_ctx	tmp;
-
-// 	if (ctx->accum)
-// 	{
-// 		set_token(&tokens[ctx->j++], ctx);
-// 		reset_quote_state(ctx);
-// 	}
-// 	tmp.accum = ft_substr(input, ctx->i++, 2);
-// 	tmp.in_quotes = 0;
-// 	tmp.quote_char = 0;
-// 	set_token(&tokens[ctx->j], &tmp);
-// 	ft_safe_free(tmp.accum);
-// 	ctx->i += 2;
-// 	return (1);
-// }
-
 
 int	handle_double_redirect(char *input, t_token *tokens, t_tokenizer_ctx *ctx)
 {
