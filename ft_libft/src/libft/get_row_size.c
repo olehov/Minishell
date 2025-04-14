@@ -1,31 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unlink_heredocs.c                                  :+:      :+:    :+:   */
+/*   get_row_size.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 12:32:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 13:32:28 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/10 16:57:01 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/10 16:57:26 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_heredoc.h"
+#include "../../headers/libft.h"
 
-void	unlink_heredocs(t_list **heredocs)
+size_t	get_row_size(char **args)
 {
-	t_list		*node;
-	t_heredoc	*heredoc_node;
+	size_t	i;
 
-	node = *heredocs;
-	if (node == NULL)
-		return ;
-	while (node)
+	i = 0;
+	if (args == NULL || *args == NULL)
 	{
-		heredoc_node = node->content;
-		unlink(heredoc_node->filename);
-		node = node->next;
+		return (0);
 	}
-	ft_lstclear(heredocs, free_heredoc);
-	heredocs = NULL;
+	while (args[i] != NULL)
+	{
+		i++;
+	}
+	return (i);
 }

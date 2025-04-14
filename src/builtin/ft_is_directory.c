@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unlink_heredocs.c                                  :+:      :+:    :+:   */
+/*   ft_is_directory.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 12:32:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 13:32:28 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/10 14:37:21 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/10 14:37:27 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_heredoc.h"
+#include "../../include/minishell.h"
+#include <dirent.h>
 
-void	unlink_heredocs(t_list **heredocs)
+bool	ft_is_directory(const char *path)
 {
-	t_list		*node;
-	t_heredoc	*heredoc_node;
+	DIR	*dir;
 
-	node = *heredocs;
-	if (node == NULL)
-		return ;
-	while (node)
+	dir = opendir(path);
+	if (dir)
 	{
-		heredoc_node = node->content;
-		unlink(heredoc_node->filename);
-		node = node->next;
+		closedir(dir);
+		return (1);
 	}
-	ft_lstclear(heredocs, free_heredoc);
-	heredocs = NULL;
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:30:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 20:18:02 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:30:32 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 #include "../../include/process_env_utils.h"
 
 int	handle_text(const char *input, int *i, t_env_state *state,
-	char *var_name)
+	t_minish *msh)
 {
-	(void)var_name;
 	if (input[*i] == '\\')
 	{
 		if (handle_escaping_variable(input, i, state) == -1)
@@ -24,12 +23,12 @@ int	handle_text(const char *input, int *i, t_env_state *state,
 	}
 	else if (state->quote == '\'' && input[*i] == '\"')
 	{
-		if (extract_quoted_text(input, i, state) == -1)
+		if (extract_quoted_text(input, i, state, msh) == -1)
 			return (-1);
 	}
 	else if (state->quote == '\"' && input[*i] == '$' && input[*i + 1] != ' ')
 	{
-		if (extract_variable_value(input, i, state) == -1)
+		if (extract_variable_value(input, i, state, msh) == -1)
 			return (-1);
 	}
 	else
@@ -40,51 +39,42 @@ int	handle_text(const char *input, int *i, t_env_state *state,
 	return (0);
 }
 
-// int	process_quoted_text(const char *input, int start,
-// 	t_env_state *state)
-// {
-// 	int		i;
-// 	char	var_name[256];
+static int	process_quoted_text_loop(const char *input,
+	int *i, t_env_state *state, t_minish *msh)
+{
+	if (state->quote == '\'' && input[*i])
+	{
+		if (try_ensure_buffer_capacity(state, 1, input[*i]) == -1)
+			return (-1);
+		i++;
+	}
+	else if (state->quote == '\"')
+	{
+		if (input[*i] == '$')
+		{
+			if (extract_variable_value(input, i, state, msh) == -1)
+				return (-1);
+		}
+		else
+		{
+			if (try_ensure_buffer_capacity(state, 1, input[*i]) == -1)
+				return (-1);
+			(*i)++;
+		}
+	}
+	return (0);
+}
 
-// 	i = start + 1;
-// 	if (try_ensure_buffer_capacity(state, 1, state->quote) == -1)
-// 		return (-1);
-// 	while (input[i] && input[i] != state->quote)
-// 	{
-// 		if (handle_text(input, &i, state, var_name) == -1)
-// 			return (-1);
-// 	}
-// 	return (i);
-// }
-
-int	process_quoted_text(const char *input, int start, t_env_state *state)
+int	process_quoted_text(const char *input, int start,
+	t_env_state *state, t_minish *msh)
 {
 	int		i;
 
 	i = start + 1;
 	while (input[i] && input[i] != state->quote)
 	{
-		if (state->quote == '\'' && input[i]) // одинарні лапки — копіюй як є
-		{
-			if (try_ensure_buffer_capacity(state, 1, input[i]) == -1)
-				return (-1);
-			i++;
-		}
-		else if (state->quote == '\"') // подвійні лапки
-		{
-			if (input[i] == '$')
-			{
-				if (extract_variable_value(input, &i, state) == -1)
-					return (-1);
-			}
-			else
-			{
-				if (try_ensure_buffer_capacity(state, 1, input[i]) == -1)
-					return (-1);
-				i++;
-			}
-		}
+		if (process_quoted_text_loop(input, &i, state, msh) == -1)
+			return (-1);
 	}
 	return (i);
 }
-

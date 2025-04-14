@@ -1,306 +1,1521 @@
-==497407== Memcheck, a memory error detector
-==497407== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==497407== Using Valgrind-3.18.1-42b08ed5bd-20211015 and LibVEX; rerun with -h for copyright info
-==497407== Command: ./minishell
-==497407== Parent PID: 489162
-==497407== 
---497407-- 
---497407-- Valgrind options:
---497407--    --suppressions=rl.supp
---497407--    --leak-check=full
---497407--    --show-leak-kinds=all
---497407--    --track-origins=yes
---497407--    --track-fds=yes
---497407--    --verbose
---497407--    --log-file=valgrind-out.txt
---497407-- Contents of /proc/version:
---497407--   Linux version 5.15.0-134-generic (buildd@lcy02-amd64-081) (gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #145-Ubuntu SMP Wed Feb 12 20:08:39 UTC 2025
---497407-- 
---497407-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand-rdseed
---497407-- Page sizes: currently 4096, max supported 4096
---497407-- Valgrind library directory: /usr/libexec/valgrind
---497407-- Reading syms from /home/ogrativ/student_projects/Minishell/minishell
---497407-- Reading syms from /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
---497407--   Considering /usr/lib/debug/.build-id/e4/de036b19e4768e7591b596c4be9f9015f2d28a.debug ..
---497407--   .. build-id is valid
---497407-- Reading syms from /usr/libexec/valgrind/memcheck-amd64-linux
---497407--    object doesn't have a symbol table
---497407--    object doesn't have a dynamic symbol table
---497407-- Scheduler: using generic scheduler lock implementation.
---497407-- Reading suppressions file: rl.supp
---497407-- Reading suppressions file: /usr/libexec/valgrind/default.supp
-==497407== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-497407-by-ogrativ-on-???
-==497407== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-497407-by-ogrativ-on-???
-==497407== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-497407-by-ogrativ-on-???
-==497407== 
-==497407== TO CONTROL THIS PROCESS USING vgdb (which you probably
-==497407== don't want to do, unless you know exactly what you're doing,
-==497407== or are doing some strange experiment):
-==497407==   /usr/bin/vgdb --pid=497407 ...command...
-==497407== 
-==497407== TO DEBUG THIS PROCESS USING GDB: start GDB like this
-==497407==   /path/to/gdb ./minishell
-==497407== and then give GDB the following command
-==497407==   target remote | /usr/bin/vgdb --pid=497407
-==497407== --pid is optional if only one valgrind process is running
-==497407== 
---497407-- REDIR: 0x402aa40 (ld-linux-x86-64.so.2:strlen) redirected to 0x580bcec2 (???)
---497407-- REDIR: 0x402a810 (ld-linux-x86-64.so.2:index) redirected to 0x580bcedc (???)
---497407-- Reading syms from /usr/libexec/valgrind/vgpreload_core-amd64-linux.so
---497407--    object doesn't have a symbol table
---497407-- Reading syms from /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
---497407--    object doesn't have a symbol table
-==497407== WARNING: new redirection conflicts with existing -- ignoring it
---497407--     old: 0x0402aa40 (strlen              ) R-> (0000.0) 0x580bcec2 ???
---497407--     new: 0x0402aa40 (strlen              ) R-> (2007.0) 0x0484ee30 strlen
---497407-- REDIR: 0x4027220 (ld-linux-x86-64.so.2:strcmp) redirected to 0x484fcd0 (strcmp)
---497407-- REDIR: 0x402afa0 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4853840 (mempcpy)
---497407-- Reading syms from /usr/lib/x86_64-linux-gnu/libreadline.so.8.1
---497407--    object doesn't have a symbol table
---497407-- Reading syms from /usr/lib/x86_64-linux-gnu/libc.so.6
---497407--   Considering /usr/lib/debug/.build-id/cd/410b710f0f094c6832edd95931006d883af48e.debug ..
---497407--   .. build-id is valid
-==497407== WARNING: new redirection conflicts with existing -- ignoring it
---497407--     old: 0x0496ac60 (memalign            ) R-> (1011.0) 0x0484e080 memalign
---497407--     new: 0x0496ac60 (memalign            ) R-> (1017.0) 0x0484e050 aligned_alloc
-==497407== WARNING: new redirection conflicts with existing -- ignoring it
---497407--     old: 0x0496ac60 (memalign            ) R-> (1011.0) 0x0484e080 memalign
---497407--     new: 0x0496ac60 (memalign            ) R-> (1017.0) 0x0484e020 aligned_alloc
-==497407== WARNING: new redirection conflicts with existing -- ignoring it
---497407--     old: 0x0496ac60 (memalign            ) R-> (1011.0) 0x0484e080 memalign
---497407--     new: 0x0496ac60 (memalign            ) R-> (1017.0) 0x0484e050 aligned_alloc
-==497407== WARNING: new redirection conflicts with existing -- ignoring it
---497407--     old: 0x0496ac60 (memalign            ) R-> (1011.0) 0x0484e080 memalign
---497407--     new: 0x0496ac60 (memalign            ) R-> (1017.0) 0x0484e020 aligned_alloc
---497407-- Reading syms from /usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
---497407--    object doesn't have a symbol table
---497407-- REDIR: 0x496d720 (libc.so.6:strnlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496d9e0 (libc.so.6:strpbrk) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496d2e0 (libc.so.6:strcmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x498bcd0 (libc.so.6:wcsnlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496e6d0 (libc.so.6:memset) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x498a540 (libc.so.6:wcslen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496ec10 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x498a370 (libc.so.6:wcschr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496d260 (libc.so.6:index) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496d960 (libc.so.6:rindex) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496e5a0 (libc.so.6:memmove) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
-==497407== Preferring higher priority redirection:
---497407--     old: 0x04a657c0 (__memcpy_avx_unalign) R-> (2018.0) 0x04850f90 __memcpy_avx_unaligned_erms
---497407--     new: 0x04a657c0 (__memcpy_avx_unalign) R-> (2018.1) 0x04852880 memmove
---497407-- REDIR: 0x498a3f0 (libc.so.6:wcscmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496e9e0 (libc.so.6:stpncpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x498a9b0 (libc.so.6:wmemchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496d830 (libc.so.6:strncmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496ea70 (libc.so.6:strcasecmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496d420 (libc.so.6:strcspn) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x498a470 (libc.so.6:wcscpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496d1d0 (libc.so.6:strcat) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496eb60 (libc.so.6:strncasecmp_l) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496e480 (libc.so.6:bcmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x4976570 (libc.so.6:memrchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x4970010 (libc.so.6:strchrnul) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496d390 (libc.so.6:strcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496eb10 (libc.so.6:strcasecmp_l) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496d6a0 (libc.so.6:strlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496d8d0 (libc.so.6:strncpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496e950 (libc.so.6:stpcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496e3f0 (libc.so.6:memchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496db00 (libc.so.6:strspn) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496e7d0 (libc.so.6:mempcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496eac0 (libc.so.6:strncasecmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496ff80 (libc.so.6:rawmemchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496d7a0 (libc.so.6:strncat) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x49f9280 (libc.so.6:__memcpy_chk) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x496e310 (libc.so.6:strstr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
---497407-- REDIR: 0x4a62610 (libc.so.6:__strrchr_avx2) redirected to 0x484e810 (rindex)
---497407-- REDIR: 0x496a0a0 (libc.so.6:malloc) redirected to 0x4848820 (malloc)
---497407-- REDIR: 0x496a3e0 (libc.so.6:free) redirected to 0x484b210 (free)
---497407-- REDIR: 0x4a627e0 (libc.so.6:__strlen_avx2) redirected to 0x484ed10 (strlen)
---497407-- REDIR: 0x4a657c0 (libc.so.6:__memcpy_avx_unaligned_erms) redirected to 0x4852880 (memmove)
---497407-- REDIR: 0x4a62400 (libc.so.6:__strchrnul_avx2) redirected to 0x4853330 (strchrnul)
---497407-- REDIR: 0x490a150 (libc.so.6:setenv) redirected to 0x48542d0 (setenv)
---497407-- REDIR: 0x4a62180 (libc.so.6:__strchr_avx2) redirected to 0x484e9f0 (index)
---497407-- REDIR: 0x4a5dd80 (libc.so.6:__strncmp_avx2) redirected to 0x484f3e0 (strncmp)
---497407-- REDIR: 0x496a740 (libc.so.6:realloc) redirected to 0x484dc50 (realloc)
---497407-- REDIR: 0x4a65780 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x4853440 (mempcpy)
---497407-- REDIR: 0x4a5d940 (libc.so.6:__strcmp_avx2) redirected to 0x484fbd0 (strcmp)
---497407-- REDIR: 0x496b520 (libc.so.6:calloc) redirected to 0x484d9d0 (calloc)
---497407-- REDIR: 0x4a62960 (libc.so.6:__strnlen_avx2) redirected to 0x484ecb0 (strnlen)
---497407-- REDIR: 0x4a63cb0 (libc.so.6:__strcpy_avx2) redirected to 0x484ee60 (strcpy)
---497407-- REDIR: 0x496dfc0 (libc.so.6:__GI_strstr) redirected to 0x4853ae0 (__strstr_sse2)
---497407-- REDIR: 0x4a65790 (libc.so.6:__memcpy_chk_avx_unaligned_erms) redirected to 0x4853940 (__memcpy_chk)
---497407-- REDIR: 0x4a65f80 (libc.so.6:__memset_avx2_unaligned_erms) redirected to 0x4852770 (memset)
---497407-- REDIR: 0x4a64040 (libc.so.6:__strncpy_avx2) redirected to 0x484efe0 (strncpy)
---497407-- REDIR: 0x4a5e2c0 (libc.so.6:__memchr_avx2) redirected to 0x484fd50 (memchr)
---497407-- REDIR: 0x4a649a0 (libc.so.6:__stpcpy_avx2) redirected to 0x4852130 (stpcpy)
---497407-- REDIR: 0x4a5f130 (libc.so.6:__strcasecmp_avx) redirected to 0x484f560 (strcasecmp)
---497407-- REDIR: 0x4a607b0 (libc.so.6:__strncasecmp_avx) redirected to 0x484f640 (strncasecmp)
---497407-- REDIR: 0x4a5ea80 (libc.so.6:__memcmp_avx2_movbe) redirected to 0x4852010 (bcmp)
-==497407== 
-==497407== FILE DESCRIPTORS: 8 open (3 std) at exit.
-==497407== Open file descriptor 5: /dev/pts/0
-==497407==    at 0x49D9FEB: dup (syscall-template.S:120)
-==497407==    by 0x109758: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== Open file descriptor 4: /dev/pts/0
-==497407==    at 0x49D9FEB: dup (syscall-template.S:120)
-==497407==    by 0x10974B: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
-==497407==    <inherited from parent>
-==497407== 
-==497407== Open file descriptor 43: /home/ogrativ/.config/Code/logs/20250404T103446/ptyhost.log
-==497407==    <inherited from parent>
-==497407== 
-==497407== Open file descriptor 3: /home/ogrativ/student_projects/Minishell/valgrind-out.txt
-==497407==    <inherited from parent>
-==497407== 
-==497407== 
-==497407== HEAP SUMMARY:
-==497407==     in use at exit: 213,418 bytes in 529 blocks
-==497407==   total heap usage: 877 allocs, 348 frees, 336,466 bytes allocated
-==497407== 
-==497407== Searching for pointers to 529 not-freed blocks
-==497407== Checked 251,680 bytes
-==497407== 
-==497407== 2 bytes in 1 blocks are still reachable in loss record 1 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10E479: ft_calloc (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C20C: get_value (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C3AE: parce_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C00F: ft_set_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C501: update_shell_level (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C61E: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109403: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109741: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 2 bytes in 1 blocks are definitely lost in loss record 2 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10E741: ft_itoa (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109571: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x1095BD: get_cmd_lst (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x1097A0: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 5 bytes in 1 blocks are still reachable in loss record 3 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10F269: ft_strdup (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10A2FC: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10A3BC: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10960C: get_cmd_lst (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x1097A0: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 6 bytes in 1 blocks are still reachable in loss record 4 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10C126: ft_get_key (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C2CF: parce_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C00F: ft_set_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C501: update_shell_level (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C61E: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109403: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109741: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 16 bytes in 1 blocks are still reachable in loss record 13 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10EB15: ft_lstnew (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C5BF: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109403: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109741: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 16 bytes in 1 blocks are still reachable in loss record 14 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10C29C: parce_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C00F: ft_set_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C501: update_shell_level (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C61E: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109403: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109741: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 16 bytes in 1 blocks are still reachable in loss record 16 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10B4AD: add_arg (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10A31F: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10A3BC: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10960C: get_cmd_lst (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x1097A0: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 41 bytes in 1 blocks are still reachable in loss record 20 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10F269: ft_strdup (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10B89E: change_path (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10B9CD: ft_chdir (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10BC40: ft_cd (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10A662: execute_builtin (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10AC41: execute_commands (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x1097BE: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 56 bytes in 1 blocks are still reachable in loss record 25 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x109857: init_cmd_node (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109EAC: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10A3BC: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10960C: get_cmd_lst (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x1097A0: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 58 bytes in 1 blocks are still reachable in loss record 26 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10F269: ft_strdup (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10B90E: change_path (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10B9CD: ft_chdir (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10BC40: ft_cd (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10A662: execute_builtin (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10AC41: execute_commands (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x1097BE: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 98 bytes in 11 blocks are definitely lost in loss record 32 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10F269: ft_strdup (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109D5A: tokenize_with_quote_info (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10A3AC: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10960C: get_cmd_lst (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x1097A0: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 1,022 bytes in 69 blocks are still reachable in loss record 41 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10C126: ft_get_key (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C2CF: parce_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C582: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109403: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109741: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 1,104 bytes in 69 blocks are still reachable in loss record 50 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10C29C: parce_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C582: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109403: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109741: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 1,104 bytes in 69 blocks are still reachable in loss record 51 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10EB15: ft_lstnew (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C5D4: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109403: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109741: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== 1,448 bytes in 67 blocks are still reachable in loss record 52 of 81
-==497407==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
-==497407==    by 0x10E479: ft_calloc (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C20C: get_value (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C3AE: parce_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x10C582: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109403: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407==    by 0x109741: main (in /home/ogrativ/student_projects/Minishell/minishell)
-==497407== 
-==497407== LEAK SUMMARY:
-==497407==    definitely lost: 100 bytes in 12 blocks
-==497407==    indirectly lost: 0 bytes in 0 blocks
-==497407==      possibly lost: 0 bytes in 0 blocks
-==497407==    still reachable: 4,894 bytes in 283 blocks
-==497407==         suppressed: 208,424 bytes in 234 blocks
-==497407== 
-==497407== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
---497407-- 
---497407-- used_suppression:     62 leak readline rl.supp:3 suppressed: 204,162 bytes in 221 blocks
---497407-- used_suppression:      4 leak add_history rl.supp:9 suppressed: 4,262 bytes in 13 blocks
-==497407== 
-==497407== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+==2956854== Memcheck, a memory error detector
+==2956854== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==2956854== Using Valgrind-3.18.1-42b08ed5bd-20211015 and LibVEX; rerun with -h for copyright info
+==2956854== Command: ./minishell
+==2956854== Parent PID: 2872184
+==2956854== 
+--2956854-- 
+--2956854-- Valgrind options:
+--2956854--    --suppressions=rl.supp
+--2956854--    --leak-check=full
+--2956854--    --show-leak-kinds=all
+--2956854--    --track-origins=yes
+--2956854--    --track-fds=yes
+--2956854--    --verbose
+--2956854--    --log-file=valgrind-out.txt
+--2956854-- Contents of /proc/version:
+--2956854--   Linux version 5.15.0-134-generic (buildd@lcy02-amd64-081) (gcc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0, GNU ld (GNU Binutils for Ubuntu) 2.38) #145-Ubuntu SMP Wed Feb 12 20:08:39 UTC 2025
+--2956854-- 
+--2956854-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand-rdseed
+--2956854-- Page sizes: currently 4096, max supported 4096
+--2956854-- Valgrind library directory: /usr/libexec/valgrind
+--2956854-- Reading syms from /home/ogrativ/student_projects/Minishell/minishell
+--2956854-- Reading syms from /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+--2956854--   Considering /usr/lib/debug/.build-id/e4/de036b19e4768e7591b596c4be9f9015f2d28a.debug ..
+--2956854--   .. build-id is valid
+--2956854-- Reading syms from /usr/libexec/valgrind/memcheck-amd64-linux
+--2956854--    object doesn't have a symbol table
+--2956854--    object doesn't have a dynamic symbol table
+--2956854-- Scheduler: using generic scheduler lock implementation.
+--2956854-- Reading suppressions file: rl.supp
+--2956854-- Reading suppressions file: /usr/libexec/valgrind/default.supp
+==2956854== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-2956854-by-ogrativ-on-???
+==2956854== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-2956854-by-ogrativ-on-???
+==2956854== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-2956854-by-ogrativ-on-???
+==2956854== 
+==2956854== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==2956854== don't want to do, unless you know exactly what you're doing,
+==2956854== or are doing some strange experiment):
+==2956854==   /usr/bin/vgdb --pid=2956854 ...command...
+==2956854== 
+==2956854== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==2956854==   /path/to/gdb ./minishell
+==2956854== and then give GDB the following command
+==2956854==   target remote | /usr/bin/vgdb --pid=2956854
+==2956854== --pid is optional if only one valgrind process is running
+==2956854== 
+--2956854-- REDIR: 0x402aa40 (ld-linux-x86-64.so.2:strlen) redirected to 0x580bcec2 (???)
+--2956854-- REDIR: 0x402a810 (ld-linux-x86-64.so.2:index) redirected to 0x580bcedc (???)
+--2956854-- Reading syms from /usr/libexec/valgrind/vgpreload_core-amd64-linux.so
+--2956854--    object doesn't have a symbol table
+--2956854-- Reading syms from /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
+--2956854--    object doesn't have a symbol table
+==2956854== WARNING: new redirection conflicts with existing -- ignoring it
+--2956854--     old: 0x0402aa40 (strlen              ) R-> (0000.0) 0x580bcec2 ???
+--2956854--     new: 0x0402aa40 (strlen              ) R-> (2007.0) 0x0484ee30 strlen
+--2956854-- REDIR: 0x4027220 (ld-linux-x86-64.so.2:strcmp) redirected to 0x484fcd0 (strcmp)
+--2956854-- REDIR: 0x402afa0 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4853840 (mempcpy)
+--2956854-- Reading syms from /usr/lib/x86_64-linux-gnu/libreadline.so.8.1
+--2956854--    object doesn't have a symbol table
+--2956854-- Reading syms from /usr/lib/x86_64-linux-gnu/libc.so.6
+--2956854--   Considering /usr/lib/debug/.build-id/cd/410b710f0f094c6832edd95931006d883af48e.debug ..
+--2956854--   .. build-id is valid
+==2956854== WARNING: new redirection conflicts with existing -- ignoring it
+--2956854--     old: 0x0496ac60 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--2956854--     new: 0x0496ac60 (memalign            ) R-> (1017.0) 0x0484e050 aligned_alloc
+==2956854== WARNING: new redirection conflicts with existing -- ignoring it
+--2956854--     old: 0x0496ac60 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--2956854--     new: 0x0496ac60 (memalign            ) R-> (1017.0) 0x0484e020 aligned_alloc
+==2956854== WARNING: new redirection conflicts with existing -- ignoring it
+--2956854--     old: 0x0496ac60 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--2956854--     new: 0x0496ac60 (memalign            ) R-> (1017.0) 0x0484e050 aligned_alloc
+==2956854== WARNING: new redirection conflicts with existing -- ignoring it
+--2956854--     old: 0x0496ac60 (memalign            ) R-> (1011.0) 0x0484e080 memalign
+--2956854--     new: 0x0496ac60 (memalign            ) R-> (1017.0) 0x0484e020 aligned_alloc
+--2956854-- Reading syms from /usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+--2956854--    object doesn't have a symbol table
+--2956854-- REDIR: 0x496d720 (libc.so.6:strnlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496d9e0 (libc.so.6:strpbrk) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496d2e0 (libc.so.6:strcmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x498bcd0 (libc.so.6:wcsnlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496e6d0 (libc.so.6:memset) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x498a540 (libc.so.6:wcslen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496ec10 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x498a370 (libc.so.6:wcschr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496d260 (libc.so.6:index) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496d960 (libc.so.6:rindex) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496e5a0 (libc.so.6:memmove) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+==2956854== Preferring higher priority redirection:
+--2956854--     old: 0x04a657c0 (__memcpy_avx_unalign) R-> (2018.0) 0x04850f90 __memcpy_avx_unaligned_erms
+--2956854--     new: 0x04a657c0 (__memcpy_avx_unalign) R-> (2018.1) 0x04852880 memmove
+--2956854-- REDIR: 0x498a3f0 (libc.so.6:wcscmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496e9e0 (libc.so.6:stpncpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x498a9b0 (libc.so.6:wmemchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496d830 (libc.so.6:strncmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496ea70 (libc.so.6:strcasecmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496d420 (libc.so.6:strcspn) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x498a470 (libc.so.6:wcscpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496d1d0 (libc.so.6:strcat) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496eb60 (libc.so.6:strncasecmp_l) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496e480 (libc.so.6:bcmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x4976570 (libc.so.6:memrchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x4970010 (libc.so.6:strchrnul) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496d390 (libc.so.6:strcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496eb10 (libc.so.6:strcasecmp_l) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496d6a0 (libc.so.6:strlen) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496d8d0 (libc.so.6:strncpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496e950 (libc.so.6:stpcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496e3f0 (libc.so.6:memchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496db00 (libc.so.6:strspn) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496e7d0 (libc.so.6:mempcpy) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496eac0 (libc.so.6:strncasecmp) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496ff80 (libc.so.6:rawmemchr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496d7a0 (libc.so.6:strncat) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x49f9280 (libc.so.6:__memcpy_chk) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x496e310 (libc.so.6:strstr) redirected to 0x483f220 (_vgnU_ifunc_wrapper)
+--2956854-- REDIR: 0x4a62610 (libc.so.6:__strrchr_avx2) redirected to 0x484e810 (rindex)
+--2956854-- REDIR: 0x496a0a0 (libc.so.6:malloc) redirected to 0x4848820 (malloc)
+--2956854-- REDIR: 0x496a3e0 (libc.so.6:free) redirected to 0x484b210 (free)
+--2956854-- REDIR: 0x4a627e0 (libc.so.6:__strlen_avx2) redirected to 0x484ed10 (strlen)
+--2956854-- REDIR: 0x4a657c0 (libc.so.6:__memcpy_avx_unaligned_erms) redirected to 0x4852880 (memmove)
+--2956854-- REDIR: 0x4a62400 (libc.so.6:__strchrnul_avx2) redirected to 0x4853330 (strchrnul)
+--2956854-- REDIR: 0x490a150 (libc.so.6:setenv) redirected to 0x48542d0 (setenv)
+--2956854-- REDIR: 0x4a62180 (libc.so.6:__strchr_avx2) redirected to 0x484e9f0 (index)
+--2956854-- REDIR: 0x4a5dd80 (libc.so.6:__strncmp_avx2) redirected to 0x484f3e0 (strncmp)
+--2956854-- REDIR: 0x496a740 (libc.so.6:realloc) redirected to 0x484dc50 (realloc)
+--2956854-- REDIR: 0x4a65780 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x4853440 (mempcpy)
+--2956854-- REDIR: 0x4a5d940 (libc.so.6:__strcmp_avx2) redirected to 0x484fbd0 (strcmp)
+--2956854-- REDIR: 0x4a65f80 (libc.so.6:__memset_avx2_unaligned_erms) redirected to 0x4852770 (memset)
+--2956854-- REDIR: 0x496b520 (libc.so.6:calloc) redirected to 0x484d9d0 (calloc)
+--2956854-- REDIR: 0x4a62960 (libc.so.6:__strnlen_avx2) redirected to 0x484ecb0 (strnlen)
+--2956854-- REDIR: 0x4a63cb0 (libc.so.6:__strcpy_avx2) redirected to 0x484ee60 (strcpy)
+--2956854-- REDIR: 0x496dfc0 (libc.so.6:__GI_strstr) redirected to 0x4853ae0 (__strstr_sse2)
+--2956854-- REDIR: 0x4a65790 (libc.so.6:__memcpy_chk_avx_unaligned_erms) redirected to 0x4853940 (__memcpy_chk)
+--2956854-- REDIR: 0x4a64040 (libc.so.6:__strncpy_avx2) redirected to 0x484efe0 (strncpy)
+--2956854-- REDIR: 0x4a5e2c0 (libc.so.6:__memchr_avx2) redirected to 0x484fd50 (memchr)
+--2956854-- REDIR: 0x4a649a0 (libc.so.6:__stpcpy_avx2) redirected to 0x4852130 (stpcpy)
+--2956854-- REDIR: 0x4a5f130 (libc.so.6:__strcasecmp_avx) redirected to 0x484f560 (strcasecmp)
+--2956854-- REDIR: 0x4a607b0 (libc.so.6:__strncasecmp_avx) redirected to 0x484f640 (strncasecmp)
+--2956854-- REDIR: 0x4a5ea80 (libc.so.6:__memcmp_avx2_movbe) redirected to 0x4852010 (bcmp)
+==2956894== Use of uninitialised value of size 8
+==2956894==    at 0x10EC38: set_closed_quote (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10EC95: get_delimiter (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10F0B6: ft_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10A9D2: parce_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10ADD2: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B53C: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==  Uninitialised value was created by a stack allocation
+==2956894==    at 0x10EAFD: set_closed_quote (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== Invalid read of size 1
+==2956894==    at 0x10EC38: set_closed_quote (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10EC95: get_delimiter (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10F0B6: ft_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10A9D2: parce_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10ADD2: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B53C: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==  Address 0x2003b67680 is not stack'd, malloc'd or (recently) free'd
+==2956894== 
+==2956894== 
+==2956894== Process terminating with default action of signal 11 (SIGSEGV)
+==2956894==  Access not within mapped region at address 0x2003B67680
+==2956894==    at 0x10EC38: set_closed_quote (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10EC95: get_delimiter (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10F0B6: ft_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10A9D2: parce_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10ADD2: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B53C: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==  If you believe this happened as a result of a stack
+==2956894==  overflow in your program's main thread (unlikely but
+==2956894==  possible), you can try to increase the size of the
+==2956894==  main thread stack using the --main-stacksize= flag.
+==2956894==  The main thread stack size used in this run was 8388608.
+==2956894== 
+==2956894== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==2956894== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==2956894==    <inherited from parent>
+==2956894== 
+==2956894== Open file descriptor 43: /home/ogrativ/.config/Code/logs/20250414T085954/ptyhost.log
+==2956894==    <inherited from parent>
+==2956894== 
+==2956894== Open file descriptor 3: /home/ogrativ/student_projects/Minishell/valgrind-out.txt
+==2956894==    <inherited from parent>
+==2956894== 
+==2956894== 
+==2956894== HEAP SUMMARY:
+==2956894==     in use at exit: 219,624 bytes in 540 blocks
+==2956894==   total heap usage: 743 allocs, 203 frees, 234,186 bytes allocated
+==2956894== 
+==2956894== Searching for pointers to 540 not-freed blocks
+==2956894== Checked 256,368 bytes
+==2956894== 
+==2956894== 2 bytes in 1 blocks are still reachable in loss record 1 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x111B29: ft_strdup (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10C5F4: add_or_update_env (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10C841: set_env_loop (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10C8D5: ft_set_env (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10CCC4: update_shell_level (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10CDE4: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109395: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x1097BA: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 3 bytes in 1 blocks are still reachable in loss record 2 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x111B29: ft_strdup (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B898: set_token (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10BBA0: handle_double_redirect (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10C1D6: process_tokenization_loop (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10C3C2: tokenize_with_quote_info (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B51D: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 4 bytes in 1 blocks are still reachable in loss record 3 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x11222E: ft_substr (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B842: remove_outer_quotes (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10A961: parce_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10ADD2: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B53C: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 6 bytes in 1 blocks are still reachable in loss record 4 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x111B29: ft_strdup (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B898: set_token (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10C2E2: process_tokenization_loop (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10C3C2: tokenize_with_quote_info (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B51D: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 9 bytes in 1 blocks are still reachable in loss record 10 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x11222E: ft_substr (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B78B: split_outside_quotes (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B4E5: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 16 bytes in 1 blocks are still reachable in loss record 19 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x1111A5: ft_lstnew (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10CD85: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109395: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x1097BA: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 16 bytes in 1 blocks are still reachable in loss record 21 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x10F69B: init_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10A969: parce_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10ADD2: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B53C: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 23 bytes in 1 blocks are still reachable in loss record 23 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x111D0E: ft_strjoin3 (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10F710: init_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10A969: parce_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10ADD2: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B53C: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 48 bytes in 1 blocks are still reachable in loss record 35 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x10B667: split_outside_quotes (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B4E5: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 64 bytes in 1 blocks are still reachable in loss record 36 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x1102B6: init_cmd_node (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10AB1B: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B53C: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 160 bytes in 1 blocks are still reachable in loss record 43 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x110B79: ft_calloc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10C399: tokenize_with_quote_info (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B51D: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 1,028 bytes in 70 blocks are still reachable in loss record 63 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x10C952: ft_get_key (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10CAFB: parce_env (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10CD45: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109395: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x1097BA: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 1,104 bytes in 69 blocks are still reachable in loss record 64 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x1111A5: ft_lstnew (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10CD9A: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109395: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x1097BA: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 1,120 bytes in 70 blocks are still reachable in loss record 65 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x10CAC8: parce_env (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10CD45: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109395: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x1097BA: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== 1,553 bytes in 69 blocks are still reachable in loss record 67 of 96
+==2956894==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956894==    by 0x110B79: ft_calloc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10CA38: get_value (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10CBDA: parce_env (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10CD45: init_env (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109395: init_shell (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x1097BA: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+==2956894== LEAK SUMMARY:
+==2956894==    definitely lost: 0 bytes in 0 blocks
+==2956894==    indirectly lost: 0 bytes in 0 blocks
+==2956894==      possibly lost: 0 bytes in 0 blocks
+==2956894==    still reachable: 5,156 bytes in 289 blocks
+==2956894==         suppressed: 214,468 bytes in 251 blocks
+==2956894== 
+==2956894== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+==2956894== 
+==2956894== 1 errors in context 1 of 2:
+==2956894== Invalid read of size 1
+==2956894==    at 0x10EC38: set_closed_quote (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10EC95: get_delimiter (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10F0B6: ft_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10A9D2: parce_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10ADD2: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B53C: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==  Address 0x2003b67680 is not stack'd, malloc'd or (recently) free'd
+==2956894== 
+==2956894== 
+==2956894== 1 errors in context 2 of 2:
+==2956894== Use of uninitialised value of size 8
+==2956894==    at 0x10EC38: set_closed_quote (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10EC95: get_delimiter (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10F0B6: ft_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10A9D2: parce_heredoc (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10ADD2: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x10B53C: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894==  Uninitialised value was created by a stack allocation
+==2956894==    at 0x10EAFD: set_closed_quote (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956894== 
+--2956894-- 
+--2956894-- used_suppression:     77 leak readline rl.supp:3 suppressed: 210,409 bytes in 247 blocks
+--2956894-- used_suppression:      4 leak add_history rl.supp:9 suppressed: 4,059 bytes in 4 blocks
+==2956894== 
+==2956894== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+==2956854== Syscall param wait4(pid) contains uninitialised byte(s)
+==2956854==    at 0x49AF3EA: wait4 (wait4.c:30)
+==2956854==    by 0x109B53: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109C92: execute_commands (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x10988B: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a heap allocation
+==2956854==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x1102B6: init_cmd_node (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x10AB1B: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x10B53C: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x10A812: ft_decode_wstatus (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109B6A: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109C92: execute_commands (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x10988B: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x10A866: ft_decode_wstatus (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109B6A: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109C92: execute_commands (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x10988B: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x10A881: ft_decode_wstatus (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109B6A: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109C92: execute_commands (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x10988B: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x10953A: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x110E8B: ft_sign (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x110D92: ft_itoa (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109596: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x110F05: ft_size (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x110DAC: ft_itoa (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109596: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x110F20: ft_size (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x110DAC: ft_itoa (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109596: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x110DF2: ft_itoa (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109596: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x110E0F: ft_itoa (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109596: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x11208C: ft_strlen (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x111CE7: ft_strjoin3 (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1095B4: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x111D8D: ft_strjoin3 (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1095B4: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED28: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48871D7: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484E830: rindex (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x4897D56: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x4897D5D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED28: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48975C7: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED28: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48AA5AE: _rl_adjust_point (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48AA7D2: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED28: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48AA80F: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED28: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48AA96A: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED19: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48AA96A: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48F6051: utf8_internal_loop (loop.c:335)
+==2956854==    by 0x48F6051: __gconv_transform_utf8_internal (skeleton.c:619)
+==2956854==    by 0x498B09E: mbrtowc (mbrtowc.c:85)
+==2956854==    by 0x48AA97B: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x498B0E3: mbrtowc (mbrtowc.c:101)
+==2956854==    by 0x48AA97B: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA9FD: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AAA02: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AAA07: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AAA10: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AAA18: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x4897719: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489772A: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED19: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48AA80F: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA832: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA874: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA879: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA87E: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA8E6: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489ED76: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897C17: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489ED86: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897C17: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489ED8F: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897C17: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489ED98: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897C17: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489EEC6: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897C17: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA5EF: _rl_adjust_point (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48AA7D2: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489EE9A: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897C17: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED28: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x4897E2E: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489A0EE: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x489CCE1: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4888458: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CF8: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x485207E: bcmp (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x489EF23: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x489B2DF: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x489CCE1: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4888458: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CF8: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x4951E1D: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:782)
+==2956854==    by 0x48995B2: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x489B853: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x489CCE1: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4888458: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CF8: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x485207E: bcmp (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48999BB: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x489E4BB: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4888458: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CF8: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== Syscall param write(buf) points to uninitialised byte(s)
+==2956854==    at 0x49D9887: write (write.c:26)
+==2956854==    by 0x494FEEC: _IO_file_write@@GLIBC_2.2.5 (fileops.c:1180)
+==2956854==    by 0x49519E0: new_do_write (fileops.c:448)
+==2956854==    by 0x49519E0: _IO_new_do_write (fileops.c:425)
+==2956854==    by 0x49519E0: _IO_do_write@@GLIBC_2.2.5 (fileops.c:422)
+==2956854==    by 0x494F4D7: _IO_file_sync@@GLIBC_2.2.5 (fileops.c:798)
+==2956854==    by 0x49441A9: fflush (iofflush.c:40)
+==2956854==    by 0x489D4E6: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4888458: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CF8: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Address 0x4b63668 is 40 bytes inside a block of size 1,024 alloc'd
+==2956854==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x4943BA3: _IO_file_doallocate (filedoalloc.c:101)
+==2956854==    by 0x4952CDF: _IO_doallocbuf (genops.c:347)
+==2956854==    by 0x4951F5F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
+==2956854==    by 0x49506D4: _IO_new_file_xsputn (fileops.c:1243)
+==2956854==    by 0x49506D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==2956854==    by 0x4944FD6: fwrite (iofwrite.c:39)
+==2956854==    by 0x488F77C: rl_prep_terminal (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CEE: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== FILE DESCRIPTORS: 6 open (3 std) at exit.
+==2956854== Open file descriptor 103: /usr/share/code/v8_context_snapshot.bin
+==2956854==    <inherited from parent>
+==2956854== 
+==2956854== Open file descriptor 43: /home/ogrativ/.config/Code/logs/20250414T085954/ptyhost.log
+==2956854==    <inherited from parent>
+==2956854== 
+==2956854== Open file descriptor 3: /home/ogrativ/student_projects/Minishell/valgrind-out.txt
+==2956854==    <inherited from parent>
+==2956854== 
+==2956854== 
+==2956854== HEAP SUMMARY:
+==2956854==     in use at exit: 208,276 bytes in 222 blocks
+==2956854==   total heap usage: 755 allocs, 533 frees, 234,564 bytes allocated
+==2956854== 
+==2956854== Searching for pointers to 222 not-freed blocks
+==2956854== Checked 247,080 bytes
+==2956854== 
+==2956854== LEAK SUMMARY:
+==2956854==    definitely lost: 0 bytes in 0 blocks
+==2956854==    indirectly lost: 0 bytes in 0 blocks
+==2956854==      possibly lost: 0 bytes in 0 blocks
+==2956854==    still reachable: 0 bytes in 0 blocks
+==2956854==         suppressed: 208,276 bytes in 222 blocks
+==2956854== 
+==2956854== ERROR SUMMARY: 536 errors from 48 contexts (suppressed: 0 from 0)
+==2956854== 
+==2956854== 1 errors in context 1 of 48:
+==2956854== Syscall param write(buf) points to uninitialised byte(s)
+==2956854==    at 0x49D9887: write (write.c:26)
+==2956854==    by 0x494FEEC: _IO_file_write@@GLIBC_2.2.5 (fileops.c:1180)
+==2956854==    by 0x49519E0: new_do_write (fileops.c:448)
+==2956854==    by 0x49519E0: _IO_new_do_write (fileops.c:425)
+==2956854==    by 0x49519E0: _IO_do_write@@GLIBC_2.2.5 (fileops.c:422)
+==2956854==    by 0x494F4D7: _IO_file_sync@@GLIBC_2.2.5 (fileops.c:798)
+==2956854==    by 0x49441A9: fflush (iofflush.c:40)
+==2956854==    by 0x489D4E6: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4888458: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CF8: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Address 0x4b63668 is 40 bytes inside a block of size 1,024 alloc'd
+==2956854==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x4943BA3: _IO_file_doallocate (filedoalloc.c:101)
+==2956854==    by 0x4952CDF: _IO_doallocbuf (genops.c:347)
+==2956854==    by 0x4951F5F: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:744)
+==2956854==    by 0x49506D4: _IO_new_file_xsputn (fileops.c:1243)
+==2956854==    by 0x49506D4: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1196)
+==2956854==    by 0x4944FD6: fwrite (iofwrite.c:39)
+==2956854==    by 0x488F77C: rl_prep_terminal (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CEE: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 1 errors in context 2 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x485207E: bcmp (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48999BB: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x489E4BB: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4888458: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CF8: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 1 errors in context 3 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x485207E: bcmp (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x489EF23: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x489B2DF: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x489CCE1: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4888458: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CF8: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 1 errors in context 4 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x4897D5D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 1 errors in context 5 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x110DF2: ft_itoa (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109596: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 1 errors in context 6 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x110F05: ft_size (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x110DAC: ft_itoa (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109596: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 1 errors in context 7 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x110E8B: ft_sign (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x110D92: ft_itoa (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109596: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 1 errors in context 8 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x10953A: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 1 errors in context 9 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x10A881: ft_decode_wstatus (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109B6A: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109C92: execute_commands (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x10988B: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 1 errors in context 10 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x10A866: ft_decode_wstatus (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109B6A: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109C92: execute_commands (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x10988B: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 1 errors in context 11 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x10A812: ft_decode_wstatus (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109B6A: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109C92: execute_commands (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x10988B: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 1 errors in context 12 of 48:
+==2956854== Syscall param wait4(pid) contains uninitialised byte(s)
+==2956854==    at 0x49AF3EA: wait4 (wait4.c:30)
+==2956854==    by 0x109B53: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109C92: execute_commands (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x10988B: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a heap allocation
+==2956854==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x1102B6: init_cmd_node (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x10AB1B: parse_single_command_from_tokens (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x10B53C: parse_input (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109866: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 13 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x4951E1D: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:782)
+==2956854==    by 0x48995B2: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x489B853: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x489CCE1: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4888458: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CF8: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 14 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489A0EE: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x489CCE1: rl_redisplay (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4888458: readline_internal_setup (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CF8: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 15 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED28: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x4897E2E: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 16 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489EEC6: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897C17: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 17 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489ED98: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897C17: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 18 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489ED8F: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897C17: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 19 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489ED86: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897C17: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 20 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489ED76: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897C17: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 21 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA8E6: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 22 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA87E: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 23 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA879: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 24 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA874: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 25 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA832: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 26 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED19: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48AA80F: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 27 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489772A: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 28 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x4897719: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 29 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AAA18: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 30 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AAA10: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 31 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AAA07: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 32 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AAA02: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 33 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA9FD: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 34 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x498B0E3: mbrtowc (mbrtowc.c:101)
+==2956854==    by 0x48AA97B: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 35 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48F6051: utf8_internal_loop (loop.c:335)
+==2956854==    by 0x48F6051: __gconv_transform_utf8_internal (skeleton.c:619)
+==2956854==    by 0x498B09E: mbrtowc (mbrtowc.c:85)
+==2956854==    by 0x48AA97B: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 36 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED19: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48AA96A: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 37 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED28: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48975C7: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 38 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484E830: rindex (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x4897D56: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 39 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED28: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48871D7: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 40 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x111D8D: ft_strjoin3 (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1095B4: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 3 errors in context 41 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x11208C: ft_strlen (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x111CE7: ft_strjoin3 (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1095B4: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 4 errors in context 42 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x110E0F: ft_itoa (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109596: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 4 errors in context 43 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x110F20: ft_size (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x110DAC: ft_itoa (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109596: get_prompt (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x109605: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 12 errors in context 44 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x489EE9A: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897C17: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 24 errors in context 45 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x48AA5EF: _rl_adjust_point (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48AA7D2: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 120 errors in context 46 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED28: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48AA96A: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 123 errors in context 47 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED28: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48AA80F: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+==2956854== 
+==2956854== 150 errors in context 48 of 48:
+==2956854== Conditional jump or move depends on uninitialised value(s)
+==2956854==    at 0x484ED28: strlen (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==2956854==    by 0x48AA5AE: _rl_adjust_point (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48AA7D2: _rl_find_next_mbchar (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897A12: ??? (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4897E0D: rl_expand_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x48871BF: rl_set_prompt (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x4892CCF: readline (in /usr/lib/x86_64-linux-gnu/libreadline.so.8.1)
+==2956854==    by 0x10963C: get_line (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==    by 0x1097E8: main (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854==  Uninitialised value was created by a stack allocation
+==2956854==    at 0x109B0E: wait_all_proccesses (in /home/ogrativ/student_projects/Minishell/minishell)
+==2956854== 
+--2956854-- 
+--2956854-- used_suppression:     62 leak readline rl.supp:3 suppressed: 204,260 bytes in 221 blocks
+--2956854-- used_suppression:      1 leak add_history rl.supp:9 suppressed: 4,016 bytes in 1 blocks
+==2956854== 
+==2956854== ERROR SUMMARY: 536 errors from 48 contexts (suppressed: 0 from 0)

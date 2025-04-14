@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unlink_heredocs.c                                  :+:      :+:    :+:   */
+/*   is_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 12:32:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 13:32:28 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/10 17:04:30 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/10 17:04:45 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_heredoc.h"
+#include "../../include/minishell.h"
 
-void	unlink_heredocs(t_list **heredocs)
+int	is_builtin(char **cmd)
 {
-	t_list		*node;
-	t_heredoc	*heredoc_node;
-
-	node = *heredocs;
-	if (node == NULL)
-		return ;
-	while (node)
-	{
-		heredoc_node = node->content;
-		unlink(heredoc_node->filename);
-		node = node->next;
-	}
-	ft_lstclear(heredocs, free_heredoc);
-	heredocs = NULL;
+	if (ft_strcmp(cmd[0], "cd") == 0 || ft_strcmp(cmd[0], "pwd") == 0
+		|| ft_strcmp(cmd[0], "env") == 0 || ft_strcmp(cmd[0], "export") == 0
+		|| ft_strcmp(cmd[0], "unset") == 0 || ft_strcmp(cmd[0], "exit") == 0
+		|| ft_strcmp(cmd[0], "$?") == 0 || ft_strcmp(cmd[0], "echo") == 0)
+		return (1);
+	return (0);
 }

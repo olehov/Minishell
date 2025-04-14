@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unlink_heredocs.c                                  :+:      :+:    :+:   */
+/*   ft_signals.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 12:32:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 13:32:28 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/14 15:10:08 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/14 15:21:36 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_heredoc.h"
+#ifndef FT_SIGNALS_H
+# define FT_SIGNALS_H
 
-void	unlink_heredocs(t_list **heredocs)
-{
-	t_list		*node;
-	t_heredoc	*heredoc_node;
+# include <signal.h>
 
-	node = *heredocs;
-	if (node == NULL)
-		return ;
-	while (node)
-	{
-		heredoc_node = node->content;
-		unlink(heredoc_node->filename);
-		node = node->next;
-	}
-	ft_lstclear(heredocs, free_heredoc);
-	heredocs = NULL;
-}
+extern volatile sig_atomic_t	g_received_signal;
+
+void	set_heredoc_signals(void);
+void	set_signals(void);
+
+void	signal_handler(int signo);
+void	child_signal_handler(int signo);
+void	heredoc_signal_handler(int signo);
+
+
+#endif

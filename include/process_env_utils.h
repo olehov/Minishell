@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:41:57 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/15 10:08:02 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/13 17:30:12 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,11 @@ typedef struct s_env_state
 	t_list	*lst;
 }	t_env_state;
 
-int	process_quoted_text(const char *input, int start, t_env_state *state);
+int	process_quoted_text(const char *input, int start,
+		t_env_state *state, t_minish *msh);
 
-int	extract_quoted_text(const char *input, int *i, t_env_state *state);
+int	extract_quoted_text(const char *input, int *i,
+		t_env_state *state, t_minish *msh);
 
 /**
  * @brief Extracts the name of a variable starting from
@@ -46,8 +48,10 @@ int	extract_quoted_text(const char *input, int *i, t_env_state *state);
 // int		extract_variable_name(const char *input, int start,
 // 			char *var_name, int max_len);
 
-int	extract_variable_value(const char *input, int	*i, t_env_state *state);
-int	extract_variable(const char *input, int *i, t_env_state *state);
+int	extract_variable_value(const char *input, int	*i,
+		t_env_state *state, t_minish *msh);
+int	extract_variable(const char *input, int *i,
+		t_env_state *state, t_minish *msh);
 
 /**
  * @brief Check if enough capacity for add text

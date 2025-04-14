@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unlink_heredocs.c                                  :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 12:32:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 13:32:28 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/11 15:19:20 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/11 15:31:45 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_heredoc.h"
+#include "../../include/minishell.h"
 
-void	unlink_heredocs(t_list **heredocs)
+char	*remove_outer_quotes(char *str)
 {
-	t_list		*node;
-	t_heredoc	*heredoc_node;
+	char	*new_str;
+	size_t	len;
 
-	node = *heredocs;
-	if (node == NULL)
-		return ;
-	while (node)
+	len = ft_strlen(str);
+	if ((str[0] == '"' && str[len - 1] == '"')
+		|| (str[0] == '\'' && str[len - 1] == '\''))
 	{
-		heredoc_node = node->content;
-		unlink(heredoc_node->filename);
-		node = node->next;
+		new_str = ft_substr(str, 1, len - 2);
+		return (new_str);
 	}
-	ft_lstclear(heredocs, free_heredoc);
-	heredocs = NULL;
+	return (ft_strdup(str));
 }

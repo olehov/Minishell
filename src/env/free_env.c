@@ -1,31 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unlink_heredocs.c                                  :+:      :+:    :+:   */
+/*   free_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 12:32:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 13:32:28 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/10 15:21:16 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/14 13:00:10 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_heredoc.h"
+#include "../../include/minishell.h"
 
-void	unlink_heredocs(t_list **heredocs)
+void	free_env(void *env)
 {
-	t_list		*node;
-	t_heredoc	*heredoc_node;
-
-	node = *heredocs;
-	if (node == NULL)
+	if (env == NULL)
 		return ;
-	while (node)
-	{
-		heredoc_node = node->content;
-		unlink(heredoc_node->filename);
-		node = node->next;
-	}
-	ft_lstclear(heredocs, free_heredoc);
-	heredocs = NULL;
+	if (((t_env *)env)->key != NULL)
+		free(((t_env *)env)->key);
+	if (((t_env *)env)->value != NULL)
+		free(((t_env *)env)->value);
+	// free(env);
+	free(env);
 }
