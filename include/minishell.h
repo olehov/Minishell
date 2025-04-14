@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 09:56:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 15:13:36 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 17:58:46 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,19 @@
 //       FUNCTIONS
 // ----------------------
 
+void	free_tokens(t_token *tokens);
+int		parce_heredoc(t_minish *msh, int *i, t_cmd *cmd);
+int		handle_word(char *input, int *i, char **accum);
+int		handle_single_redirect(char *input,
+			t_token *tokens, t_tokenizer_ctx *ctx);
+bool	is_only_digit(char *str);
+char	*get_line(t_minish *msh);
+char	*get_prompt(t_minish *msh);
 void	clear_data(t_minish *msh);
 void	free_shell(t_minish *msh);
 void	heredoc_signal_handler(int signo);
 size_t	get_row_size(char **args);
 bool	ft_is_directory(const char *path);
-void	print_args(char	**args);
 bool	is_closed_quote(char quote, int start, char *str);
 
 int		is_builtin(char **cmd);
@@ -135,10 +142,6 @@ t_env	*parce_env(char *env);
 void	free_env(void *env);
 t_list	*ft_get_env_node(t_list *lst, char *key);
 
-// ===== other helpers =====
-void	print_file_error(void); // з print_file_error.c
-
 void	free_split(char **str);
-void	ft_safe_free(void	**ptr);
 
 #endif

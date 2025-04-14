@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/07 11:20:08 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 17:33:39 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 17:18:32 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@
 t_heredoc	*init_heredoc(char *dilimiter);
 
 int			ft_heredoc(t_heredoc *heredoc, t_minish *msh);
+bool		check_delimiter(const char *delimiter);
 
 void		unlink_heredocs(t_list **heredocs);
 void		free_heredoc(void *heredoc);
+void		get_delimiter(t_heredoc *heredoc);
+
 #endif

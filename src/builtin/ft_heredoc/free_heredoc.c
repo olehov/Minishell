@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_env.c                                         :+:      :+:    :+:   */
+/*   free_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 15:21:16 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 17:29:54 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/07 12:11:16 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/14 17:16:59 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/ft_heredoc.h"
 
-void	free_env(void *env)
+void	free_heredoc(void *value)
 {
-	if (env == NULL)
+	t_heredoc	*heredoc;
+
+	heredoc = (t_heredoc *)value;
+	if (heredoc == NULL)
 		return ;
-	if (((t_env *)env)->key != NULL)
-		free(((t_env *)env)->key);
-	if (((t_env *)env)->value != NULL)
-		free(((t_env *)env)->value);
-	free(env);
+	if (heredoc->delimiter != NULL)
+		free(heredoc->delimiter);
+	if (heredoc->filename != NULL)
+		free(heredoc->filename);
+	free(heredoc);
+	value = NULL;
 }

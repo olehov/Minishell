@@ -6,100 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:05:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 14:56:22 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 17:18:56 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_heredoc.h"
-
-static char	*get_new_delimiter(char *delimiter, char quote)
-{
-	char	*tmp;
-	char	*old_str;
-	char	*new_str;
-
-	tmp = readline("> ");
-	if (tmp == NULL)
-	{
-		ft_putstr_fd(" unexpected EOF while looking for matching `",
-			STDERR_FILENO);
-		ft_putchar_fd(quote, STDERR_FILENO);
-		ft_putendl_fd("'", STDERR_FILENO);
-		return (NULL);
-	}
-	old_str = ft_strdup(delimiter);
-	new_str = ft_strjoin3(old_str, "\n", tmp);
-	free(old_str);
-	free(tmp);
-	return (new_str);
-}
-
-static void	set_closed_quote(t_heredoc *heredoc,
-	char *quote, bool *is_closed_quote)
-{
-	size_t	i;
-
-	while (heredoc->delimiter[i] != '\0')
-	{
-		while (heredoc->delimiter[i] != '\'' && heredoc->delimiter[i] != '\"'
-			&& heredoc->delimiter[i] != '\0')
-			i++;
-		if (heredoc->delimiter[i] == '\'' || heredoc->delimiter[i] == '\"')
-		{
-			*quote = heredoc->delimiter[i++];
-			*is_closed_quote = false;
-		}
-		while (heredoc->delimiter[i] != *quote && heredoc->delimiter[i] != '\0')
-			i++;
-		if (heredoc->delimiter[i] == '\'' || heredoc->delimiter[i] == '\"')
-		{
-			*quote = 0;
-			*is_closed_quote = true;
-			i++;
-		}
-	}
-}
-
-static void	get_delimiter(t_heredoc *heredoc)
-{
-	char	quote;
-	bool	is_closed_quote;
-	char	*delimiter;
-
-	quote = 0;
-	is_closed_quote = true;
-	if (heredoc->delimiter == NULL)
-		return ;
-	set_closed_quote(heredoc, &quote, &is_closed_quote);
-	if (!is_closed_quote)
-	{
-		delimiter = ft_strdup(heredoc->delimiter);
-		free(heredoc->delimiter);
-		heredoc->delimiter = get_new_delimiter(delimiter, quote);
-		free(delimiter);
-		if (heredoc->delimiter == NULL)
-			return ;
-		get_delimiter(heredoc);
-	}
-}
-
-static bool	check_delimiter(const char *delimiter)
-{
-	if (delimiter == NULL)
-	{
-		errno = EINVAL;
-		ft_putendl_fd(" unexpected end of file", STDERR_FILENO);
-		return (false);
-	}
-	if (delimiter[0] == '\0')
-	{
-		errno = EINVAL;
-		ft_putstr_fd("syntax error near unexpected token `newline'\n",
-			STDERR_FILENO);
-		return (false);
-	}
-	return (true);
-}
+#include "../../../include/ft_heredoc.h"
 
 static char	*allocate_delimitter(char *delimiter)
 {
@@ -156,15 +67,13 @@ static int	read_line(int fd, char *delimiter,
 	char	*buffer;
 	char	*tmp;
 
+	msh->exit_code = 0;
 	if (isatty(STDIN_FILENO))
 		buffer = readline("> ");
 	else
 		buffer = readline(NULL);
 	if (buffer == NULL)
-	{
-		print_err(delimiter);
-		return (-1);
-	}
+		return (print_err(delimiter), -1);
 	if (ft_strcmp(buffer, delimiter) == 0)
 		return (free(buffer), 0);
 	if (in_quotes == false)

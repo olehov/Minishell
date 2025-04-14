@@ -1,24 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_env.c                                         :+:      :+:    :+:   */
+/*   handle_single_redirect.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 15:21:16 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 17:29:54 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/14 17:47:37 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/14 17:48:05 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	free_env(void *env)
+int	handle_single_redirect(char *input,
+	t_token *tokens, t_tokenizer_ctx *ctx)
 {
-	if (env == NULL)
-		return ;
-	if (((t_env *)env)->key != NULL)
-		free(((t_env *)env)->key);
-	if (((t_env *)env)->value != NULL)
-		free(((t_env *)env)->value);
-	free(env);
+	t_tokenizer_ctx	tmp;
+
+	if (ctx->accum)
+	{
+		set_token(&tokens[ctx->j++], ctx);
+		reset_quote_state(ctx);
+	}
+	tmp.accum = ft_substr(input, ctx->i, 1);
+	tmp.in_quotes = 0;
+	tmp.quote_char = 0;
+	set_token(&tokens[ctx->j++], &tmp);
+	free(tmp.accum);
+	ctx->i++;
+	return (1);
 }

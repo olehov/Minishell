@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_heredoc.c                                     :+:      :+:    :+:   */
+/*   handle_word.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/07 12:11:16 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 12:51:31 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/14 17:50:42 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/14 17:51:07 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_heredoc.h"
+#include "../../include/minishell.h"
 
-void	free_heredoc(void *value)
+int	handle_word(char *input, int *i, char **accum)
 {
-	t_heredoc	*heredoc;
+	int		start;
+	char	*part;
 
-	heredoc = (t_heredoc *)value;
-	if (heredoc == NULL)
-		return ;
-	if (heredoc->delimiter != NULL)
-		free(heredoc->delimiter);
-	if (heredoc->filename != NULL)
-		free(heredoc->filename);
-	free(heredoc);
-	value = NULL;
+	start = *i;
+	while (input[*i] && !ft_isspace(input[*i]) && input[*i] != '<'
+		&& input[*i] != '>' && input[*i] != '\'' && input[*i] != '"')
+		(*i)++;
+	part = ft_substr(input, start, *i - start);
+	*accum = append_part(*accum, part);
+	free(part);
+	return (1);
 }

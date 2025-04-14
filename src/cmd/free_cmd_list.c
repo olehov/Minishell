@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:01:48 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 12:59:10 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 17:29:15 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,31 +40,28 @@ void	free_cmd_node(t_cmd *cmd)
 	free(cmd);
 }
 
-void	free_cmd_list(t_cmd *cmd)
+void	free_cmd_list(t_cmd **cmd)
 {
 	t_cmd	*tmp;
+	t_cmd	*node;
 
-	while (cmd != NULL)
+	node = *cmd;
+	while (node != NULL)
 	{
-		tmp = cmd;
-		if (cmd->args != NULL)
+		tmp = node;
+		if (node->args != NULL)
 		{
-			free_split(cmd->args);
-			cmd->args = NULL;
+			free_split(node->args);
+			node->args = NULL;
 		}
-		if (cmd->redirect_lst != NULL)
-			ft_lstclear(&cmd->redirect_lst, free_redirect);
-		if (cmd->infile != NULL)
-		{
-			free(cmd->infile);
-			cmd->infile = NULL;
-		}
-		if (cmd->outfile != NULL)
-		{
-			free(cmd->outfile);
-			cmd->outfile = NULL;
-		}
-		cmd = cmd->next;
+		if (node->redirect_lst != NULL)
+			ft_lstclear(&node->redirect_lst, free_redirect);
+		if (node->infile != NULL)
+			free(node->infile);
+		if (node->outfile != NULL)
+			free(node->outfile);
+		node = node->next;
 		free(tmp);
 	}
+	cmd = NULL;
 }

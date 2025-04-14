@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 16:09:51 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 17:05:31 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	run_child(t_cmd *cmd, t_minish *msh, pid_t pid)
 		exit(EXIT_FAILURE);
 	if (pid == 0)
 	{
+		set_child_signals();
 		if (ft_strcmp(cmd->args[0], "exit") == 0)
 		{
 			if (ft_exit(cmd->args, msh, true) == -1)
@@ -83,6 +84,7 @@ void	wait_all_proccesses(t_minish *msh)
 	int		status;
 	int		last_status;
 
+	status = 0;
 	cmd = msh->cmd;
 	while (cmd)
 	{
