@@ -6,20 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:05:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 17:33:30 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:56:22 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/ft_heredoc.h"
-
-void	heredoc_signal_handler(int signo)
-{
-	if (signo == SIGINT)
-	{
-		ft_putendl_fd("", STDOUT_FILENO);
-		exit(128 + SIGINT);
-	}
-}
 
 static char	*get_new_delimiter(char *delimiter, char quote)
 {
@@ -43,18 +34,11 @@ static char	*get_new_delimiter(char *delimiter, char quote)
 	return (new_str);
 }
 
-static void	get_delimiter(t_heredoc *heredoc)
+static void	set_closed_quote(t_heredoc *heredoc,
+	char *quote, bool *is_closed_quote)
 {
 	size_t	i;
-	char	quote;
-	bool	is_closed_quote;
-	char	*delimiter;
 
-	i = 0;
-	quote = 0;
-	is_closed_quote = true;
-	if (heredoc->delimiter == NULL)
-		return ;
 	while (heredoc->delimiter[i] != '\0')
 	{
 		while (heredoc->delimiter[i] != '\'' && heredoc->delimiter[i] != '\"'
@@ -62,22 +46,35 @@ static void	get_delimiter(t_heredoc *heredoc)
 			i++;
 		if (heredoc->delimiter[i] == '\'' || heredoc->delimiter[i] == '\"')
 		{
-			quote = heredoc->delimiter[i++];
-			is_closed_quote = false;
+			*quote = heredoc->delimiter[i++];
+			*is_closed_quote = false;
 		}
-		while (heredoc->delimiter[i] != quote && heredoc->delimiter[i] != '\0')
+		while (heredoc->delimiter[i] != *quote && heredoc->delimiter[i] != '\0')
 			i++;
 		if (heredoc->delimiter[i] == '\'' || heredoc->delimiter[i] == '\"')
 		{
-			quote = 0;
-			is_closed_quote = true;
+			*quote = 0;
+			*is_closed_quote = true;
 			i++;
 		}
 	}
+}
+
+static void	get_delimiter(t_heredoc *heredoc)
+{
+	char	quote;
+	bool	is_closed_quote;
+	char	*delimiter;
+
+	quote = 0;
+	is_closed_quote = true;
+	if (heredoc->delimiter == NULL)
+		return ;
+	set_closed_quote(heredoc, &quote, &is_closed_quote);
 	if (!is_closed_quote)
 	{
 		delimiter = ft_strdup(heredoc->delimiter);
-		ft_safe_free(heredoc->delimiter);
+		free(heredoc->delimiter);
 		heredoc->delimiter = get_new_delimiter(delimiter, quote);
 		free(delimiter);
 		if (heredoc->delimiter == NULL)

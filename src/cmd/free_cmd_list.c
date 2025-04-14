@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:01:48 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 13:39:56 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:59:10 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,20 +43,27 @@ void	free_cmd_node(t_cmd *cmd)
 void	free_cmd_list(t_cmd *cmd)
 {
 	t_cmd	*tmp;
-	int		i;
 
 	while (cmd != NULL)
 	{
 		tmp = cmd;
-		i = 0;
 		if (cmd->args != NULL)
 		{
-			while (cmd->args[i] != NULL)
-				free(cmd->args[i++]);
-			free(cmd->args);
+			free_split(cmd->args);
+			cmd->args = NULL;
 		}
 		if (cmd->redirect_lst != NULL)
 			ft_lstclear(&cmd->redirect_lst, free_redirect);
+		if (cmd->infile != NULL)
+		{
+			free(cmd->infile);
+			cmd->infile = NULL;
+		}
+		if (cmd->outfile != NULL)
+		{
+			free(cmd->outfile);
+			cmd->outfile = NULL;
+		}
 		cmd = cmd->next;
 		free(tmp);
 	}

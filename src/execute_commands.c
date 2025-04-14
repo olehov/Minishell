@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 17:36:50 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 11:31:26 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,14 @@ int	run_single_cmd(t_cmd *cmd, t_minish *msh)
 
 	if (cmd && !cmd->next && cmd->args != NULL && is_builtin(cmd->args))
 	{
+		if (ft_strcmp(cmd->args[0], "exit") == 0)
+		{
+			if (ft_exit(cmd->args, msh, false) == -1)
+			{
+				msh->exit_code = EXIT_FAILURE;
+				return (-1);
+			}
+		}
 		std_fd[0] = dup(STDIN_FILENO);
 		std_fd[1] = dup(STDOUT_FILENO);
 		if (handle_redirect(cmd) == -1)
@@ -50,17 +58,19 @@ int	run_single_cmd(t_cmd *cmd, t_minish *msh)
 void	run_child(t_cmd *cmd, t_minish *msh, pid_t pid)
 {
 	if (pid == -1)
-	{
-		msh->exit_code = EXIT_FAILURE;
-		exit(msh->exit_code);
-	}
+		exit(EXIT_FAILURE);
 	if (pid == 0)
 	{
+		if (ft_strcmp(cmd->args[0], "exit") == 0)
+		{
+			if (ft_exit(cmd->args, msh, true) == -1)
+				exit(EXIT_FAILURE);
+		}
 		msh->exit_code = 0;
 		if (handle_redirect(cmd) == -1)
 		{
-			msh->exit_code = EXIT_FAILURE;
-			exit(msh->exit_code);
+			clear_data(msh);
+			exit(EXIT_FAILURE);
 		}
 		launch_child(cmd, msh);
 	}

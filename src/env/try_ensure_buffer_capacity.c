@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:18:08 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 20:18:23 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 11:45:19 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ensure_buffer_capacity(t_env_state *state, int extra_length)
 	{
 		new_length = current_length * 2 + extra_length;
 		state->result_size = new_length + 1;
-		new_result = malloc(new_length + 1);
+		new_result = ft_calloc(new_length + 1, sizeof(char));
 		if (!new_result)
 		{
 			free(state->result);

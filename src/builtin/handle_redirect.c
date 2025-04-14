@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 11:28:35 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 17:34:47 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:54:33 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ static int	check_outfile_permission(t_cmd *cmd, char *filename, int flags)
 		return (perror(filename), -1);
 	}
 	close(fd);
-	ft_safe_free(cmd->outfile);
+	if (cmd->outfile != NULL)
+		free(cmd->outfile);
 	cmd->outfile = ft_strdup(filename);
 	return (0);
 }
@@ -37,7 +38,8 @@ static int	check_infile_permission(t_cmd *cmd, char *filename, int flags)
 		return (perror(filename), -1);
 	}
 	close(fd);
-	ft_safe_free(cmd->infile);
+	if (cmd->infile != NULL)
+		free(cmd->infile);
 	cmd->infile = ft_strdup(filename);
 	return (0);
 }
@@ -105,16 +107,20 @@ int	handle_redirect(t_cmd *cmd)
 	{
 		if (redirect_loop(tmp, cmd, &last_out_file) == -1)
 		{
-			ft_safe_free(cmd->infile);
-			ft_safe_free(cmd->outfile);
+			free(cmd->infile);
+			free(cmd->outfile);
+			cmd->infile = NULL;
+			cmd->outfile = NULL;
 			return (-1);
 		}
 		tmp = tmp->next;
 	}
 	if (redirect_fd(cmd, last_out_file) == -1)
 	{
-		ft_safe_free(cmd->infile);
-		ft_safe_free(cmd->outfile);
+		free(cmd->infile);
+		free(cmd->outfile);
+		cmd->infile = NULL;
+		cmd->outfile = NULL;
 		return (-1);
 	}
 	return (0);

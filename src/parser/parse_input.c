@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:48:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 17:33:47 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 15:27:11 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,11 @@ void	free_tokens(t_token *tokens)
 	i = 0;
 	while (tokens && tokens[i].value)
 	{
-		ft_safe_free(tokens[i].value);
+		free(tokens[i].value);
 		i++;
 	}
-	ft_safe_free(tokens);
+	free(tokens);
+	tokens = NULL;
 }
 
 int	parce_heredoc(t_minish *msh, int *i, t_cmd *cmd)
@@ -45,21 +46,21 @@ int	parce_heredoc(t_minish *msh, int *i, t_cmd *cmd)
 		return (1);
 	if (pid == 0)
 	{
-		signal(SIGINT, heredoc_signal_handler);
+		set_heredoc_signals();
 		status = ft_heredoc(heredoc, msh);
 		free_cmd_node(cmd);
 		free_tokens(msh->tokens);
-		free_heredoc(heredoc);
-		free_cmd_list(msh->cmd);
 		free_split(msh->pipe_split);
+		clear_data(msh);
 		free_shell(msh);
 		if (status == -1)
-			exit(1);
-		exit(0);
+			exit(EXIT_FAILURE);
+		exit(EXIT_SUCCESS);
 	}
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
 	msh->exit_code = ft_decode_wstatus(status);
+	set_signals();
 	add_redirection(cmd, _heredoc, heredoc->filename);
 	if (msh->heredocs == NULL)
 		msh->heredocs = ft_lstnew(heredoc);
@@ -150,15 +151,15 @@ static char	*insert_quotes_around_delim(char *input, size_t start, size_t end)
 	delim = ft_substr(input, start, end - start);
 	suffix = ft_strdup(input + end);
 	if (!prefix || !delim || !suffix)
-		return (ft_safe_free(prefix), ft_safe_free(delim), ft_safe_free(suffix), NULL);
+		return (free(prefix), free(delim), free(suffix), NULL);
 	quoted = ft_strjoin3("\"", delim, "\"");
 	joined = ft_strjoin(prefix, quoted);
 	result = ft_strjoin(joined, suffix);
-	ft_safe_free(prefix);
-	ft_safe_free(delim);
-	ft_safe_free(quoted);
-	ft_safe_free(joined);
-	ft_safe_free(suffix);
+	free(prefix);
+	free(delim);
+	free(quoted);
+	free(joined);
+	free(suffix);
 	return (result);
 }
 
@@ -235,7 +236,7 @@ char	*ft_get_input(char *input)
 			if (result[start] != '\'' && result[start] != '"')
 			{
 				tmp = insert_quotes_around_delim(result, start, end);
-				ft_safe_free(result);
+				free(result);
 				result = tmp;
 				i = end + 2;
 				continue ;
@@ -299,7 +300,7 @@ t_cmd *parse_input(char *input, t_list *env, t_minish *msh)
 	if (formated_input == NULL)
 		return (NULL);
 	msh->pipe_split = split_outside_quotes(formated_input, '|');
-	ft_safe_free(formated_input);
+	free(formated_input);
 	while (msh->pipe_split[i])
 	{
 		msh->tokens = tokenize_with_quote_info(msh->pipe_split[i]);

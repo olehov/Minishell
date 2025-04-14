@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:17:14 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 17:26:15 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 11:55:49 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ char	*process_env(const char *input, t_list *lst, t_minish *msh)
 	if (check_unsupported_line(input) == 0)
 		return (NULL);
 	state.result_size = ft_strlen(input) * 2 + 1;
-	state.result = malloc(state.result_size);
+	state.result = ft_calloc(state.result_size, sizeof(char));
 	if (!state.result)
 	{
 		perror("Memory allocation failed");

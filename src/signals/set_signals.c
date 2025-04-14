@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_env.c                                         :+:      :+:    :+:   */
+/*   set_signals.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 15:21:16 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 13:00:10 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/14 14:55:20 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/14 15:25:00 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include "../../include/ft_signals.h"
 
-void	free_env(void *env)
+void	set_signals(void)
 {
-	if (env == NULL)
-		return ;
-	if (((t_env *)env)->key != NULL)
-		free(((t_env *)env)->key);
-	if (((t_env *)env)->value != NULL)
-		free(((t_env *)env)->value);
-	// free(env);
-	free(env);
+	signal(SIGINT, signal_handler);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	set_heredoc_signals(void)
+{
+	signal(SIGINT, heredoc_signal_handler);
+	signal(SIGQUIT, SIG_IGN);
 }

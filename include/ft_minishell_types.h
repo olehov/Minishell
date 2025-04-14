@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:14:36 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 18:13:21 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 15:10:45 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@
 
 # define PERMISSION_DENIED	127
 # define IS_A_DIRECTORY	126
-
-extern volatile sig_atomic_t g_received_signal;
 
 typedef struct s_heredoc
 {

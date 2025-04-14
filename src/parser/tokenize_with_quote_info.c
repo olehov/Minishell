@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:16:31 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 16:26:14 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:38:00 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	handle_single_redirect(char *input,
 	tmp.in_quotes = 0;
 	tmp.quote_char = 0;
 	set_token(&tokens[ctx->j++], &tmp);
-	ft_safe_free(tmp.accum);
+	free(tmp.accum);
 	ctx->i++;
 	return (1);
 }

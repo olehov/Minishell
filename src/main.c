@@ -6,31 +6,28 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 19:10:53 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 15:25:04 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-#include <signal.h>
-
-volatile sig_atomic_t	g_received_signal = 0;
 
 // initialization shell: enviroment variables
-void	init_shell(t_minish *msh, char **envp)
-{
-	msh->env = NULL;
-	msh->heredocs = NULL;
-	msh->cmd = NULL;
-	msh->pipe_split = NULL;
-	msh->tokens = NULL;
-	msh->exit_code = 0;
-	if (init_env(&msh->env, envp) == -1)
-	{
-		msh->exit_code = EXIT_FAILURE;
-		ft_putstr_fd("Failed to initialize environment\n", STDERR_FILENO);
-		exit(msh->exit_code);
-	}
-}
+// void	init_shell(t_minish *msh, char **envp)
+// {
+// 	msh->env = NULL;
+// 	msh->heredocs = NULL;
+// 	msh->cmd = NULL;
+// 	msh->pipe_split = NULL;
+// 	msh->tokens = NULL;
+// 	msh->exit_code = 0;
+// 	if (init_env(&msh->env, envp) == -1)
+// 	{
+// 		msh->exit_code = EXIT_FAILURE;
+// 		ft_putstr_fd("Failed to initialize environment\n", STDERR_FILENO);
+// 		exit(msh->exit_code);
+// 	}
+// }
 
 void	free_shell(t_minish *msh)
 {
@@ -42,24 +39,24 @@ void	free_shell(t_minish *msh)
 		ft_lstclear(&msh->heredocs, free_heredoc);
 }
 
-void	signal_handler(int signo)
-{
-	if (signo == SIGINT)
-	{
-		ft_putstr_fd("\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		g_received_signal = SIGINT;
-	}
-	else if (signo == SIGQUIT)
-	{
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		g_received_signal = SIGQUIT;
-	}
-}
+// void	signal_handler(int signo)
+// {
+// 	if (signo == SIGINT)
+// 	{
+// 		ft_putstr_fd("\n", 1);
+// 		rl_on_new_line();
+// 		rl_replace_line("", 0);
+// 		rl_redisplay();
+// 		g_received_signal = SIGINT;
+// 	}
+// 	else if (signo == SIGQUIT)
+// 	{
+// 		rl_on_new_line();
+// 		rl_replace_line("", 0);
+// 		rl_redisplay();
+// 		g_received_signal = SIGQUIT;
+// 	}
+// }
 
 char	*get_prompt(t_minish *msh)
 {
@@ -93,62 +90,31 @@ char	*get_prompt(t_minish *msh)
 	return (prompt);
 }
 
-char	*get_line(t_minish *msh)
-{
-	char	*line;
-	char	*prompt;
+// char	*get_line(t_minish *msh)
+// {
+// 	char	*line;
+// 	char	*prompt;
 
-	prompt = get_prompt(msh);
-	if (isatty(STDIN_FILENO))
-	{
-		if (prompt == NULL)
-			line = readline(GRN "minishell> " RESET);
-		else
-			line = readline(prompt);
-	}
-	else
-		line = readline("minishell> ");
-	if (line == NULL)
-	{
-		if (prompt != NULL)
-			free(prompt);
-		return (NULL);
-	}
-	if (prompt != NULL)
-		free(prompt);
-	return (line);
-}
-
-void	print_arr_of_str(char **str)
-{
-	size_t	i;
-
-	i = 0;
-	if (str == NULL || *str == NULL)
-	{
-		return ;
-	}
-	while (str[i] != NULL)
-	{
-		printf("str[%lu]: %s\n", i, str[i]);
-		i++;
-	}
-}
-
-t_cmd	*get_cmd_lst(t_minish *msh)
-{
-	char	*line;
-	t_cmd	*cmd_list;
-
-	line = get_line(msh);
-	if (!line)
-		return (NULL);
-	if (*line)
-		add_history(line);
-	cmd_list = parse_input(line, msh->env, msh);
-	free(line);
-	return (cmd_list);
-}
+// 	prompt = get_prompt(msh);
+// 	if (isatty(STDIN_FILENO))
+// 	{
+// 		if (prompt == NULL)
+// 			line = readline(GRN "minishell> " RESET);
+// 		else
+// 			line = readline(prompt);
+// 	}
+// 	else
+// 		line = readline("minishell> ");
+// 	if (line == NULL)
+// 	{
+// 		if (prompt != NULL)
+// 			free(prompt);
+// 		return (NULL);
+// 	}
+// 	if (prompt != NULL)
+// 		free(prompt);
+// 	return (line);
+// }
 
 // Основний цикл shell
 int	main(int argc, char **argv, char **envp)
@@ -160,8 +126,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	init_shell(&msh, envp);
-	signal(SIGINT, signal_handler);
-	signal(SIGQUIT, signal_handler);
+	set_signals();
 	while (1)
 	{
 		line = get_line(&msh);

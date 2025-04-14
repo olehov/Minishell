@@ -29,6 +29,7 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/pipe_utils.c \
       $(SRC_DIR)/launch_child.c \
       $(SRC_DIR)/ft_decode_wstatus.c \
+      $(SRC_DIR)/ft_shell.c \
       $(SRC_DIR)/$(PARSER_DIR)/parse_input.c \
       $(SRC_DIR)/$(PARSER_DIR)/split_outside_quotes.c \
       $(SRC_DIR)/$(PARSER_DIR)/parser_utils.c \
@@ -63,9 +64,11 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/ft_is_directory.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/is_builtin.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/handle_redirect.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/ft_exit.c \
       $(SRC_DIR)/$(CMD_DIR)/init_cmd_node.c \
 	$(SRC_DIR)/$(CMD_DIR)/add_redirection.c \
-	$(SRC_DIR)/$(CMD_DIR)/free_cmd_list.c
+	$(SRC_DIR)/$(CMD_DIR)/free_cmd_list.c \
+      $(SRC_DIR)/$((CMD_DIR))/get_cmd_lst.c
 
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 

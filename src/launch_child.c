@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:05:57 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 17:11:29 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 13:05:28 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ void	launch_child(t_cmd *cmd, t_minish *msh)
 {
 	char	*path;
 	char	**envp;
+	int		exit_code;
 
 	check_is_directory_permission(cmd->args, msh);
 	set_pipe_fds(cmd, msh);
@@ -107,14 +108,18 @@ void	launch_child(t_cmd *cmd, t_minish *msh)
 	if (is_builtin(cmd->args))
 	{
 		execute_builtin(cmd, msh);
-		exit(msh->exit_code);
+		exit_code = msh->exit_code;
+		clear_data(msh);
+		exit(exit_code);
 	}
 	path = find_executable_path(cmd->args[0], msh->env);
 	envp = env_list_to_str_arr(msh->env);
 	execve(path, cmd->args, envp);
-	ft_safe_free(path);
+	free(path);
 	free_split(envp);
-	msh->exit_code = 127;
+	exit_code = 127;
+	msh->exit_code = exit_code;
 	print_error(cmd->args[0], msh);
-	exit(msh->exit_code);
+	clear_data(msh);
+	exit(exit_code);
 }

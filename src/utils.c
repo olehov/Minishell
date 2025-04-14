@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:30:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/11 13:38:19 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 14:52:44 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,15 +95,6 @@ void	add_arg(t_cmd *cmd, char *arg)
 	}
 	new_args[i] = arg;
 	new_args[i + 1] = NULL;
-	ft_safe_free(cmd->args);
+	free(cmd->args);
 	cmd->args = new_args;
-}
-
-void	ft_safe_free(void	*ptr)
-{
-	if (ptr != NULL)
-	{
-		free(ptr);
-	}
-	ptr = NULL;
 }

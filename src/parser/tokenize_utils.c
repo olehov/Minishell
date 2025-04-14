@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:18:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/12 19:45:14 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:37:37 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 void	set_token(t_token *token, t_tokenizer_ctx *ctx)
 {
-	ft_safe_free(token->value);
+	if (token->value != NULL)
+		free(token->value);
 	token->value = ft_strdup(ctx->accum);
 	token->in_quotes = ctx->in_quotes;
 	token->quote_char = ctx->quote_char;
@@ -22,7 +23,8 @@ void	set_token(t_token *token, t_tokenizer_ctx *ctx)
 
 void	reset_quote_state(t_tokenizer_ctx *ctx)
 {
-	ft_safe_free(ctx->accum);
+	if (ctx->accum != NULL)
+		free(ctx->accum);
 	ctx->accum = NULL;
 	ctx->in_quotes = 0;
 	ctx->quote_char = 0;
@@ -38,9 +40,10 @@ char	*append_part(char *accum, char *part)
 	if (accum)
 	{
 		tmp = ft_strdup(accum);
-		ft_safe_free(accum);
+		free(accum);
+		accum = NULL;
 		joined = ft_strjoin(tmp, part);
-		ft_safe_free(tmp);
+		free(tmp);
 	}
 	else
 		joined = ft_strdup(part);
@@ -63,11 +66,9 @@ void	handle_quote(char *input, t_tokenizer_ctx *ctx)
 		ctx->i++;
 	part = ft_substr(input, start - 1, (ctx->i - start + 2));
 	tmp = remove_quotes(part);
-	// tmp = remove_outer_quotes(part);
 	ctx->accum = append_part(ctx->accum, tmp);
-	// free(part);
-	ft_safe_free(part);
-	ft_safe_free(tmp);
+	free(part);
+	free(tmp);
 	if (input[ctx->i] == quote)
 		ctx->i++;
 }
@@ -104,7 +105,8 @@ int	handle_double_redirect(char *input, t_token *tokens, t_tokenizer_ctx *ctx)
 	tmp.in_quotes = 0;
 	tmp.quote_char = 0;
 	set_token(&tokens[ctx->j++], &tmp);
-	ft_safe_free(tmp.accum);
+	if (tmp.accum != NULL)
+		free(tmp.accum);
 	ctx->i += 2;
 	ctx->skip_next_token_quote_handling = 1;
 	return (1);

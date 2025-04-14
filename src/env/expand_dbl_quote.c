@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 15:01:57 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/10 15:51:42 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:50:01 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,13 @@ char	*find_key(char *key_start)
 	return (ret);
 }
 
-char	*find_value_from_node(t_env *envvar)
+static char	*get_copy_str(char *result, char *str1, char *end, int i)
 {
-	if (!envvar)
-		return (NULL);
-	return (envvar->value);
+	if (!str1 && i > 1)
+		str1 = copy_first_str(NULL, end, end + i);
+	else if (i > 1)
+		str1 = copy_first_str(result, str1, end + i);
+	return (str1);
 }
 
 char	*expand_dbl_quote(char *line, int *i, t_minish *msh)
@@ -82,14 +84,16 @@ char	*expand_dbl_quote(char *line, int *i, t_minish *msh)
 	{
 		if (line[*i] == '$')
 		{
-			if (!str1 && *i > 1)
-				str1 = copy_first_str(NULL, line, line + *i);
-			else if (*i > 1)
-				str1 = copy_first_str(result, str1, line + *i);
+			// if (!str1 && *i > 1)
+			// 	str1 = copy_first_str(NULL, line, line + *i);
+			// else if (*i > 1)
+			// 	str1 = copy_first_str(result, str1, line + *i);
+			str1 = get_copy_str(result, str1, line, *i);
 			str2 = get_env_value(find_key(line + *i + 1), msh->env);
 			result = ft_strjoin(str1, str2);
-			ft_safe_free(str1);
-			ft_safe_free(str2);
+			free(str1);
+			str1 = NULL;
+			free(str2);
 			skip_key(line, i);
 			if (line[*i] != '"')
 				str1 = line + *i;
