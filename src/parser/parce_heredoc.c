@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:53:20 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 12:12:30 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 15:13:02 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static void	launch_heredoc_child(t_minish *msh, t_cmd *cmd,
 		free_cmd_node(cmd);
 		free_tokens(msh->tokens);
 		free_heredoc(heredoc);
-		free_split(msh->pipe_split);
 		clear_data(msh);
 		if (g_received_signal == SIGINT)
 			exit(128 + SIGINT);

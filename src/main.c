@@ -6,11 +6,24 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 10:57:07 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 14:49:40 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	reset_shell(t_minish *msh)
+{
+	if (msh == NULL)
+		return ;
+	if (msh->heredocs != NULL)
+		ft_lstclear(&msh->heredocs, free_heredoc);
+	if (msh->cmd != NULL)
+		free_cmd_list(&msh->cmd);
+	if (msh->pipe_split != NULL)
+		free_split(msh->pipe_split);
+	msh->exit_code = 0;
+}
 
 static int	minishell_loop(t_minish *msh)
 {
@@ -34,8 +47,8 @@ static int	minishell_loop(t_minish *msh)
 	if (msh->cmd == NULL)
 		return (0);
 	execute_commands(msh);
-	free_cmd_list(&msh->cmd);
 	unlink_heredocs(&msh->heredocs);
+	reset_shell(msh);
 	return (0);
 }
 

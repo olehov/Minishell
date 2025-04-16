@@ -100,6 +100,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 $(LIBFT):
 	$(MAKE) -C $(LIBFT_DIR)
 
+v: all
+	valgrind --suppressions=rl.supp --leak-check=full --show-leak-kinds=all --track-origins=yes --track-fds=yes --verbose --log-file=valgrind-out.txt ./$(NAME)
+
 clean:
 	$(RM) $(OBJ)
 	$(MAKE) -C $(LIBFT_DIR) clean
