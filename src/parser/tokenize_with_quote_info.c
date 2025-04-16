@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:16:31 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 17:51:00 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:55:26 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/ft_parser.h"
 
 static void	handle_next_token_literal(char *input, t_tokenizer_ctx *ctx)
 {
@@ -57,7 +57,7 @@ static void	reset_quote_state_set_token(t_token *tokens,
 }
 
 static void	process_tokenization_loop(char *input,
-	t_token *tokens, t_tokenizer_ctx *ctx)
+	t_token *tokens, t_tokenizer_ctx *ctx, t_minish *msh)
 {
 	while (input[ctx->i])
 	{
@@ -70,22 +70,22 @@ static void	process_tokenization_loop(char *input,
 			handle_next_token_literal(input, ctx);
 			ctx->skip_next_token_quote_handling = 0;
 		}
-		else if (input[ctx->i] == '\'' || input[ctx->i] == '"')
-			handle_quote(input, ctx);
+		else if ((input[ctx->i] == '\'' || input[ctx->i] == '"'))
+			handle_quote(input, ctx, msh);
 		else if ((input[ctx->i] == '<' || input[ctx->i] == '>')
 			&& input[ctx->i + 1] == input[ctx->i])
 			handle_double_redirect(input, tokens, ctx);
 		else if (input[ctx->i] == '<' || input[ctx->i] == '>')
 			handle_single_redirect(input, tokens, ctx);
 		else
-			handle_word(input, &ctx->i, &ctx->accum);
+			handle_word(input, &ctx->i, &ctx->accum, msh);
 		if (!input[ctx->i] || ft_isspace(input[ctx->i])
 			|| input[ctx->i] == '<' || input[ctx->i] == '>')
 			reset_quote_state_set_token(tokens, ctx);
 	}
 }
 
-t_token	*tokenize_with_quote_info(char *input)
+t_token	*tokenize_with_quote_info(char *input, t_minish *msh)
 {
 	t_token			*tokens;
 	t_tokenizer_ctx	ctx;
@@ -94,7 +94,7 @@ t_token	*tokenize_with_quote_info(char *input)
 	tokens = ft_calloc(sizeof(t_token), (ft_strlen(input) + 2));
 	if (!tokens)
 		return (NULL);
-	process_tokenization_loop(input, tokens, &ctx);
+	process_tokenization_loop(input, tokens, &ctx, msh);
 	if (ctx.accum)
 		set_token(&tokens[ctx.j++], &ctx);
 	tokens[ctx.j].value = NULL;

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:01:48 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 17:29:15 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:53:10 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,13 @@
 #include "../../include/ft_redirection.h"
 
 void	free_cmd_node(t_cmd *cmd)
+void	free_cmd_node(t_cmd *cmd)
 {
 	size_t	i;
+	size_t	i;
 
+	i = 0;
+	if (cmd == NULL)
 	i = 0;
 	if (cmd == NULL)
 	{
@@ -42,26 +46,16 @@ void	free_cmd_node(t_cmd *cmd)
 
 void	free_cmd_list(t_cmd **cmd)
 {
-	t_cmd	*tmp;
-	t_cmd	*node;
+	t_cmd	*next;
 
-	node = *cmd;
-	while (node != NULL)
+	if (cmd == NULL || *cmd == NULL)
+		return ;
+	while (cmd != NULL && *cmd != NULL)
 	{
-		tmp = node;
-		if (node->args != NULL)
-		{
-			free_split(node->args);
-			node->args = NULL;
-		}
-		if (node->redirect_lst != NULL)
-			ft_lstclear(&node->redirect_lst, free_redirect);
-		if (node->infile != NULL)
-			free(node->infile);
-		if (node->outfile != NULL)
-			free(node->outfile);
-		node = node->next;
-		free(tmp);
+		next = (*cmd)->next;
+		free_cmd_node(*cmd);
+		*cmd = next;
 	}
+	cmd = NULL;
 	cmd = NULL;
 }

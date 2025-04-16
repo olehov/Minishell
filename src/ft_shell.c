@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:14:40 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 15:17:04 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:50:27 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,9 @@ void	free_shell(t_minish *msh)
 		ft_lstclear(&msh->env, free_env);
 	if (msh->heredocs)
 		ft_lstclear(&msh->heredocs, free_heredoc);
+	if (msh->cmd != NULL)
+		free_cmd_list(&msh->cmd);
+	if (msh->pipe_split != NULL)
+		free_split(msh->pipe_split);
+	msh->exit_code = 0;
 }

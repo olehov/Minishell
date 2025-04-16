@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:31:30 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 12:52:22 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:51:24 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ void	free_redirect(void *value)
 		free(redirect->filename);
 	redirect->type = _reset;
 	free(redirect);
+	value = NULL;
 	value = NULL;
 }

@@ -20,6 +20,10 @@ PARSER_DIR = parser
 UTILS_DIR = utils
 SIGNALS_DIR = signals
 HEREDOC_DIR = $(BUILTIN_DIR)/ft_heredoc
+PARSER_DIR = parser
+UTILS_DIR = utils
+SIGNALS_DIR = signals
+HEREDOC_DIR = $(BUILTIN_DIR)/ft_heredoc
 
 # -------------------------
 #     SOURCE FILES
@@ -27,14 +31,16 @@ HEREDOC_DIR = $(BUILTIN_DIR)/ft_heredoc
 
 SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/execute_commands.c \
-      $(SRC_DIR)/utils.c \
       $(SRC_DIR)/execute_builtin.c \
-      $(SRC_DIR)/pipe_utils.c \
       $(SRC_DIR)/launch_child.c \
-      $(SRC_DIR)/ft_decode_wstatus.c \
       $(SRC_DIR)/ft_shell.c \
+      $(SRC_DIR)/$(UTILS_DIR)/utils.c \
+      $(SRC_DIR)/$(UTILS_DIR)/pipe_utils.c \
+      $(SRC_DIR)/$(UTILS_DIR)/ft_decode_wstatus.c \
       $(SRC_DIR)/$(UTILS_DIR)/get_prompt.c \
       $(SRC_DIR)/$(PARSER_DIR)/parse_input.c \
+      $(SRC_DIR)/$(PARSER_DIR)/parse_input_delimi.c \
+      $(SRC_DIR)/$(PARSER_DIR)/parse_input_tok.c \
       $(SRC_DIR)/$(PARSER_DIR)/split_outside_quotes.c \
       $(SRC_DIR)/$(PARSER_DIR)/parser_utils.c \
       $(SRC_DIR)/$(PARSER_DIR)/tokenize_utils.c \
@@ -57,8 +63,6 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/$(ENV_DIR)/proccess_quoted_text.c \
       $(SRC_DIR)/$(ENV_DIR)/env_list_to_arr.c \
       $(SRC_DIR)/$(ENV_DIR)/split_path.c \
-      $(SRC_DIR)/$(ENV_DIR)/expand_line.c \
-      $(SRC_DIR)/$(ENV_DIR)/expand_dbl_quote.c \
       $(SRC_DIR)/$(ENV_DIR)/free_env.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/printpwd.c \
       $(SRC_DIR)/$(BUILTIN_DIR)/builtin_echo.c \
@@ -76,7 +80,23 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/$(HEREDOC_DIR)/free_heredoc.c \
       $(SRC_DIR)/$(HEREDOC_DIR)/check_delimiter.c \
       $(SRC_DIR)/$(HEREDOC_DIR)/get_delimiter.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/ft_is_directory.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/is_builtin.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/handle_redirect.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/ft_exit_utils.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/ft_exit.c \
+      $(SRC_DIR)/$(HEREDOC_DIR)/ft_heredoc.c \
+      $(SRC_DIR)/$(HEREDOC_DIR)/init_heredoc.c \
+      $(SRC_DIR)/$(HEREDOC_DIR)/unlink_heredocs.c \
+      $(SRC_DIR)/$(HEREDOC_DIR)/free_heredoc.c \
+      $(SRC_DIR)/$(HEREDOC_DIR)/check_delimiter.c \
+      $(SRC_DIR)/$(HEREDOC_DIR)/get_delimiter.c \
       $(SRC_DIR)/$(CMD_DIR)/init_cmd_node.c \
+	$(SRC_DIR)/$(CMD_DIR)/add_redirection.c \
+	$(SRC_DIR)/$(CMD_DIR)/free_cmd_list.c \
+      $(SRC_DIR)/$(CMD_DIR)/get_cmd_lst.c \
+      $(SRC_DIR)/$(SIGNALS_DIR)/ft_signals.c \
+      $(SRC_DIR)/$(SIGNALS_DIR)/set_signals.c
 	$(SRC_DIR)/$(CMD_DIR)/add_redirection.c \
 	$(SRC_DIR)/$(CMD_DIR)/free_cmd_list.c \
       $(SRC_DIR)/$(CMD_DIR)/get_cmd_lst.c \
@@ -91,9 +111,11 @@ OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
 all: $(NAME)
 
 $(NAME): $(OBJ) $(LIBFT)
+$(NAME): $(OBJ) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 

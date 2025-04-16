@@ -6,13 +6,13 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:50:46 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 16:09:50 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:47:18 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	printerrcode(t_minish *msh)
+static void	printerrcode(t_minish *msh)
 {
 	char	*exit_code;
 
@@ -24,7 +24,7 @@ void	printerrcode(t_minish *msh)
 	free(exit_code);
 }
 
-int	run_cd(t_cmd *cmd, t_minish *msh)
+static int	run_cd(t_cmd *cmd, t_minish *msh)
 {
 	if (get_row_size(cmd->args) > 2)
 	{
@@ -35,7 +35,6 @@ int	run_cd(t_cmd *cmd, t_minish *msh)
 		return (ft_cd(cmd->args[1], &msh->env));
 }
 
-// // --- Вбудовані команди ---
 void	execute_builtin(t_cmd *cmd, t_minish *msh)
 {
 	int	exit_code;

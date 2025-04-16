@@ -6,19 +6,18 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:15:16 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 17:21:06 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:54:31 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
-
+#include "../../include/ft_env.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
 #include <ctype.h>
 
-void	add_or_update_env(t_list **lst, t_env *var)
+static void	add_or_update_env(t_list **lst, t_env *var)
 {
 	t_list	*cur;
 	t_env	*item;
@@ -61,25 +60,32 @@ static int	is_valid_identifier(const char *str)
 }
 
 static int	print_error(char *str)
+static int	print_error(char *str)
 {
 	ft_putstr_fd("export: `", STDERR_FILENO);
 	ft_putstr_fd(str, STDERR_FILENO);
 	ft_putstr_fd("`: not a valid identifier\n", STDERR_FILENO);
 	return (-1);
+	return (-1);
 }
 
+static int	set_env_loop(t_list	**lst, char **tmp)
 static int	set_env_loop(t_list	**lst, char **tmp)
 {
 	t_env	*var;
 	size_t	i;
 	int		exit_code;
+	size_t	i;
+	int		exit_code;
 
 	i = 0;
+	exit_code = 0;
 	exit_code = 0;
 	while (tmp[i])
 	{
 		if (!is_valid_identifier(tmp[i]))
 		{
+			exit_code = print_error(tmp[i++]);
 			exit_code = print_error(tmp[i++]);
 			continue ;
 		}
@@ -87,6 +93,7 @@ static int	set_env_loop(t_list	**lst, char **tmp)
 		if (var == NULL)
 			return (free_split(tmp), -1);
 		add_or_update_env(lst, var);
+		free_env(var);
 		free_env(var);
 		i++;
 	}
@@ -105,6 +112,22 @@ int	ft_set_env(t_list **lst, char *env)
 	if (!tmp)
 		return (-1);
 	exit_code = set_env_loop(lst, tmp);
+	return (exit_code);
+}
+
+int	ft_set_env(t_list **lst, char *env)
+{
+	char	**tmp;
+	int		exit_code;
+
+	exit_code = 0;
+	if (!env)
+		return (-1);
+	tmp = split_outside_quotes(env, ' ');
+	if (!tmp)
+		return (-1);
+	exit_code = set_env_loop(lst, tmp);
 	free_split(tmp);
+	return (exit_code);
 	return (exit_code);
 }

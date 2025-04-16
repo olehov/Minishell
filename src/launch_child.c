@@ -6,13 +6,13 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 13:05:57 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 13:05:28 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:50:34 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	*find_executable_path(char *cmd, t_list *env)
+static char	*find_executable_path(char *cmd, t_list *env)
 {
 	char	**paths;
 	char	*full_path;
@@ -41,15 +41,15 @@ char	*find_executable_path(char *cmd, t_list *env)
 	return (free_split(paths), NULL);
 }
 
-void	print_error(char *cmd, t_minish *msh)
+static void	print_error_and_exit(char *cmd, t_minish *msh)
 {
-	if (msh->exit_code == 0)
-		return ;
+	int	exit_code;
+
+	exit_code = 127;
 	ft_putstr_fd(cmd, STDERR_FILENO);
-	if (msh->exit_code == 127)
-		ft_putstr_fd(": command not found\n", STDERR_FILENO);
-	else
-		perror(cmd);
+	ft_putstr_fd(": command not found\n", STDERR_FILENO);
+	clear_data(msh);
+	exit(exit_code);
 }
 
 static int	is_exists(char *path)
@@ -79,20 +79,30 @@ static int	is_exists(char *path)
 	return (0);
 }
 
-void	check_is_directory_permission(char **args, t_minish *msh)
+static void	check_is_directory_permission(char **args, t_minish *msh)
 {
 	int	exist;
 
 	if (args == NULL || args[0] == NULL
 		|| (args[0][0] == '\0' && args[1] == NULL))
-		exit(msh->exit_code);
+	{
+		exist = msh->exit_code;
+		clear_data(msh);
+		exit(exist);
+	}
 	if (args[0][0] == '/' || args[0][0] == '.')
 	{
 		exist = is_exists(args[0]);
 		if (exist == -1)
+		{
+			clear_data(msh);
 			exit(EXIT_FAILURE);
+		}
 		if (exist != 0)
+		{
+			clear_data(msh);
 			exit(exist);
+		}
 	}
 }
 
@@ -113,13 +123,11 @@ void	launch_child(t_cmd *cmd, t_minish *msh)
 		exit(exit_code);
 	}
 	path = find_executable_path(cmd->args[0], msh->env);
+	if (path == NULL)
+		print_error_and_exit(cmd->args[0], msh);
 	envp = env_list_to_str_arr(msh->env);
 	execve(path, cmd->args, envp);
 	free(path);
 	free_split(envp);
-	exit_code = 127;
-	msh->exit_code = exit_code;
-	print_error(cmd->args[0], msh);
-	clear_data(msh);
-	exit(exit_code);
+	print_error_and_exit(cmd->args[0], msh);
 }

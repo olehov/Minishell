@@ -6,13 +6,13 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 14:50:38 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 16:28:30 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:55:37 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*ft_get_user(t_minish *msh)
+static char	*ft_get_user(t_minish *msh)
 {
 	char	*user_value;
 	char	*user;

@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:18:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 17:37:03 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:55:22 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/ft_parser.h"
 
 void	set_token(t_token *token, t_tokenizer_ctx *ctx)
 {
@@ -50,13 +50,14 @@ char	*append_part(char *accum, char *part)
 	return (joined);
 }
 
-void	handle_quote(char *input, t_tokenizer_ctx *ctx)
+void	handle_quote(char *input, t_tokenizer_ctx *ctx, t_minish *msh)
 {
 	int		start;
 	char	*part;
 	char	*tmp;
 	char	quote;
 
+	(void)msh;
 	quote = input[ctx->i];
 	ctx->quote_char = quote;
 	ctx->in_quotes = 1;

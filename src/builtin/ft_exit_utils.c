@@ -6,17 +6,18 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:24:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 18:27:45 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:52:39 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include "../../include/ft_utils.h"
+#include <readline/readline.h>
+#include <readline/history.h>
 
 void	clear_data(t_minish *msh)
 {
 	rl_clear_history();
-	if (msh->cmd != NULL)
-		free_cmd_list(&msh->cmd);
 	free_shell(msh);
 }
 

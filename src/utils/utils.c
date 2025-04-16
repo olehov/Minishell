@@ -6,13 +6,14 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:30:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 13:51:16 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 12:46:48 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/ft_utils.h"
+#include "../../include/minishell.h"
 
-bool	is_closed_quote(char quote, int start, char *str)
+static bool	is_closed_quote(char quote, int start, char *str)
 {
 	const char	single_quote = '\'';
 	const char	double_quote = '\"';
@@ -34,7 +35,7 @@ bool	is_closed_quote(char quote, int start, char *str)
 	return (false);
 }
 
-int	ft_is_quote(char c)
+static int	ft_is_quote(char c)
 {
 	return (c == '\'' || c == '"');
 }
@@ -98,38 +99,3 @@ void	add_arg(t_cmd *cmd, char *arg)
 	free(cmd->args);
 	cmd->args = new_args;
 }
-
-// ===== Обробка редіректів для команди =====
-// void	handle_redirects(t_cmd *cmd)
-// {
-// 	if (cmd->outfile)
-// 	{
-// 		if (cmd->append_out)
-// 			append_to_file(cmd->infile, cmd->outfile, O_RDWR | O_APPEND);
-// 		else
-// 			append_to_file(cmd->infile, cmd->outfile, O_RDWR | O_TRUNC);
-// 	}
-// 	if (cmd->infile)
-// 	{
-// 		if (cmd->redirect_in)
-// 		{
-// 			append_to_file(cmd->outfile, cmd->infile,
-// 				O_RDONLY | O_CREAT | O_TRUNC);
-// 		}
-// 	}
-// }
-
-// ===== Перевірка для echo -n (чи лише n) =====
-int only_n(char *str)
-{
-	int i = 1;
-	if (str[0] != '-') return 0;
-	while (str[i])
-	{
-		if (str[i] != 'n')
-			return 0;
-		i++;
-	}
-	return 1;
-}
-

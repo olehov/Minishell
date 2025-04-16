@@ -6,13 +6,14 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 12:19:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 17:22:24 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:54:36 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/ft_env.h"
+#include <string.h>
 
-char	*ft_get_key(char *env)
+static char	*ft_get_key(char *env)
 {
 	char	*key;
 	size_t	i;

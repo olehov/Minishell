@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:26:00 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 17:29:51 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:53:26 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/ft_env.h"
 #include "../../include/process_env_utils.h"
 
 static int	extract_variable_name(const char *input, int start,
@@ -24,14 +24,41 @@ static int	extract_variable_name(const char *input, int start,
 	while (input[i] && (ft_isalnum(input[i]) || input[i] == '_')
 		&& var_index < max_len - 1)
 		var_name[var_index++] = input[i++];
+	while (input[i] && (ft_isalnum(input[i]) || input[i] == '_')
+		&& var_index < max_len - 1)
+		var_name[var_index++] = input[i++];
 	var_name[var_index] = '\0';
 	return (i);
 }
 
 static int	extract_last_exit_code(int *i, int *j,
 	t_env_state *state, t_minish *msh)
+static int	extract_last_exit_code(int *i, int *j,
+	t_env_state *state, t_minish *msh)
 {
 	char	*exit_str;
+
+	exit_str = ft_itoa(msh->exit_code);
+	if (!exit_str)
+		return (-1);
+	if (ensure_buffer_capacity(state, ft_strlen(exit_str)) == -1)
+		return (free(exit_str), -1);
+	while (exit_str[*j])
+		state->result[state->res_index++] = exit_str[(*j)++];
+	free(exit_str);
+	*i += 2;
+	return (0);
+}
+
+int	extract_variable_value(const char *input, int *i,
+	t_env_state *state, t_minish *msh)
+{
+	char	var_name[256];
+	int		j;
+
+	j = 0;
+	if (input[*i + 1] == '?')
+		return (extract_last_exit_code(i, &j, state, msh));
 
 	exit_str = ft_itoa(msh->exit_code);
 	if (!exit_str)
@@ -69,8 +96,10 @@ int	extract_variable_value(const char *input, int *i,
 
 int	extract_quoted_text(const char *input, int *i,
 	t_env_state *state, t_minish *msh)
+	t_env_state *state, t_minish *msh)
 {
 	state->quote = input[*i];
+	*i = process_quoted_text(input, *i, state, msh);
 	*i = process_quoted_text(input, *i, state, msh);
 	if (*i == -1)
 		return (-1);
@@ -79,16 +108,20 @@ int	extract_quoted_text(const char *input, int *i,
 
 int	extract_variable(const char *input, int *i,
 	t_env_state *state, t_minish *msh)
+int	extract_variable(const char *input, int *i,
+	t_env_state *state, t_minish *msh)
 {
 	while (input[*i])
 	{
 		if (input[*i] == '\'' || input[*i] == '"')
 		{
 			if (extract_quoted_text(input, i, state, msh) == -1)
+			if (extract_quoted_text(input, i, state, msh) == -1)
 				return (-1);
 		}
 		else if (input[*i] == '$')
 		{
+			if (extract_variable_value(input, i, state, msh) == -1)
 			if (extract_variable_value(input, i, state, msh) == -1)
 				return (-1);
 		}

@@ -6,38 +6,12 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:30:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 17:30:32 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:54:40 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/ft_env.h"
 #include "../../include/process_env_utils.h"
-
-int	handle_text(const char *input, int *i, t_env_state *state,
-	t_minish *msh)
-{
-	if (input[*i] == '\\')
-	{
-		if (handle_escaping_variable(input, i, state) == -1)
-			return (-1);
-	}
-	else if (state->quote == '\'' && input[*i] == '\"')
-	{
-		if (extract_quoted_text(input, i, state, msh) == -1)
-			return (-1);
-	}
-	else if (state->quote == '\"' && input[*i] == '$' && input[*i + 1] != ' ')
-	{
-		if (extract_variable_value(input, i, state, msh) == -1)
-			return (-1);
-	}
-	else
-	{
-		if (try_ensure_buffer_capacity(state, 1, input[(*i)++]) == -1)
-			return (-1);
-	}
-	return (0);
-}
 
 static int	process_quoted_text_loop(const char *input,
 	int *i, t_env_state *state, t_minish *msh)
@@ -46,7 +20,7 @@ static int	process_quoted_text_loop(const char *input,
 	{
 		if (try_ensure_buffer_capacity(state, 1, input[*i]) == -1)
 			return (-1);
-		i++;
+		(*i)++;
 	}
 	else if (state->quote == '\"')
 	{
@@ -73,6 +47,8 @@ int	process_quoted_text(const char *input, int start,
 	i = start + 1;
 	while (input[i] && input[i] != state->quote)
 	{
+		if (process_quoted_text_loop(input, &i, state, msh) == -1)
+			return (-1);
 		if (process_quoted_text_loop(input, &i, state, msh) == -1)
 			return (-1);
 	}

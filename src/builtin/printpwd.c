@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 15:41:35 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 16:09:47 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:52:59 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/ft_builtin.h"
 #include <linux/limits.h>
 
 int	printpwd(void)

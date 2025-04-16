@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 17:48:05 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:54:55 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/ft_parser.h"
 
 int	handle_single_redirect(char *input,
 	t_token *tokens, t_tokenizer_ctx *ctx)

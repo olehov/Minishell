@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/10 14:53:42 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/13 17:30:54 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/03/15 15:01:57 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/16 13:53:23 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,54 @@ char	*expand_line(char *line, t_minish *msh, int i)
 		else
 			result = expand_single_char(line[i++], result);
 		if (tmp)
-			join_tmp_to_result(&result, tmp);
-		if (line[i] && line[i] != '\''
-			&& line[i] != '"' && !(line[i] == '$' && in_dquote))
-			i++;
+		{
+			if (result)
+			{
+				char *joined = ft_strjoin(result, tmp);
+				free(result);
+				result = joined;
+			}
+			else
+				result = ft_strdup(tmp);
+			free(tmp);
+		}
 	}
-	return (result);
+	if (!result)
+		result = ft_strdup("");
+	return result;
 }
+
+// char	*expand_line(char *line, t_minish *msh, int i)
+// {
+// 	char	*result;
+
+// 	result = NULL;
+// 	while (line[i] != '\0')
+// 	{
+// 		// printf("i: %i\n", i);
+// 		//check that there are matching quotes ", ' before that
+// 		if (line[i] == '\'')
+// 		{
+// 			// printf("copy_string\n");
+// 			result = copy_string(line, &i, NULL);
+// 		}
+// 		else if (line[i] && line[i] == '"')
+// 		{
+// 			i++;
+// 			// printf("expand_dbl_quote\n");
+// 			result = expand_dbl_quote(line, &i, msh);
+// 			i++;
+// 		}
+// 		else
+// 			i++;
+// 	}
+// 	if (result == NULL)
+// 	{
+// 		i = 0;
+// 		result = malloc(sizeof(char) * (ft_strlen(line) + 1));
+// 		if (result != NULL)
+// 			ft_strlcpy(result, line, ft_strlen(line) + 1);
+// 	}
+// 	// free (line);
+// 	return (result);
+// }

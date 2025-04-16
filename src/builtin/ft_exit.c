@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 19:19:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 17:27:57 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:52:44 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/ft_builtin.h"
 #include <stdint.h>
 
 static int	get_positive_cmp_res(char *str)

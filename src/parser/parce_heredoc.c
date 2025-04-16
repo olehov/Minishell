@@ -6,12 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:53:20 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 18:02:41 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:55:05 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/ft_heredoc.h"
-#include "../../include/minishell.h"
+#include "../../include/ft_parser.h"
 
 static void	launch_heredoc_child(t_minish *msh, t_cmd *cmd,
 	t_heredoc *heredoc)
@@ -32,6 +31,8 @@ static void	launch_heredoc_child(t_minish *msh, t_cmd *cmd,
 		free_heredoc(heredoc);
 		free_split(msh->pipe_split);
 		clear_data(msh);
+		if (g_received_signal == SIGINT)
+			exit(128 + SIGINT);
 		if (status == -1)
 			exit(EXIT_FAILURE);
 		exit(EXIT_SUCCESS);
@@ -56,6 +57,8 @@ int	parce_heredoc(t_minish *msh, int *i, t_cmd *cmd)
 	}
 	launch_heredoc_child(msh, cmd, heredoc);
 	set_signals();
+	if (msh->exit_code == (128 + SIGINT))
+		return (free_heredoc(heredoc), -1);
 	add_redirection(cmd, _heredoc, heredoc->filename);
 	if (msh->heredocs == NULL)
 		msh->heredocs = ft_lstnew(heredoc);

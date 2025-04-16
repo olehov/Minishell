@@ -6,12 +6,14 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 17:05:31 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:50:19 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <linux/limits.h>
+#include <linux/limits.h>
 #include "../include/minishell.h"
+#include "../include/ft_redirection.h"
 #include "../include/ft_redirection.h"
 #include <sys/wait.h>
 #include <unistd.h>
@@ -20,7 +22,7 @@
 #include <fcntl.h>
 #include <dirent.h>
 
-void	reset_std_fds(int std_fd[2])
+static void	reset_std_fds(int std_fd[2])
 {
 	dup2(std_fd[0], STDIN_FILENO);
 	dup2(std_fd[1], STDOUT_FILENO);
@@ -28,7 +30,7 @@ void	reset_std_fds(int std_fd[2])
 	close(std_fd[1]);
 }
 
-int	run_single_cmd(t_cmd *cmd, t_minish *msh)
+static int	run_single_cmd(t_cmd *cmd, t_minish *msh)
 {
 	int		std_fd[2];
 
@@ -51,17 +53,18 @@ int	run_single_cmd(t_cmd *cmd, t_minish *msh)
 		}
 		execute_builtin(cmd, msh);
 		return (reset_std_fds(std_fd), 0);
+		execute_builtin(cmd, msh);
+		return (reset_std_fds(std_fd), 0);
 	}
 	return (1);
 }
 
-void	run_child(t_cmd *cmd, t_minish *msh, pid_t pid)
+static void	run_child(t_cmd *cmd, t_minish *msh, pid_t pid)
 {
 	if (pid == -1)
 		exit(EXIT_FAILURE);
 	if (pid == 0)
 	{
-		set_child_signals();
 		if (ft_strcmp(cmd->args[0], "exit") == 0)
 		{
 			if (ft_exit(cmd->args, msh, true) == -1)
@@ -72,27 +75,39 @@ void	run_child(t_cmd *cmd, t_minish *msh, pid_t pid)
 		{
 			clear_data(msh);
 			exit(EXIT_FAILURE);
+			clear_data(msh);
+			exit(EXIT_FAILURE);
 		}
 		launch_child(cmd, msh);
 	}
 	cmd->pid = pid;
 }
 
-void	wait_all_proccesses(t_minish *msh)
+static void	wait_all_proccesses(t_minish *msh, t_cmd *cmd)
 {
-	t_cmd	*cmd;
 	int		status;
 	int		last_status;
+	int		count_sig_exit;
+	int		sig_exit;
 
 	status = 0;
-	cmd = msh->cmd;
+	count_sig_exit = 0;
+	signal(SIGINT, SIG_IGN);
 	while (cmd)
 	{
-		waitpid(cmd->pid, &status, 0);
+		if (cmd->pid != -1)
+		{
+			waitpid(cmd->pid, &status, 0);
+			sig_exit = ft_decode_wstatus(status);
+			if (sig_exit == 128 + SIGINT || sig_exit == 128 + SIGQUIT)
+				count_sig_exit = 1;
+		}
 		if (cmd->next == NULL)
 			last_status = ft_decode_wstatus(status);
 		cmd = cmd->next;
 	}
+	if (count_sig_exit == 1)
+		ft_putendl_fd("", STDOUT_FILENO);
 	msh->exit_code = last_status;
 }
 
@@ -109,6 +124,7 @@ void	execute_commands(t_minish *msh)
 		if (cmd->args == NULL)
 		{
 			msh->exit_code = 0;
+			msh->exit_code = 0;
 			cmd = cmd->next;
 			continue ;
 		}
@@ -116,11 +132,14 @@ void	execute_commands(t_minish *msh)
 		{
 			ft_putstr_fd(" Broken pipe\n", STDERR_FILENO);
 			exit(EXIT_FAILURE);
+			ft_putstr_fd(" Broken pipe\n", STDERR_FILENO);
+			exit(EXIT_FAILURE);
 		}
 		pid = fork();
+		run_child(cmd, msh, pid);
 		run_child(cmd, msh, pid);
 		cmd = cmd->next;
 	}
 	close_all_pipes(msh->cmd);
-	wait_all_proccesses(msh);
+	wait_all_proccesses(msh, msh->cmd);
 }

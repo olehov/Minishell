@@ -6,14 +6,14 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 14:11:06 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 16:09:43 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:51:47 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/ft_builtin.h"
 #include <linux/limits.h>
 
-void	change_path(t_list **lst, char *old_path)
+static void	change_path(t_list **lst, char *old_path)
 {
 	t_env	*env;
 	char	buf[PATH_MAX];
@@ -35,7 +35,10 @@ void	change_path(t_list **lst, char *old_path)
 }
 
 static int	print_cd_error(int cd_out)
+static int	print_cd_error(int cd_out)
 {
+	if (cd_out != -1)
+		return (cd_out);
 	if (cd_out != -1)
 		return (cd_out);
 	if (errno == ENOENT)
@@ -44,6 +47,7 @@ static int	print_cd_error(int cd_out)
 		ft_putstr_fd(" Permision denied\n", STDERR_FILENO);
 	else if (errno == ENOTDIR)
 		ft_putstr_fd(" Not a directory\n", STDERR_FILENO);
+	return (cd_out);
 	return (cd_out);
 }
 
@@ -54,8 +58,10 @@ static int	ft_chdir(char *path, t_list **lst)
 	if (getcwd(old_path, PATH_MAX) == NULL)
 		return (-1);
 	if (!ft_is_directory(path))
+	if (!ft_is_directory(path))
 	{
 		errno = ENOTDIR;
+		return (print_cd_error(-1));
 		return (print_cd_error(-1));
 	}
 	if (chdir(path) == 0)
@@ -75,7 +81,7 @@ static int	ft_cd_home(char *path, t_list **lst)
 	if (env == NULL)
 		return (-1);
 	if (path == NULL || ft_strcmp(path, "~") == 0)
-		return (print_cd_error(ft_chdir(env->value, lst)));
+		return (ft_chdir(env->value, lst));
 	if (path != NULL)
 	{
 		while (*path != '/')
@@ -83,7 +89,7 @@ static int	ft_cd_home(char *path, t_list **lst)
 		path2 = ft_strjoin(env->value, path);
 		if (path2 == NULL)
 			return (-1);
-		return_val = print_cd_error(ft_chdir(path2, lst));
+		return_val = ft_chdir(path2, lst);
 		free(path2);
 		return (return_val);
 	}
@@ -97,11 +103,6 @@ int	ft_cd(char *path, t_list **lst)
 
 	if (*lst == NULL)
 		return (-1);
-	if (access(path, F_OK) != 0)
-	{
-		errno = ENOENT;
-		return (print_cd_error(-1));
-	}
 	if (ft_get_env(*lst, "OLDPWD") == NULL)
 		ft_set_env(lst, ft_strjoin("OLDPWD=", getcwd(oldpwd, PATH_MAX)));
 	if (path == NULL || path[0] == '~')
@@ -113,5 +114,10 @@ int	ft_cd(char *path, t_list **lst)
 			return (-1);
 		return (print_cd_error(ft_chdir(env->value, lst)));
 	}
-	return (print_cd_error(ft_chdir(path, lst)));
+	if (access(path, F_OK) != 0)
+	{
+		errno = ENOENT;
+		return (print_cd_error(-1));
+	}
+	return (ft_chdir(path, lst));
 }

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:17:20 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 17:18:03 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:53:06 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ static char	*get_new_delimiter(char *delimiter, char quote)
 	char	*new_str;
 
 	tmp = readline("> ");
+	if (g_received_signal == SIGINT)
+		return (free(tmp), NULL);
 	if (tmp == NULL)
 	{
 		ft_putstr_fd(" unexpected EOF while looking for matching `",
@@ -61,7 +63,7 @@ static void	set_closed_quote(t_heredoc *heredoc,
 	}
 }
 
-void	get_delimiter(t_heredoc *heredoc)
+int	get_delimiter(t_heredoc *heredoc)
 {
 	char	quote;
 	bool	is_closed_quote;
@@ -70,7 +72,7 @@ void	get_delimiter(t_heredoc *heredoc)
 	quote = 0;
 	is_closed_quote = true;
 	if (heredoc->delimiter == NULL)
-		return ;
+		return (-1);
 	set_closed_quote(heredoc, &quote, &is_closed_quote);
 	if (!is_closed_quote)
 	{
@@ -78,8 +80,11 @@ void	get_delimiter(t_heredoc *heredoc)
 		free(heredoc->delimiter);
 		heredoc->delimiter = get_new_delimiter(delimiter, quote);
 		free(delimiter);
+		if (g_received_signal == SIGINT)
+			return (1);
 		if (heredoc->delimiter == NULL)
-			return ;
+			return (-1);
 		get_delimiter(heredoc);
 	}
+	return (0);
 }

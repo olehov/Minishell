@@ -6,13 +6,13 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:20:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/11 15:20:35 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:55:18 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/ft_parser.h"
 
-void	ft_set_quote(char *quote, char value)
+static void	ft_set_quote(char *quote, char value)
 {
 	if (!(*quote))
 		*quote = value;

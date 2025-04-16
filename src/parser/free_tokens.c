@@ -6,11 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:58:22 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 17:58:39 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:54:52 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../include/ft_parser.h"
 
 void	free_tokens(t_token *tokens)
 {

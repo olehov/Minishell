@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:05:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 17:18:56 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:53:03 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static char	*allocate_delimitter(char *delimiter)
 	return (tmp);
 }
 
-char	*get_delimiter_without_quotes(char *delimiter, bool *in_quotes)
+static char	*get_delimiter_without_quotes(char *delimiter, bool *in_quotes)
 {
 	char	*tmp;
 	char	quote;
@@ -72,8 +72,10 @@ static int	read_line(int fd, char *delimiter,
 		buffer = readline("> ");
 	else
 		buffer = readline(NULL);
+	if (g_received_signal == SIGINT)
+		return (free(buffer), -1);
 	if (buffer == NULL)
-		return (print_err(delimiter), -1);
+		return (print_err(delimiter), 0);
 	if (ft_strcmp(buffer, delimiter) == 0)
 		return (free(buffer), 0);
 	if (in_quotes == false)
@@ -97,7 +99,10 @@ int	ft_heredoc(t_heredoc *heredoc, t_minish *msh)
 
 	in_quotes = false;
 	exit_status = 1;
-	get_delimiter(heredoc);
+	if (get_delimiter(heredoc) == -1)
+		return (-1);
+	if (g_received_signal == SIGINT)
+		return (-1);
 	if (check_delimiter(heredoc->delimiter) == 0)
 		return (-1);
 	fd = open(heredoc->filename, O_CREAT | O_WRONLY | O_TRUNC, 0644);
@@ -109,5 +114,7 @@ int	ft_heredoc(t_heredoc *heredoc, t_minish *msh)
 		exit_status = read_line(fd, del_without_quotes, msh, in_quotes);
 	close(fd);
 	free(del_without_quotes);
+	if (exit_status == -1)
+		return (-1);
 	return (0);
 }
