@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_is_directory.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/10 14:37:21 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/16 12:23:48 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+// #include "../../include/minishell.h"
+#include "../../include/ft_utils.h"
+#include <dirent.h>
 
-size_t	ft_strlen(const char *str)
+bool	ft_is_directory(const char *path)
 {
-	size_t	i;
+	DIR	*dir;
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
+	dir = opendir(path);
+	if (dir)
 	{
-		i++;
+		closedir(dir);
+		return (1);
 	}
-	return (i);
+	return (0);
 }

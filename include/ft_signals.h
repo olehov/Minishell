@@ -1,27 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_signals.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/14 15:10:08 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/15 13:53:05 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+#ifndef FT_SIGNALS_H
+# define FT_SIGNALS_H
 
-size_t	ft_strlen(const char *str)
-{
-	size_t	i;
+# include <signal.h>
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
-}
+extern volatile sig_atomic_t	g_received_signal;
+
+void	set_heredoc_signals(void);
+void	set_signals(void);
+
+void	signal_handler(int signo);
+void	heredoc_signal_handler(int signo);
+
+#endif

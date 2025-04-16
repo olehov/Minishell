@@ -3,168 +3,58 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mfedorys <mfedorys@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid Date        by              +#+  #+#    #+#             */
-/*   Updated: 2025/03/31 13:25:30 by mfedorys         ###   ########.fr       */
+/*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/16 10:57:07 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../include/minishell.h"
 
-// Глобальна змінна для обробки статусу (як $?)
-t_minish g_minish;
-
-void	free_split(char **str)
-{
-	size_t	i;
-
-	i = 0;
-	if (str == NULL || *str == NULL)
-	{
-		return ;
-	}
-	while (str[i] != NULL)
-	{
-		free(str[i++]);
-	}
-	free(str);
-}
-
-// Ініціалізація shell: змінні середовища
-void	init_shell(t_list **env, char **envp)
-{
-	*env = NULL;
-	g_minish.last_exit_code = 0;
-	if (init_env(env, envp) == -1)
-	{
-		ft_putstr_fd("Failed to initialize environment\n", 2);
-		exit(EXIT_FAILURE);
-	}
-}
-
-void	signal_handler(int signo)
-{
-	if (signo == SIGINT)
-	{
-		ft_putstr_fd("\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		g_minish.last_exit_code = 130;
-	}
-	else if (signo == SIGQUIT)
-	{
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}
-
-char	*get_prompt(void)
-{
-	char	*prompt;
-	char	*tmp;
-	char	*user;
-
-
-	tmp = get_env_value("USER", g_minish.env);
-	user = ft_strjoin(tmp, "'s" RESET "-" GRN "minishell");
-	if(user==NULL)  //checking if user is null
-		return(free(user), free(tmp), NULL);
-	free(tmp);                          //LEAK!
-
-	tmp = get_env_value("USER", g_minish.env);
-	user = ft_strjoin(tmp, "'s" RESET "-" GRN "minishell");
-	if(user==NULL)  //checking if user is null
-		return(free(user), free(tmp), NULL);
-	free(tmp);                          //LEAK!
-	if (g_minish.last_exit_code == 0)
-	{
-		tmp = ft_strjoin(CYAN, user);
-		if (tmp == NULL)
-			return (free(user), NULL);
-			return (free(user), NULL);
-		prompt = ft_strjoin(tmp, RESET "> ");
-		free(tmp);
-	}
-	else
-	{
-		tmp = ft_strjoin3(CYAN, user, " " RED "[");
-		if (tmp == NULL)
-			return (free(tmp), NULL);
-			return (free(tmp), NULL);
-		prompt = ft_strjoin3(tmp, ft_itoa(g_minish.last_exit_code),
-				"]" RESET "> ");
-		free(tmp);
-	}
-	free(user);
-	free(user);
-	return (prompt);
-}
-
-t_cmd	*get_cmd_lst(void)
+static int	minishell_loop(t_minish *msh)
 {
 	char	*line;
-	char	*prompt;
-	t_cmd	*cmd_list;
 
-	prompt = get_prompt();
-		line = readline(prompt);
+	line = get_line(msh);
 	if (!line)
-		return (NULL);
+	{
+		msh->exit_code = 0;
+		return (-1);
+	}
+	if (g_received_signal == SIGINT)
+	{
+		msh->exit_code = 128 + SIGINT;
+		g_received_signal = 0;
+	}
 	if (*line)
 		add_history(line);
-	cmd_list = parse_input(line, g_minish.env);
+	msh->cmd = parse_input(line, msh->env, msh);
 	free(line);
-	free(prompt);
-	return (cmd_list);
+	if (msh->cmd == NULL)
+		return (0);
+	execute_commands(msh);
+	free_cmd_list(&msh->cmd);
+	unlink_heredocs(&msh->heredocs);
+	return (0);
 }
 
-void	print_arr_of_str(char **str)
-{
-	size_t i;
-
-	i = 0;
-	if (str == NULL || *str == NULL)
-	{
-		return ;
-	}
-	while (str[i] != NULL)
-	{
-		printf("str[%lu]: %s\n", i, str[i]);
-		i++;
-	}
-}
-
-// Основний цикл shell
 int	main(int argc, char **argv, char **envp)
 {
-	t_cmd	*cmd_list;
-	int	std_fd[2];
+	t_minish	msh;
+	int			exit_code;
 
 	(void)argc;
 	(void)argv;
-	init_shell(&g_minish.env, envp);
-	std_fd[0] = dup(STDIN_FILENO);
-	std_fd[1] = dup(STDOUT_FILENO);
+	init_shell(&msh, envp);
 	while (1)
 	{
-		dup2(std_fd[0], STDIN_FILENO);
-		dup2(std_fd[1], STDOUT_FILENO);
-		signal(SIGINT, signal_handler);
-		signal(SIGQUIT, signal_handler);
-		cmd_list = get_cmd_lst();
-		if (cmd_list == NULL)
+		set_signals();
+		if (minishell_loop(&msh) == -1)
 			break ;
-		// print_arr_of_str(cmd_list->args);
-		execute_commands(cmd_list, &g_minish);
-		free_cmd_list(cmd_list);
-		if (unlink(HEREDOC_FILENAME_PATH) == -1 && errno != ENOENT)
-			perror(HEREDOC_FILENAME_PATH);
 	}
 	rl_clear_history();
-	ft_lstclear(&g_minish.env, free_env);
-	return (0);
+	exit_code = msh.exit_code;
+	free_shell(&msh);
+	exit(exit_code);
 }

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:49:02 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/22 17:25:32 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/14 10:49:26 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ int		ft_isprint(int c);
 Check whether c is space, tab, white space... 
 */
 int		ft_isblank(int c);
+
+int		ft_isspace(int c);
 /*
 Convert all letters from lowercase to uppercase
 */
@@ -114,6 +116,8 @@ The  atoi() function converts the initial portion
 of the string pointed to by nptr to int.
 */
 int		ft_atoi(const char *str);
+long	ft_atol(const char *str);
+size_t	ft_atoul(const char *str);
 
 /*
 Fills *s with zeros
@@ -289,6 +293,9 @@ Description:
 	Negative numbers must be handled.
 */
 char	*ft_itoa(int n);
+char	*ft_ltoa(long n);
+char	*ft_ultoa(size_t numb);
+
 /*
 Parameters:
 	s: The string on which to iterate.
@@ -433,6 +440,6 @@ int		ft_lstsize(t_list *lst);
 /*
 Free allocate memory for 2d char array
 */
-void	ft_free_2d_array(char **arr, int row);
+void	free_split(char **str);
 
 #endif

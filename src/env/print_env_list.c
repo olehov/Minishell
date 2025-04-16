@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   print_env_list.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2024/12/09 14:23:43 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/16 12:36:53 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+// #include "../../include/minishell.h"
+#include "../../include/ft_env.h"
 
-size_t	ft_strlen(const char *str)
+void	print_env_list(t_list *lst)
 {
-	size_t	i;
+	t_env	*env;
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
+	env = NULL;
+	if (lst == NULL)
+		return ;
+	while (lst != NULL)
 	{
-		i++;
+		env = (t_env *)(lst->content);
+		if (env == NULL)
+			return ;
+		printf("%s=%s\n", env->key, env->value);
+		lst = lst->next;
 	}
-	return (i);
 }

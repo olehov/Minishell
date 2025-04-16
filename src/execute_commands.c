@@ -6,224 +6,130 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/03/29 21:55:57 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 12:44:52 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
 #include <linux/limits.h>
+#include "../include/minishell.h"
+#include "../include/ft_redirection.h"
+#include <sys/wait.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <dirent.h>
 
-// // --- Обробка редіректів ---
-// void handle_redirects(t_cmd *cmd)
-// {
-//     int fd;
-
-//     if (cmd->infile && ft_strcmp(cmd->infile, "<<") != 0) // звичайний редірект
-//     {
-//         fd = open(cmd->infile, O_RDONLY);
-//         if (fd < 0)
-//         {
-//             perror("Input file open failed");
-//             exit(EXIT_FAILURE);
-//         }
-//         dup2(fd, STDIN_FILENO);
-//         close(fd);
-//     }
-//     if (cmd->outfile)
-//     {
-//         if (cmd->append_out)
-//             fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_APPEND, 0644);
-//         else
-//             fd = open(cmd->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-//         if (fd < 0)
-//         {
-//             perror("Output file open failed");
-//             exit(EXIT_FAILURE);
-//         }
-//         dup2(fd, STDOUT_FILENO);
-//         close(fd);
-//     }
-// }
-
-void printerrcode(t_minish *msh)
+static void	reset_std_fds(int std_fd[2])
 {
-	if (msh != NULL)
-	{
-		perror(ft_itoa(msh->last_exit_code));
-	}
+	dup2(std_fd[0], STDIN_FILENO);
+	dup2(std_fd[1], STDOUT_FILENO);
+	close(std_fd[0]);
+	close(std_fd[1]);
 }
 
-// --- Вбудовані команди ---
-void execute_builtin(t_cmd *cmd, t_minish *msh)
+static int	run_single_cmd(t_cmd *cmd, t_minish *msh)
 {
-	if (ft_strcmp(cmd->args[0], "cd") == 0)
-		ft_cd(cmd->args[1], &msh->env);
-	else if (ft_strcmp(cmd->args[0], "pwd") == 0)
-		printpwd();
-	else if (ft_strcmp(cmd->args[0], "env") == 0)
-		print_env_list(msh->env);
-	else if (ft_strcmp(cmd->args[0], "export") == 0)
-		ft_set_env(&msh->env, cmd->args[1]);
-	else if (ft_strcmp(cmd->args[0], "unset") == 0)
-		ft_env_unset(&msh->env, cmd->args[1]);
-	else if (ft_strcmp(cmd->args[0], "exit") == 0)
-		exit(0);
-	else if (ft_strcmp(cmd->args[0], "echo") == 0)
-		ft_echo(cmd->args + 1);
-	else if (ft_strcmp(cmd->args[0], "$?") == 0)
-		printerrcode(msh);
-}
+	int		std_fd[2];
 
-int	is_builtin(char **cmd)
-{
-	if (ft_strcmp(cmd[0], "cd") == 0 || ft_strcmp(cmd[0], "pwd") == 0
-		|| ft_strcmp(cmd[0], "env") == 0 || ft_strcmp(cmd[0], "export") == 0
-		|| ft_strcmp(cmd[0], "unset") == 0 || ft_strcmp(cmd[0], "exit") == 0
-		|| ft_strcmp(cmd[0], "$?") == 0)
-		return (1);
-	else if (ft_strcmp(cmd[0], "echo") == 0 && cmd[1] != NULL && ft_strcmp(cmd[1], "-n") == 0)
-		return (1);
-	return (0);
-}
-
-size_t	get_row_size(char **args)
-{
-	size_t	i;
-
-	i = 0;
-	if (args == NULL || *args == NULL)
+	if (cmd && !cmd->next && cmd->args != NULL && is_builtin(cmd->args))
 	{
-		return (0);
-	}
-	while (args[i] != NULL)
-	{
-		i++;
-	}
-	return (i);
-}
-
-// --- Heredoc перед виконанням ---
-void handle_heredoc(t_cmd *cmd, t_list *env)
-{
-	if (cmd->infile && ft_strcmp(cmd->infile, "<<") == 0)
-	{
-		ft_heredoc(cmd->delimiter, env);
-		if (cmd->infile != NULL)
-			free(cmd->infile);
-		cmd->infile = ft_strdup(HEREDOC_FILENAME_PATH);
-	}
-}
-
-char *find_executable_path(char *cmd, t_list *env)
-{
-	if (ft_strchr(cmd, '/'))
-	{
-		if (access(cmd, X_OK) == 0)
-			return ft_strdup(cmd);
-		return NULL;
-	}
-
-	char **paths = split_path(env, "PATH", ':');
-	if (!paths)
-		return NULL;
-
-	char *full_path = NULL;
-	for (int i = 0; paths[i]; i++)
-	{
-		char *tmp = ft_strjoin(paths[i], "/");
-		full_path = ft_strjoin(tmp, cmd);
-		free(tmp);
-
-		if (access(full_path, X_OK) == 0)
+		if (ft_strcmp(cmd->args[0], "exit") == 0)
 		{
-			ft_free_2d_array(paths, -1);
-			return full_path;
+			if (ft_exit(cmd->args, msh, false) == -1)
+			{
+				msh->exit_code = EXIT_FAILURE;
+				return (-1);
+			}
 		}
-		free(full_path);
+		std_fd[0] = dup(STDIN_FILENO);
+		std_fd[1] = dup(STDOUT_FILENO);
+		if (handle_redirect(cmd) == -1)
+		{
+			msh->exit_code = EXIT_FAILURE;
+			return (-1);
+		}
+		execute_builtin(cmd, msh);
+		return (reset_std_fds(std_fd), 0);
 	}
-	ft_free_2d_array(paths, -1);
-	return NULL;
+	return (1);
 }
 
-void	print_args(char	**args)
+static void	run_child(t_cmd *cmd, t_minish *msh, pid_t pid)
 {
-	size_t	i;
-
-	i = 0;
-	if (args == NULL || *args == NULL)
+	if (pid == -1)
+		exit(EXIT_FAILURE);
+	if (pid == 0)
 	{
-		return ;
+		if (ft_strcmp(cmd->args[0], "exit") == 0)
+		{
+			if (ft_exit(cmd->args, msh, true) == -1)
+				exit(EXIT_FAILURE);
+		}
+		msh->exit_code = 0;
+		if (handle_redirect(cmd) == -1)
+		{
+			clear_data(msh);
+			exit(EXIT_FAILURE);
+		}
+		launch_child(cmd, msh);
 	}
-	while (args[i] != NULL)
-	{
-		printf("args[%lu]: %s\n", i, args[i]);
-		i++;
-	}
+	cmd->pid = pid;
 }
 
-void	print_error(char *cmd)
+static void	wait_all_proccesses(t_minish *msh, t_cmd *cmd)
 {
-	ft_putstr_fd(cmd, STDERR_FILENO);
-	if (errno == 127)
-		ft_putstr_fd(": command not found", STDERR_FILENO);
-	else
-		perror(cmd);
-}
+	int		status;
+	int		last_status;
+	int		count_sig_exit;
+	int		sig_exit;
 
-// --- Основна функція виконання з пайпами ---
-void execute_commands(t_cmd *cmd_list, t_minish *msh)
-{
-	t_cmd *cmd = cmd_list;
-	int prev_fd = -1;
-	int pipe_fd[2];
-	pid_t pid;
-
+	status = 0;
+	count_sig_exit = 0;
+	signal(SIGINT, SIG_IGN);
 	while (cmd)
 	{
-		if (cmd->next)
-			pipe(pipe_fd);
-		handle_redirects(cmd);
-		handle_heredoc(cmd, msh->env);
-		if (is_builtin(cmd->args) && !cmd->next && prev_fd == -1)
+		if (cmd->pid != -1)
 		{
-			execute_builtin(cmd, msh);
-			g_minish.last_exit_code = errno;
-			return ;
+			waitpid(cmd->pid, &status, 0);
+			sig_exit = ft_decode_wstatus(status);
+			if (sig_exit == 128 + SIGINT || sig_exit == 128 + SIGQUIT)
+				count_sig_exit = 1;
 		}
-		pid = fork();
-		if (pid == 0)
-		{
-			if (prev_fd != -1) dup2(prev_fd, 0);
-			if (cmd->next) dup2(pipe_fd[1], 1);
-			if (is_builtin(cmd->args))
-			{
-				execute_builtin(cmd, msh);
-				exit(0);
-			}
-			char *path = find_executable_path(cmd->args[0], msh->env);
-			char **envp = env_list_to_str_arr(msh->env);
-			execve(path, cmd->args, envp); // виклик зовнішньої команди
-			msh->last_exit_code = 127;
-			errno = msh->last_exit_code;
-			// perror("execve failed");
-			print_error(cmd->args[0]);
-			exit(msh->last_exit_code);
-		}
-		else
-		{
-			waitpid(pid, &msh->last_exit_code, 0);
-			if (WIFEXITED(msh->last_exit_code))
-				g_minish.last_exit_code = WEXITSTATUS(msh->last_exit_code);
-			else if (WIFSIGNALED(msh->last_exit_code))
-				g_minish.last_exit_code = 128 + WTERMSIG(msh->last_exit_code);
-			if (prev_fd != -1)
-				close(prev_fd);
-			if (cmd->next)
-			{
-				close(pipe_fd[1]);
-				prev_fd = pipe_fd[0];
-			}
-		}
+		if (cmd->next == NULL)
+			last_status = ft_decode_wstatus(status);
 		cmd = cmd->next;
 	}
+	if (count_sig_exit == 1)
+		ft_putendl_fd("", STDOUT_FILENO);
+	msh->exit_code = last_status;
+}
+
+void	execute_commands(t_minish *msh)
+{
+	t_cmd	*cmd;
+	pid_t	pid;
+
+	cmd = msh->cmd;
+	if (run_single_cmd(cmd, msh) != 1)
+		return ;
+	while (cmd)
+	{
+		if (cmd->args == NULL)
+		{
+			msh->exit_code = 0;
+			cmd = cmd->next;
+			continue ;
+		}
+		if (cmd->next && pipe(cmd->pipe_fd) == -1)
+		{
+			ft_putstr_fd(" Broken pipe\n", STDERR_FILENO);
+			exit(EXIT_FAILURE);
+		}
+		pid = fork();
+		run_child(cmd, msh, pid);
+		cmd = cmd->next;
+	}
+	close_all_pipes(msh->cmd);
+	wait_all_proccesses(msh, msh->cmd);
 }

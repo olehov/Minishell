@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   free_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/10 15:21:16 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/16 12:31:37 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+// #include "../../include/minishell.h"
+#include "../../include/ft_env.h"
 
-size_t	ft_strlen(const char *str)
+void	free_env(void *env)
 {
-	size_t	i;
-
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
-	{
-		i++;
-	}
-	return (i);
+	if (env == NULL)
+		return ;
+	if (((t_env *)env)->key != NULL)
+		free(((t_env *)env)->key);
+	if (((t_env *)env)->value != NULL)
+		free(((t_env *)env)->value);
+	free(env);
 }

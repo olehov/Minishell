@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/14 15:00:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/09 11:36:45 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/11 15:19:20 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/16 12:13:08 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../headers/libft.h"
+// #include "../../include/minishell.h"
+#include "../../include/ft_parser.h"
 
-size_t	ft_strlen(const char *str)
+char	*remove_outer_quotes(char *str)
 {
-	size_t	i;
+	char	*new_str;
+	size_t	len;
 
-	i = 0;
-	if (str == NULL)
-		return (0);
-	while (str[i] != '\0')
+	len = ft_strlen(str);
+	if ((str[0] == '"' && str[len - 1] == '"')
+		|| (str[0] == '\'' && str[len - 1] == '\''))
 	{
-		i++;
+		new_str = ft_substr(str, 1, len - 2);
+		return (new_str);
 	}
-	return (i);
+	return (ft_strdup(str));
 }

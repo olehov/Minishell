@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ogrativ <ogrativ@student.42london.com      +#+  +:+       +#+        */
+/*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/19 15:37:48 by ogrativ           #+#    #+#             */
-/*   Updated: 2024/04/24 17:27:46 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/02 18:48:52 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ enum e_space_type
 	_endl = '\n',
 	_tabv = '\v', //vertical tab
 	_formfeed = '\f',
-	_carriageret = '\r'
+	_carriageret = '\r',
+	_space = ' '
 };
 
 int	ft_printf(const char *format, ...);
