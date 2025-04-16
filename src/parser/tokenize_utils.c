@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:18:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 12:13:20 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 23:24:47 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,25 +55,87 @@ void	handle_quote(char *input, t_tokenizer_ctx *ctx, t_minish *msh)
 {
 	int		start;
 	char	*part;
-	char	*tmp;
+	char	*quoted;
 	char	quote;
 
 	(void)msh;
-	quote = input[ctx->i];
+	quote = input[ctx->i];           // ' або "
 	ctx->quote_char = quote;
 	ctx->in_quotes = 1;
 	ctx->i++;
 	start = ctx->i;
+
 	while (input[ctx->i] && input[ctx->i] != quote)
 		ctx->i++;
-	part = ft_substr(input, start - 1, (ctx->i - start + 2));
-	tmp = remove_quotes(part);
-	ctx->accum = append_part(ctx->accum, tmp);
+
+	part = ft_substr(input, start, ctx->i - start);
+
+	if (quote == '\'')
+		quoted = ft_strjoin3("'", part, "'");
+	else
+		quoted = ft_strjoin3("\"", part, "\"");
+
+	ctx->accum = append_part(ctx->accum, quoted);
+
 	free(part);
-	free(tmp);
+	free(quoted);
+
 	if (input[ctx->i] == quote)
 		ctx->i++;
 }
+
+
+// void	handle_quote(char *input, t_tokenizer_ctx *ctx, t_minish *msh)
+// {
+// 	int		start;
+// 	char	*part;
+// 	char	*quoted;
+// 	char	quote;
+
+// 	(void)msh;
+// 	quote = input[ctx->i];
+// 	ctx->quote_char = quote;
+// 	ctx->in_quotes = 1;
+// 	ctx->i++;
+// 	start = ctx->i;
+// 	while (input[ctx->i] && input[ctx->i] != quote)
+// 		ctx->i++;
+
+// 	part = ft_substr(input, start, ctx->i - start); // без лапок
+// 	quoted = ft_strjoin3("\"", part, "\"");         // завжди у подвійних лапках
+// 	ctx->accum = append_part(ctx->accum, quoted);
+
+// 	free(part);
+// 	free(quoted);
+
+// 	if (input[ctx->i] == quote)
+// 		ctx->i++;
+// }
+
+
+// void	handle_quote(char *input, t_tokenizer_ctx *ctx, t_minish *msh)
+// {
+// 	int		start;
+// 	char	*part;
+// 	char	*tmp;
+// 	char	quote;
+
+// 	(void)msh;
+// 	quote = input[ctx->i];
+// 	ctx->quote_char = quote;
+// 	ctx->in_quotes = 1;
+// 	ctx->i++;
+// 	start = ctx->i;
+// 	while (input[ctx->i] && input[ctx->i] != quote)
+// 		ctx->i++;
+// 	part = ft_substr(input, start - 1, (ctx->i - start + 2));
+// 	tmp = remove_quotes(part);
+// 	ctx->accum = append_part(ctx->accum, tmp);
+// 	free(part);
+// 	free(tmp);
+// 	if (input[ctx->i] == quote)
+// 		ctx->i++;
+// }
 
 int	handle_double_redirect(char *input, t_token *tokens, t_tokenizer_ctx *ctx)
 {

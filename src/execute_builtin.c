@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 12:50:46 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 10:54:34 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 21:31:21 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	execute_builtin(t_cmd *cmd, t_minish *msh)
 	else if (ft_strcmp(cmd->args[0], "unset") == 0)
 		ft_env_unset(&msh->env, cmd->args[1]);
 	else if (ft_strcmp(cmd->args[0], "echo") == 0)
-		exit_code = ft_echo(cmd->args + 1);
+		ft_echo(cmd->args + 1);
 	else if (ft_strcmp(cmd->args[0], "$?") == 0)
 		printerrcode(msh);
 	if (exit_code == -1)

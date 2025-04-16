@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:14:40 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/15 15:54:48 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 17:55:01 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,14 @@ void	free_shell(t_minish *msh)
 	if (msh->cmd != NULL)
 		free_cmd_list(&msh->cmd);
 	if (msh->pipe_split != NULL)
+	{
 		free_split(msh->pipe_split);
+		msh->pipe_split = NULL;
+	}
+	if (msh->tokens != NULL)
+	{
+		free_tokens(msh->tokens);
+		msh->tokens = NULL;
+	}
 	msh->exit_code = 0;
 }

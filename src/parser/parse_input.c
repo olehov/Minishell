@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:48:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 12:13:04 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 20:11:27 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static t_cmd	*parse_single_pipe_segment(char *segment, t_cmd *prev,
 	msh->tokens = tokenize_with_quote_info(segment, msh);
 	cmd = parse_single_command_from_tokens(msh->tokens, msh);
 	free_tokens(msh->tokens);
+	msh->tokens = NULL;
 	if (!cmd)
 		return (NULL);
 	cmd->prev = prev;
@@ -50,12 +51,14 @@ static int	parse_all_segments(t_minish *msh, t_cmd **first, t_cmd **last)
 		if (!cmd)
 		{
 			free_cmd_list(first);
-			free_split(msh->pipe_split);
-			msh->pipe_split = NULL;
+			msh->cmd = NULL;
 			return (1);
 		}
 		if (!*first)
+		{
 			*first = cmd;
+			msh->cmd = *first;
+		}
 		else
 			(*last)->next = cmd;
 		*last = cmd;
@@ -73,7 +76,11 @@ t_cmd	*parse_input(char *input, t_list *env, t_minish *msh)
 	init_parse_input(&first, &last, &(int){0});
 	msh->pipe_split = split_outside_quotes(input, '|');
 	if (parse_all_segments(msh, &first, &last))
+	{
+		free_split(msh->pipe_split);
+		msh->pipe_split = NULL;
 		return (NULL);
+	}
 	free_split(msh->pipe_split);
 	msh->pipe_split = NULL;
 	return (first);

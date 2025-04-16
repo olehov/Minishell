@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 15:09:29 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 20:03:24 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ static void	wait_all_proccesses(t_minish *msh, t_cmd *cmd)
 
 	status = 0;
 	count_sig_exit = 0;
-	signal(SIGINT, SIG_IGN);
 	while (cmd)
 	{
 		if (cmd->pid != -1)

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:43:08 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 12:15:56 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 21:31:06 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	ft_echo(char **args)
 	i = 0;
 	newline = 1;
 	if (args == NULL || args[i] == NULL)
-		return (-1);
+		return (ft_putendl_fd("", STDOUT_FILENO), 0);
 	while (args[i] && ft_strncmp(args[i], "-n", 2) == 0 && only_n(args[i]))
 	{
 		newline = 0;

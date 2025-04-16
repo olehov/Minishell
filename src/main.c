@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 14:49:40 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 20:03:46 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	reset_shell(t_minish *msh)
 		free_cmd_list(&msh->cmd);
 	if (msh->pipe_split != NULL)
 		free_split(msh->pipe_split);
-	msh->exit_code = 0;
 }
 
 static int	minishell_loop(t_minish *msh)

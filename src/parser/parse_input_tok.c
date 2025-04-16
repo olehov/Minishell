@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:32:48 by mfedorys          #+#    #+#             */
-/*   Updated: 2025/04/16 12:13:41 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 23:22:50 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,63 @@
 static void	process_argument_token(t_token *tokens,
 	t_cmd *cmd, t_minish *msh, int *i)
 {
-	char	*processed;
-	char	*env_applied;
+	char	*processed = NULL;
+	char	*env_applied = NULL;
 
-	processed = NULL;
-	env_applied = NULL;
 	if (!(tokens[*i].in_quotes && tokens[*i].quote_char == '\''))
 		env_applied = process_env(tokens[*i].value, msh->env, msh);
 	else
 		env_applied = ft_strdup(tokens[*i].value);
+
 	if (ft_strchr(tokens[*i].value, '='))
 	{
 		processed = get_processed(env_applied, tokens, *i);
 	}
-	else if (!processed)
-		processed = remove_outer_quotes(env_applied);
+	else
+	{
+		if (tokens[*i].quote_char != 0)
+			processed = ft_strdup(env_applied); // 🔥 зберігаємо лапки!
+		else
+			processed = ft_strdup(env_applied);
+	}
 	free(env_applied);
 	add_arg(cmd, processed);
 }
+
+
+// static void	process_argument_token(t_token *tokens,
+// 	t_cmd *cmd, t_minish *msh, int *i)
+// {
+// 	char	*processed;
+// 	char	*env_applied;
+
+// 	processed = NULL;
+// 	env_applied = NULL;
+// 	if (!(tokens[*i].in_quotes && tokens[*i].quote_char == '\''))
+// 		env_applied = process_env(tokens[*i].value, msh->env, msh);
+// 	else
+// 		env_applied = ft_strdup(tokens[*i].value);
+// 	// if (ft_strchr(tokens[*i].value, '='))
+// 	// {
+// 	// 	processed = get_processed(env_applied, tokens, *i);
+// 	// }
+// 	// else if (!processed)
+// 	// 	processed = remove_outer_quotes(env_applied);
+// 	if (ft_strchr(tokens[*i].value, '='))
+// 	{
+// 		processed = get_processed(env_applied, tokens, *i);
+// 	}
+// 	else if (!processed)
+// 	{
+// 		if (tokens[*i].quote_char != 0)
+// 			processed = remove_outer_quotes(env_applied);
+// 		else
+// 			processed = ft_strdup(env_applied);
+// 	}
+
+// 	free(env_applied);
+// 	add_arg(cmd, processed);
+// }
 
 static int	parse_single_command_from_tokens_loop(t_token *tokens,
 	t_minish *msh, int *i, t_cmd *cmd)
