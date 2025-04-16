@@ -6,11 +6,10 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:47:56 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 12:51:11 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:40:58 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../include/minishell.h"
 #include "../../include/ft_utils.h"
 #include <signal.h>
 #include <sys/wait.h>
