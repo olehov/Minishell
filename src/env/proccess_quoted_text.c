@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:30:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 13:43:02 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:54:40 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ int	process_quoted_text(const char *input, int start,
 	i = start + 1;
 	while (input[i] && input[i] != state->quote)
 	{
+		if (process_quoted_text_loop(input, &i, state, msh) == -1)
+			return (-1);
 		if (process_quoted_text_loop(input, &i, state, msh) == -1)
 			return (-1);
 	}

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:30:58 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 13:17:27 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:51:16 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,43 +39,45 @@ int	ft_is_quote(char c)
 	return (c == '\'' || c == '"');
 }
 
-
 /*removing quotes from line*/
 
 char	*remove_quotes(char *str)
 {
-	int		i = 0, j = 0;
-	char	quote = 0;
-	char	*res = malloc(ft_strlen(str) + 1);
-	if (!res) return NULL;
+	int		i;
+	int		j;
+	char	quote;
+	char	*res;
 
+	i = 0;
+	j = 0;
+	quote = 0;
+	res = malloc(ft_strlen(str) + 1);
+	if (!res)
+		return (NULL);
 	while (str[i])
 	{
 		if (!quote && ft_is_quote(str[i])
 			&& is_closed_quote(str[i], i + 1, str))
-		{
-			quote = str[i++];
-			continue ;
-		}
+			quote = str[i];
 		else if (quote && str[i] == quote)
-		{
 			quote = 0;
-			i++;
-			continue ;
-		}
 		else
-			res[j++] = str[i++];
+			res[j++] = str[i];
+		i++;
 	}
 	res[j] = '\0';
 	return (res);
 }
 
-// ===== Додавання аргументу в масив =====
-void add_arg(t_cmd *cmd, char *arg)
+// ===== adding arguments to array =====
+void	add_arg(t_cmd *cmd, char *arg)
 {
-	int i = 0;
-	char **new_args;
+	int		i;
+	int		j;
+	char	**new_args;
 
+	i = 0;
+	j = 0;
 	if (!cmd->args)
 	{
 		cmd->args = malloc(sizeof(char *) * 2);
@@ -83,13 +85,17 @@ void add_arg(t_cmd *cmd, char *arg)
 		cmd->args[1] = NULL;
 		return ;
 	}
-	while (cmd->args[i]) i++;
+	while (cmd->args[i])
+		i++;
 	new_args = malloc(sizeof(char *) * (i + 2));
-	for (int j = 0; j < i; j++) new_args[j] = cmd->args[j];
+	while (j < i)
+	{
+		new_args[j] = cmd->args[j];
+		j++;
+	}
 	new_args[i] = arg;
 	new_args[i + 1] = NULL;
-	if (cmd->args != NULL)
-		free(cmd->args);
+	free(cmd->args);
 	cmd->args = new_args;
 }
 

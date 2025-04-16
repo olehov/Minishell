@@ -20,6 +20,10 @@ PARSER_DIR = parser
 UTILS_DIR = utils
 SIGNALS_DIR = signals
 HEREDOC_DIR = $(BUILTIN_DIR)/ft_heredoc
+PARSER_DIR = parser
+UTILS_DIR = utils
+SIGNALS_DIR = signals
+HEREDOC_DIR = $(BUILTIN_DIR)/ft_heredoc
 
 # -------------------------
 #     SOURCE FILES
@@ -76,7 +80,23 @@ SRC = $(SRC_DIR)/main.c \
       $(SRC_DIR)/$(HEREDOC_DIR)/free_heredoc.c \
       $(SRC_DIR)/$(HEREDOC_DIR)/check_delimiter.c \
       $(SRC_DIR)/$(HEREDOC_DIR)/get_delimiter.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/ft_is_directory.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/is_builtin.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/handle_redirect.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/ft_exit_utils.c \
+      $(SRC_DIR)/$(BUILTIN_DIR)/ft_exit.c \
+      $(SRC_DIR)/$(HEREDOC_DIR)/ft_heredoc.c \
+      $(SRC_DIR)/$(HEREDOC_DIR)/init_heredoc.c \
+      $(SRC_DIR)/$(HEREDOC_DIR)/unlink_heredocs.c \
+      $(SRC_DIR)/$(HEREDOC_DIR)/free_heredoc.c \
+      $(SRC_DIR)/$(HEREDOC_DIR)/check_delimiter.c \
+      $(SRC_DIR)/$(HEREDOC_DIR)/get_delimiter.c \
       $(SRC_DIR)/$(CMD_DIR)/init_cmd_node.c \
+	$(SRC_DIR)/$(CMD_DIR)/add_redirection.c \
+	$(SRC_DIR)/$(CMD_DIR)/free_cmd_list.c \
+      $(SRC_DIR)/$(CMD_DIR)/get_cmd_lst.c \
+      $(SRC_DIR)/$(SIGNALS_DIR)/ft_signals.c \
+      $(SRC_DIR)/$(SIGNALS_DIR)/set_signals.c
 	$(SRC_DIR)/$(CMD_DIR)/add_redirection.c \
 	$(SRC_DIR)/$(CMD_DIR)/free_cmd_list.c \
       $(SRC_DIR)/$(CMD_DIR)/get_cmd_lst.c \

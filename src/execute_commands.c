@@ -6,13 +6,14 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 13:17:00 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:50:19 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <linux/limits.h>
 #include <linux/limits.h>
 #include "../include/minishell.h"
+#include "../include/ft_redirection.h"
 #include "../include/ft_redirection.h"
 #include <sys/wait.h>
 #include <unistd.h>
@@ -52,6 +53,8 @@ static int	run_single_cmd(t_cmd *cmd, t_minish *msh)
 		}
 		execute_builtin(cmd, msh);
 		return (reset_std_fds(std_fd), 0);
+		execute_builtin(cmd, msh);
+		return (reset_std_fds(std_fd), 0);
 	}
 	return (1);
 }
@@ -70,6 +73,8 @@ static void	run_child(t_cmd *cmd, t_minish *msh, pid_t pid)
 		msh->exit_code = 0;
 		if (handle_redirect(cmd) == -1)
 		{
+			clear_data(msh);
+			exit(EXIT_FAILURE);
 			clear_data(msh);
 			exit(EXIT_FAILURE);
 		}
@@ -119,6 +124,7 @@ void	execute_commands(t_minish *msh)
 		if (cmd->args == NULL)
 		{
 			msh->exit_code = 0;
+			msh->exit_code = 0;
 			cmd = cmd->next;
 			continue ;
 		}
@@ -130,6 +136,7 @@ void	execute_commands(t_minish *msh)
 			exit(EXIT_FAILURE);
 		}
 		pid = fork();
+		run_child(cmd, msh, pid);
 		run_child(cmd, msh, pid);
 		cmd = cmd->next;
 	}

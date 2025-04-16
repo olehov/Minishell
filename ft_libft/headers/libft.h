@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:49:02 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 13:11:05 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:44:26 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ The  atoi() function converts the initial portion
 of the string pointed to by nptr to int.
 */
 int		ft_atoi(const char *str);
+long	ft_atol(const char *str);
+size_t	ft_atoul(const char *str);
 long	ft_atol(const char *str);
 size_t	ft_atoul(const char *str);
 
@@ -295,6 +297,9 @@ Description:
 	Negative numbers must be handled.
 */
 char	*ft_itoa(int n);
+char	*ft_ltoa(long n);
+char	*ft_ultoa(size_t numb);
+
 char	*ft_ltoa(long n);
 char	*ft_ultoa(size_t numb);
 

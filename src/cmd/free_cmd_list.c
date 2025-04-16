@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 14:01:48 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 13:14:12 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:53:10 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,13 @@
 #include "../../include/ft_redirection.h"
 
 void	free_cmd_node(t_cmd *cmd)
+void	free_cmd_node(t_cmd *cmd)
 {
 	size_t	i;
+	size_t	i;
 
+	i = 0;
+	if (cmd == NULL)
 	i = 0;
 	if (cmd == NULL)
 	{
@@ -52,5 +56,6 @@ void	free_cmd_list(t_cmd **cmd)
 		free_cmd_node(*cmd);
 		*cmd = next;
 	}
+	cmd = NULL;
 	cmd = NULL;
 }
