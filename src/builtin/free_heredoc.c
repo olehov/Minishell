@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_env_value.c                                    :+:      :+:    :+:   */
+/*   free_heredoc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/23 14:13:25 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 13:16:02 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/07 12:11:16 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 20:05:00 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../../include/minishell.h"
-#include "../../include/ft_env.h"
+#include "../../include/ft_heredoc.h"
 
-char	*get_env_value(const char *var_name, t_list *lst)
+void	free_heredoc(void *value)
 {
-	t_env	*env;
+	t_heredoc	*heredoc;
 
-	env = ft_get_env(lst, (char *)var_name);
-	if (env == NULL)
-		return ("\0");
-	return (env->value);
+	heredoc = (t_heredoc *)value;
+	if (heredoc == NULL)
+		return ;
+	if (heredoc->delimiter != NULL)
+		free(heredoc->delimiter);
+	if (heredoc->filename != NULL)
+		free(heredoc->filename);
+	free(heredoc);
 }

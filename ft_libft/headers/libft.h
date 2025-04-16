@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/11 12:49:02 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/14 10:49:26 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:11:05 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ int		ft_isprint(int c);
 Check whether c is space, tab, white space... 
 */
 int		ft_isblank(int c);
+
+int		ft_isspace(int c);
 
 int		ft_isspace(int c);
 /*
@@ -440,6 +442,7 @@ int		ft_lstsize(t_list *lst);
 /*
 Free allocate memory for 2d char array
 */
+void	free_split(char **str);
 void	free_split(char **str);
 
 #endif

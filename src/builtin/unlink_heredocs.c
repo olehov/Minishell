@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_env_value.c                                    :+:      :+:    :+:   */
+/*   unlink_heredocs.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/23 14:13:25 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 13:16:02 by ogrativ          ###   ########.fr       */
+/*   Created: 2025/04/07 12:32:11 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/09 20:15:01 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../../include/minishell.h"
-#include "../../include/ft_env.h"
+#include "../../include/ft_heredoc.h"
 
-char	*get_env_value(const char *var_name, t_list *lst)
+void	unlink_heredocs(t_list **heredocs)
 {
-	t_env	*env;
+	t_list		*node;
+	t_heredoc	*heredoc_node;
 
-	env = ft_get_env(lst, (char *)var_name);
-	if (env == NULL)
-		return ("\0");
-	return (env->value);
+	node = *heredocs;
+	if (node == NULL)
+		return ;
+	while (node)
+	{
+		heredoc_node = node->content;
+		unlink(heredoc_node->filename);
+		node = node->next;
+	}
+	ft_lstclear(heredocs, free_heredoc);
 }

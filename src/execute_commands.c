@@ -6,10 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 12:44:52 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:17:00 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <linux/limits.h>
 #include <linux/limits.h>
 #include "../include/minishell.h"
 #include "../include/ft_redirection.h"
@@ -123,6 +124,8 @@ void	execute_commands(t_minish *msh)
 		}
 		if (cmd->next && pipe(cmd->pipe_fd) == -1)
 		{
+			ft_putstr_fd(" Broken pipe\n", STDERR_FILENO);
+			exit(EXIT_FAILURE);
 			ft_putstr_fd(" Broken pipe\n", STDERR_FILENO);
 			exit(EXIT_FAILURE);
 		}
