@@ -6,11 +6,10 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 16:15:16 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 13:15:49 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:43:02 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../../include/minishell.h"
 #include "../../include/ft_env.h"
 #include <stdio.h>
 #include <stdlib.h>

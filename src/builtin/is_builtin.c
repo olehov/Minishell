@@ -6,11 +6,10 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 17:04:30 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 12:28:11 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:43:02 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../../include/minishell.h"
 #include "../../include/ft_builtin.h"
 
 int	is_builtin(char **cmd)

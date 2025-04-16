@@ -6,11 +6,10 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 14:13:25 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 13:16:02 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:43:02 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../../include/minishell.h"
 #include "../../include/ft_env.h"
 
 char	*get_env_value(const char *var_name, t_list *lst)

@@ -6,11 +6,10 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:50:42 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 12:12:20 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:43:02 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../../include/minishell.h"
 #include "../../include/ft_parser.h"
 
 int	handle_word(char *input, int *i, char **accum, t_minish *msh)

@@ -6,12 +6,11 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:53:20 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 12:12:30 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:43:02 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/ft_parser.h"
-// #include "../../include/minishell.h"
 
 static void	launch_heredoc_child(t_minish *msh, t_cmd *cmd,
 	t_heredoc *heredoc)

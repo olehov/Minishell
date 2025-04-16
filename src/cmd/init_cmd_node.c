@@ -6,13 +6,12 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 13:00:32 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 13:14:28 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/16 13:43:02 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/ft_cmd.h"
 
-// Ініціалізація структури команди
 t_cmd	*init_cmd_node(void)
 {
 	t_cmd	*cmd;
