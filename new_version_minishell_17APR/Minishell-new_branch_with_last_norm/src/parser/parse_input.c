@@ -1,0 +1,94 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_input.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mfedorys <mfedorys@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/03/15 14:48:03 by ogrativ           #+#    #+#             */
+/*   Updated: 2025/04/17 17:11:26 by mfedorys         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+// #include "../../include/minishell.h"
+#include "../../include/ft_parser.h"
+#include "../../include/ft_cmd.h"
+#include <fcntl.h>
+#include <unistd.h>
+
+static int	init_parse_input(t_cmd **first, t_cmd **last, int *i)
+{
+	*first = NULL;
+	*last = NULL;
+	*i = 0;
+	return (0);
+}
+
+static t_cmd	*parse_single_pipe_segment(char *segment, t_cmd *prev,
+											t_minish *msh)
+{
+	t_cmd	*cmd;
+
+//				if (segment == NULL || ft_isalnum())
+//					return (perror("Do not use empty string\n"), NULL);
+	msh->tokens = tokenize_with_quote_info(segment, msh);
+	cmd = parse_single_command_from_tokens(msh->tokens, msh);
+	free_tokens(msh->tokens);
+	msh->tokens = NULL;
+	if (!cmd)
+		return (NULL);
+	cmd->prev = prev;
+	return (cmd);
+}
+
+static int	parse_all_segments(t_minish *msh, t_cmd **first, t_cmd **last)
+{
+	int		i;
+	t_cmd	*cmd;
+
+	i = 0;
+	while (msh->pipe_split[i])
+	{
+		cmd = parse_single_pipe_segment(msh->pipe_split[i], *last, msh);
+		if (!cmd)
+		{
+			free_cmd_list(first);
+			msh->cmd = NULL;
+			return (1);
+		}
+		if (!*first)
+		{
+			*first = cmd;
+			msh->cmd = *first;
+		}
+		else
+			(*last)->next = cmd;
+		*last = cmd;
+		i++;
+	}
+	return (0);
+}
+
+int	*parse_input(char *input, t_list *env, t_minish *msh)
+{
+	t_cmd	*first;
+	t_cmd	*last;
+
+	(void)env;
+	if(ft_syntax_error(input))
+	{	
+		msh->exit_code = 2;
+		return (ft_putendl_fd("syntax error", STDERR_FILENO), //change it);  //
+	}
+	init_parse_input(&first, &last, &(int){0});
+	msh->pipe_split = split_outside_quotes(input, '|');
+	if (parse_all_segments(msh, &first, &last))
+	{
+		free_split(msh->pipe_split);
+		msh->pipe_split = NULL;
+		return (NULL);
+	}
+	free_split(msh->pipe_split);
+	msh->pipe_split = NULL;
+	return (first);
+}

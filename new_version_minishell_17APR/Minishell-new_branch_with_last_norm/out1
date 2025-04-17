@@ -1,0 +1,11 @@
+build
+CMD.txt
+ft_libft
+include
+Makefile
+minishell
+minishell_tester
+out1
+rl.supp
+src
+valgrind-out.txt
