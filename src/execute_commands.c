@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/17 13:52:05 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 14:41:11 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,26 +81,16 @@ static void	wait_all_proccesses(t_minish *msh, t_cmd *cmd)
 {
 	int		status;
 	int		last_status;
-	int		count_sig_exit;
-	int		sig_exit;
 
 	status = 0;
-	count_sig_exit = 0;
 	while (cmd)
 	{
 		if (cmd->pid != -1)
-		{
 			waitpid(cmd->pid, &status, 0);
-			sig_exit = ft_decode_wstatus(status);
-			if (sig_exit == 128 + SIGINT || sig_exit == 128 + SIGQUIT)
-				count_sig_exit = 1;
-		}
 		if (cmd->next == NULL)
 			last_status = ft_decode_wstatus(status);
 		cmd = cmd->next;
 	}
-	if (count_sig_exit == 1)
-		ft_putendl_fd("", STDOUT_FILENO);
 	msh->exit_code = last_status;
 }
 
