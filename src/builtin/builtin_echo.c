@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:43:08 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 21:31:06 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 10:40:14 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ static bool	only_n(char *str)
 
 int	ft_echo(char **args)
 {
-	int	i;
-	int	newline;
+	int		i;
+	int		newline;
 
 	i = 0;
 	newline = 1;

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:04:27 by mfedorys          #+#    #+#             */
-/*   Updated: 2025/04/16 23:18:13 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 10:18:01 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,29 +103,6 @@ bool	handle_redirects(int *i, t_cmd *cmd, t_token *tokens)
 	return (0);
 }
 
-// char	*get_processed(char *env_applied, t_token *tokens, int i)
-// {
-// 	char	*eq;
-// 	char	*quoted_value;
-// 	char	*processed;
-
-// 	eq = NULL;
-// 	quoted_value = NULL;
-// 	processed = NULL;
-// 	eq = ft_strchr(env_applied, '=');
-// 	if (eq && tokens[i].quote_char != 0)
-// 	{
-// 		*eq = '\0';
-// 		quoted_value = ft_strjoin3("\"", eq + 1, "\"");
-// 		processed = ft_strjoin3(env_applied, "=", quoted_value);
-// 		free(quoted_value);
-// 	}
-// 	else
-// 		processed = ft_strdup(env_applied);
-// 		// processed = remove_outer_quotes(env_applied);
-// 	return (processed);
-// }
-
 char	*get_processed(char *env_applied, t_token *tokens, int i)
 {
 	char	*eq;
@@ -136,7 +113,6 @@ char	*get_processed(char *env_applied, t_token *tokens, int i)
 	quoted_value = NULL;
 	processed = NULL;
 	eq = ft_strchr(env_applied, '=');
-
 	if (eq && tokens[i].quote_char != 0)
 	{
 		*eq = '\0';
@@ -145,12 +121,6 @@ char	*get_processed(char *env_applied, t_token *tokens, int i)
 		free(quoted_value);
 	}
 	else
-	{
-		// тут лапки були навмисно — знімаємо їх
-		if (tokens[i].quote_char != 0)
-			processed = remove_outer_quotes(env_applied);
-		else
-			processed = ft_strdup(env_applied);
-	}
+		processed = remove_outer_quotes(env_applied);
 	return (processed);
 }
