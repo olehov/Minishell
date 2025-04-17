@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:19:20 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/17 10:16:26 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 20:40:51 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,36 @@ char	*remove_outer_quotes(char *str)
 	char	*new_str;
 	size_t	len;
 
+	if (!str)
+		return (ft_strdup(""));
+
 	len = ft_strlen(str);
-	if ((str[0] == '"' && str[len - 1] == '"')
-		|| (str[0] == '\'' && str[len - 1] == '\''))
+	if (len >= 2 && ((str[0] == '"' && str[len - 1] == '"') || (str[0] == '\'' && str[len - 1] == '\'')))
 	{
 		new_str = ft_substr(str, 1, len - 2);
+		if (!new_str)
+			return (NULL); // захист на випадок malloc error
 		return (new_str);
 	}
 	return (ft_strdup(str));
 }
+
+
+
+// char	*remove_outer_quotes(char *str)
+// {
+// 	char	*new_str;
+// 	size_t	len;
+
+// 	len = ft_strlen(str);
+// 	if ((str[0] == '"' && str[len - 1] == '"')
+// 		|| (str[0] == '\'' && str[len - 1] == '\''))
+// 	{
+// 		new_str = ft_substr(str, 1, len - 2);
+// 		return (new_str);
+// 	}
+// 	return (ft_strdup(str));
+// }
 
 // char	*remove_outer_quotes(char *str)
 // {

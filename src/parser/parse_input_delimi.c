@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:04:27 by mfedorys          #+#    #+#             */
-/*   Updated: 2025/04/17 11:04:27 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 21:54:19 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,27 @@ void	find_delimiter_bounds(char *input, size_t *start, size_t *end)
 	}
 	*end = i;
 }
+
+// bool	handle_redirects(int *i, t_cmd *cmd, t_token *tokens)
+// {
+// 	if (ft_strcmp(tokens[*i].value, "<") == 0 && tokens[*i + 1].value)
+// 	{
+// 		add_redirection(cmd, _redirect_in, tokens[++(*i)].value);
+// 		return (1);
+// 	}
+// 	else if (ft_strcmp(tokens[*i].value, ">") == 0 && tokens[*i + 1].value)
+// 	{
+// 		add_redirection(cmd, _redirect_out, tokens[++(*i)].value);
+// 		return (1);
+// 	}
+// 	else if (ft_strcmp(tokens[*i].value, ">>") == 0 && tokens[*i + 1].value)
+// 	{
+// 		add_redirection(cmd, _append_to_file, tokens[++(*i)].value);
+// 		return (1);
+// 	}
+// 	return (0);
+// }
+
 
 bool	handle_redirects(int *i, t_cmd *cmd, t_token *tokens)
 {

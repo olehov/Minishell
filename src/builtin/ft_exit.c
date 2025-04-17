@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 19:19:51 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 17:27:35 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 19:19:17 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,14 @@ static int	parce_exit_code(char *str)
 	return ((unsigned char)exit_code);
 }
 
+static int	get_exit_code(char **args, t_minish *msh)
+{
+	if (get_row_size(args) == 1)
+		return (msh->exit_code);
+	else
+		return (parce_exit_code(args[1]));
+}
+
 int	ft_exit(char **args, t_minish *msh, bool is_child)
 {
 	long	exit_code;
@@ -91,7 +99,7 @@ int	ft_exit(char **args, t_minish *msh, bool is_child)
 		clear_data(msh);
 		exit(2);
 	}
-	exit_code = parce_exit_code(args[1]);
+	exit_code = get_exit_code(args, msh);
 	clear_data(msh);
 	exit(exit_code);
 }

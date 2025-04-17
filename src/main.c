@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/17 14:16:58 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 19:46:00 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,7 @@ static int	minishell_loop(t_minish *msh)
 
 	line = get_line(msh);
 	if (!line)
-	{
-		msh->exit_code = 0;
 		return (-1);
-	}
 	if (g_received_signal == SIGINT)
 	{
 		msh->exit_code = 128 + SIGINT;
@@ -41,6 +38,11 @@ static int	minishell_loop(t_minish *msh)
 	}
 	if (*line)
 		add_history(line);
+	if (ft_syntax_error(line) == -1)
+	{
+		msh->exit_code = 2;
+		return (free(line), 0);
+	}
 	msh->cmd = parse_input(line, msh->env, msh);
 	free(line);
 	if (msh->cmd == NULL)

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:32:48 by mfedorys          #+#    #+#             */
-/*   Updated: 2025/04/17 14:15:15 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 21:39:06 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,18 @@ static void	process_argument_token(t_token *tokens,
 	processed = NULL;
 	env_applied = NULL;
 	(void)msh;
-	if (tokens[*i].in_quotes && tokens[*i].quote_char == '\'')
-		env_applied = ft_strdup(tokens[*i].value);
+	if (tokens[*i].quote_char == '\'')
+		env_applied = remove_outer_quotes(tokens[*i].value);
 	else
-		env_applied = process_env(tokens[*i].value, msh->env, msh);
+		env_applied = process_env(tokens[*i].value, msh->env, msh, tokens[*i].quote_char);
 	if (ft_strchr(tokens[*i].value, '=') && tokens[*i].quote_char != '\'')
 		processed = get_processed(env_applied, tokens, *i);
 	else
 	{
 		if (!tokens[*i].in_quotes)
-			processed = remove_outer_quotes(env_applied);
+			processed = remove_quotes(env_applied);
 		else
-			processed = ft_strdup(env_applied);
+			processed = remove_quotes(env_applied);
 	}
 	free(env_applied);
 	add_arg(cmd, processed);

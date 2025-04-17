@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:06:15 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 12:37:17 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 20:20:13 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ char	*get_env_value(const char *var_name, t_list *lst);
 void	print_env_list(t_list *lst);
 
 char	**env_list_to_str_arr(t_list *lst);
-// char	*expand_dbl_quote(char *line, int *i, t_minish *msh);
-char	*process_env(const char *input, t_list *lst, t_minish *msh);
+char	*process_env(const char *input, t_list *lst, t_minish *msh, char quote);
 t_env	*parce_env(char *env);
 
 void	ft_env_unset(t_list **lst, char *env);

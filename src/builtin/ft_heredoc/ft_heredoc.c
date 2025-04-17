@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 12:05:11 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 10:42:31 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 20:20:46 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static int	read_line(int fd, char *delimiter,
 		return (free(buffer), 0);
 	if (in_quotes == false)
 	{
-		tmp = process_env(buffer, msh->env, msh);
+		tmp = process_env(buffer, msh->env, msh, '\"');
 		ft_putendl_fd(tmp, fd);
 		free(tmp);
 	}

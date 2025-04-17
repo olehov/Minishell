@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:14:40 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 17:55:01 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 18:54:21 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,4 @@ void	free_shell(t_minish *msh)
 		free_tokens(msh->tokens);
 		msh->tokens = NULL;
 	}
-	msh->exit_code = 0;
 }

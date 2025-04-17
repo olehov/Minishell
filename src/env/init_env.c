@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 12:19:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/17 10:18:55 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 21:09:17 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static char	*ft_get_key(char *env)
 static char	*get_value(char *key, char *env)
 {
 	char	*value;
+	char	*tmp;
 	size_t	i;
 	size_t	j;
 
@@ -60,7 +61,9 @@ static char	*get_value(char *key, char *env)
 		j++;
 	}
 	value[j] = '\0';
-	return (value);
+	tmp = remove_quotes(value);
+	free(value);
+	return (tmp);
 }
 
 t_env	*parce_env(char *env)

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:48:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/17 10:47:05 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 14:47:55 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ t_cmd	*parse_input(char *input, t_list *env, t_minish *msh)
 	(void)env;
 	init_parse_input(&first, &last, &(int){0});
 	msh->pipe_split = split_outside_quotes(input, '|');
+	if (msh->pipe_split == NULL)
+		return (NULL);
 	if (parse_all_segments(msh, &first, &last))
 	{
 		free_split(msh->pipe_split);

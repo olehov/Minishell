@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/24 15:26:00 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/17 14:17:10 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 19:32:06 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,29 @@ int	extract_quoted_text(const char *input, int *i,
 	return (0);
 }
 
+static int	extract_in_single(const char *input, int *i,
+	t_env_state *state, t_minish *msh)
+{
+	if (state->quote == '"')
+	{
+		if (try_ensure_buffer_capacity(state, 1, input[*i]) == -1)
+			return (-1);
+		(*i)++;
+	}
+	else if (state->quote == 0)
+	{
+		if (extract_quoted_text(input, i, state, msh) == -1)
+			return (-1);
+	}
+	else
+	{
+		if (try_ensure_buffer_capacity(state, 1, input[*i]) == -1)
+			return (-1);
+		(*i)++;
+	}
+	return (1);
+}
+
 static int	extract_qoutes(const char *input, int *i,
 	t_env_state *state, t_minish *msh)
 {
@@ -34,18 +57,7 @@ static int	extract_qoutes(const char *input, int *i,
 	}
 	else if (input[*i] == '\'')
 	{
-		if (state->quote == 0)
-		{
-			if (extract_quoted_text(input, i, state, msh) == -1)
-				return (-1);
-		}
-		else
-		{
-			if (try_ensure_buffer_capacity(state, 1, input[*i]) == -1)
-				return (-1);
-			(*i)++;
-		}
-		return (1);
+		return (extract_in_single(input, i, state, msh));
 	}
 	return (0);
 }
@@ -60,7 +72,7 @@ int	extract_variable(const char *input, int *i,
 		err = extract_qoutes(input, i, state, msh);
 		if (err == -1)
 			return (-1);
-		else if (input[*i] == '$' && !err)
+		if (input[*i] == '$' && !err)
 		{
 			if (extract_variable_value(input, i, state, msh) == -1)
 				return (-1);

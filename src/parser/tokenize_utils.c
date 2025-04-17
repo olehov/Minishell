@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:18:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/17 14:00:00 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 21:44:02 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,11 @@ void	handle_quote(char *input, t_tokenizer_ctx *ctx, t_minish *msh)
 	quote = input[ctx->i];
 	ctx->quote_char = quote;
 	ctx->in_quotes = 1;
-	ctx->i++;
 	start = ctx->i;
+	ctx->i++;
 	while (input[ctx->i] && input[ctx->i] != quote)
+		ctx->i++;
+	if (input[ctx->i] == quote)
 		ctx->i++;
 	part = ft_substr(input, start, ctx->i - start);
 	ctx->accum = append_part(ctx->accum, part);

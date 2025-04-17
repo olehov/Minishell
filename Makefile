@@ -34,6 +34,7 @@ SRC = $(SRC_DIR)/main.c \
 	$(SRC_DIR)/$(UTILS_DIR)/pipe_utils.c \
 	$(SRC_DIR)/$(UTILS_DIR)/ft_decode_wstatus.c \
 	$(SRC_DIR)/$(UTILS_DIR)/get_prompt.c \
+	$(SRC_DIR)/$(UTILS_DIR)/ft_syntax_error.c \
 	$(SRC_DIR)/$(PARSER_DIR)/parse_input.c \
 	$(SRC_DIR)/$(PARSER_DIR)/parse_input_delimi.c \
 	$(SRC_DIR)/$(PARSER_DIR)/parse_input_tok.c \
