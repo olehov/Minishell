@@ -6,11 +6,10 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:18:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/17 10:23:47 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 14:00:00 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "../../include/minishell.h"
 #include "../../include/ft_parser.h"
 
 void	set_token(t_token *token, t_tokenizer_ctx *ctx)
@@ -55,7 +54,6 @@ void	handle_quote(char *input, t_tokenizer_ctx *ctx, t_minish *msh)
 {
 	int		start;
 	char	*part;
-	char	*tmp;
 	char	quote;
 
 	(void)msh;
@@ -66,14 +64,9 @@ void	handle_quote(char *input, t_tokenizer_ctx *ctx, t_minish *msh)
 	start = ctx->i;
 	while (input[ctx->i] && input[ctx->i] != quote)
 		ctx->i++;
-	part = ft_substr(input, start - 1, (ctx->i - start + 2));
-	printf("part: %s\n", part);
-	tmp = remove_quotes(part);
-	printf("tmp: %s\n", tmp);
-	ctx->accum = append_part(ctx->accum, tmp);
-	printf("accum: %s\n", ctx->accum);
+	part = ft_substr(input, start, ctx->i - start);
+	ctx->accum = append_part(ctx->accum, part);
 	free(part);
-	free(tmp);
 	if (input[ctx->i] == quote)
 		ctx->i++;
 }

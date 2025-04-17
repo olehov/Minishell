@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:48:03 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 20:11:27 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 10:47:05 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	init_parse_input(t_cmd **first, t_cmd **last, int *i)
 }
 
 static t_cmd	*parse_single_pipe_segment(char *segment, t_cmd *prev,
-											t_minish *msh)
+	t_minish *msh)
 {
 	t_cmd	*cmd;
 

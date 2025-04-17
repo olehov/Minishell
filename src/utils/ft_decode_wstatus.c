@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 14:47:56 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 20:09:56 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 11:37:45 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	ft_decode_wstatus(int wstatus)
 	{
 		if (WCOREDUMP(wstatus))
 			ft_putstr_fd("Quit (core dumped)\n", STDERR_FILENO);
-		else if (WTERMSIG (wstatus) == SIGKILL)
+		if (WTERMSIG (wstatus) == SIGKILL)
 			ft_putstr_fd("Killed\n", STDERR_FILENO);
 		status = (128 + WTERMSIG (wstatus));
 	}

@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 18:41:57 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 21:14:04 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 14:02:31 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 # include <ctype.h>
 # include <errno.h>
 
-
-char	*env_remove_quotes(const char *str);
 /**
  * @brief Structure used to maintain state during environment variable parsing.
  */

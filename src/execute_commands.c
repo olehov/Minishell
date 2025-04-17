@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:47:37 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 20:03:24 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/17 13:52:05 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ void	execute_commands(t_minish *msh)
 	{
 		if (cmd->args == NULL)
 		{
-			msh->exit_code = 0;
 			cmd = cmd->next;
 			continue ;
 		}

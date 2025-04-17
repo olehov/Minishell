@@ -60,6 +60,7 @@ SRC = $(SRC_DIR)/main.c \
 	$(SRC_DIR)/$(ENV_DIR)/env_list_to_arr.c \
 	$(SRC_DIR)/$(ENV_DIR)/split_path.c \
 	$(SRC_DIR)/$(ENV_DIR)/free_env.c \
+	$(SRC_DIR)/$(ENV_DIR)/extract_variable_value.c \
 	$(SRC_DIR)/$(BUILTIN_DIR)/printpwd.c \
 	$(SRC_DIR)/$(BUILTIN_DIR)/builtin_echo.c \
 	$(SRC_DIR)/$(BUILTIN_DIR)/ft_cd.c \
