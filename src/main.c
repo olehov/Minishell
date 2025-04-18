@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/15 14:50:07 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/17 19:46:00 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/18 00:15:50 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,11 @@ static int	minishell_loop(t_minish *msh)
 	}
 	if (*line)
 		add_history(line);
-	if (ft_syntax_error(line) == -1)
-	{
-		msh->exit_code = 2;
-		return (free(line), 0);
-	}
+	// if (ft_syntax_error(line) == 1)
+	// {
+	// 	msh->exit_code = 2;
+	// 	return (free(line), 0);
+	// }
 	msh->cmd = parse_input(line, msh->env, msh);
 	free(line);
 	if (msh->cmd == NULL)

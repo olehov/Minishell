@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:04:27 by mfedorys          #+#    #+#             */
-/*   Updated: 2025/04/17 21:54:19 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/18 00:33:53 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,5 +143,6 @@ char	*get_processed(char *env_applied, t_token *tokens, int i)
 	}
 	else
 		processed = remove_outer_quotes(env_applied);
+		// processed = ft_strdup(env_applied);
 	return (processed);
 }

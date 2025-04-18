@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:18:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/17 21:44:02 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/18 01:02:59 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,18 +60,63 @@ void	handle_quote(char *input, t_tokenizer_ctx *ctx, t_minish *msh)
 	quote = input[ctx->i];
 	ctx->quote_char = quote;
 	ctx->in_quotes = 1;
-	start = ctx->i;
 	ctx->i++;
-	while (input[ctx->i] && input[ctx->i] != quote)
+	start = ctx->i;
+	while (input[ctx->i])
+	{
+		if (input[ctx->i] == quote)
+			break ;
 		ctx->i++;
-	if (input[ctx->i] == quote)
-		ctx->i++;
+	}
 	part = ft_substr(input, start, ctx->i - start);
 	ctx->accum = append_part(ctx->accum, part);
 	free(part);
 	if (input[ctx->i] == quote)
 		ctx->i++;
 }
+
+
+// void	handle_quote(char *input, t_tokenizer_ctx *ctx, t_minish *msh)
+// {
+// 	int		start;
+// 	char	*part;
+// 	char	quote;
+
+// 	(void)msh;
+// 	quote = input[ctx->i];
+// 	ctx->quote_char = quote;
+// 	ctx->in_quotes = 1;
+// 	start = ctx->i;
+// 	ctx->i++;
+// 	while (input[ctx->i] && input[ctx->i] != quote)
+// 		ctx->i++;
+// 	if (input[ctx->i] == quote)
+// 		ctx->i++;
+// 	part = ft_substr(input, start, ctx->i - start);
+// 	ctx->accum = append_part(ctx->accum, part);
+// 	free(part);
+// }
+
+
+// void	handle_quote(char *input, t_tokenizer_ctx *ctx, t_minish *msh)
+// {
+// 	int		start;
+// 	char	*part;
+// 	char	quote;
+
+// 	(void)msh;
+// 	start = ctx->i;
+// 	quote = input[ctx->i++];
+// 	ctx->quote_char = quote;
+// 	ctx->in_quotes = 1;
+// 	while (input[ctx->i] && input[ctx->i] != quote)
+// 		ctx->i++;
+// 	part = ft_substr(input, start, ctx->i - start);
+// 	ctx->accum = append_part(ctx->accum, part);
+// 	free(part);
+// 	if (input[ctx->i] == quote)
+// 		ctx->i++;
+// }
 
 int	handle_double_redirect(char *input, t_token *tokens, t_tokenizer_ctx *ctx)
 {

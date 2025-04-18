@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:16:31 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/17 22:04:43 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/18 01:05:09 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,96 @@
 
 static void	handle_next_token_literal(char *input, t_tokenizer_ctx *ctx)
 {
+	int		start;
 	char	*part;
-	size_t	start;
 	char	quote;
 
 	start = ctx->i;
 	if (input[ctx->i] == '\'' || input[ctx->i] == '"')
 	{
 		quote = input[ctx->i++];
+		start = ctx->i;
 		while (input[ctx->i] && input[ctx->i] != quote)
 			ctx->i++;
-		// if (input[ctx->i] == quote)
-		// 	ctx->i++;
-		part = ft_substr(input, start, ctx->i - start + 1);
+		part = ft_substr(input, start, ctx->i - start);
 		ctx->accum = append_part(ctx->accum, part);
 		free(part);
-		return ;
+		if (input[ctx->i] == quote)
+			ctx->i++;
 	}
-	while (input[ctx->i] && !ft_isspace(input[ctx->i])
-		&& input[ctx->i] != '<' && input[ctx->i] != '>'
-		&& input[ctx->i] != '|' && input[ctx->i] != '&'
-		&& input[ctx->i] != ';')
-		ctx->i++;
-	part = ft_substr(input, start, ctx->i - start);
-	ctx->accum = append_part(ctx->accum, part);
-	free(part);
+	else
+	{
+		while (input[ctx->i] && !ft_isspace(input[ctx->i])
+			&& input[ctx->i] != '<' && input[ctx->i] != '>'
+			&& input[ctx->i] != '|'
+			&& input[ctx->i] != '&' && input[ctx->i] != ';')
+			ctx->i++;
+		part = ft_substr(input, start, ctx->i - start);
+		ctx->accum = append_part(ctx->accum, part);
+		free(part);
+	}
 }
+
+
+// static void	handle_next_token_literal(char *input, t_tokenizer_ctx *ctx)
+// {
+// 	char	*part;
+// 	size_t	start;
+// 	char	quote;
+
+// 	start = ctx->i;
+// 	if (input[ctx->i] == '\'' || input[ctx->i] == '"')
+// 	{
+// 		quote = input[ctx->i++];
+// 		while (input[ctx->i] && input[ctx->i] != quote)
+// 			ctx->i++;
+// 		if (input[ctx->i] == quote)
+// 			ctx->i++;
+// 	}
+// 	else
+// 	{
+// 		while (input[ctx->i] && !ft_isspace(input[ctx->i])
+// 			&& input[ctx->i] != '<' && input[ctx->i] != '>'
+// 			&& input[ctx->i] != '|' && input[ctx->i] != '&'
+// 			&& input[ctx->i] != ';' && input[ctx->i] != '\''
+// 			&& input[ctx->i] != '\"')
+// 			ctx->i++;
+// 	}
+// 	part = ft_substr(input, start, ctx->i - start);
+// 	ctx->accum = append_part(ctx->accum, part);
+// 	free(part);
+// }
+
+
+// static void	handle_next_token_literal(char *input, t_tokenizer_ctx *ctx)
+// {
+// 	char	*part;
+// 	size_t	start;
+// 	char	quote;
+
+// 	start = ctx->i;
+// 	if (input[ctx->i] == '\'' || input[ctx->i] == '"')
+// 	{
+// 		quote = input[ctx->i++];
+// 		while (input[ctx->i] && input[ctx->i] != quote)
+// 			ctx->i++;
+// 		if (input[ctx->i] == quote)
+// 			ctx->i++;
+// 		part = ft_substr(input, start, ctx->i + 1 - start);
+// 		// printf("part: %s\n\n", part);
+// 		ctx->accum = append_part(ctx->accum, part);
+// 		free(part);
+// 		return ;
+// 	}
+// 	while (input[ctx->i] && !ft_isspace(input[ctx->i])
+// 		&& input[ctx->i] != '<' && input[ctx->i] != '>'
+// 		&& input[ctx->i] != '|' && input[ctx->i] != '&'
+// 		&& input[ctx->i] != ';')
+// 		ctx->i++;
+// 	part = ft_substr(input, start, ctx->i - start);
+// 	ctx->accum = append_part(ctx->accum, part);
+// 	free(part);
+// }
 
 static void	skip_space(char	*input, t_tokenizer_ctx *ctx)
 {
