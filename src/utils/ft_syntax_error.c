@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/17 11:59:04 by mfedorys          #+#    #+#             */
-/*   Updated: 2025/04/18 06:26:18 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/18 09:52:05 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ static bool	check_pipe(char *input, int *i)
 	(*i)++;
 	while (input[*i] && ft_isspace(input[*i]))
 		(*i)++;
-	if (input[*i] == '|' || input[*i] == '\0'
-		|| input[*i] == '<' || input[*i] == '>')
+	if (input[*i] == '|' || input[*i] == '\0')
 		return (print_syntax_err(&input[*i]), true);
 	return (false);
 }
@@ -71,6 +70,7 @@ int	ft_syntax_error(char *input)
 	i = 0;
 	if (check_start(input))
 		return (1);
+	i = ft_strlen(input);
 	while (input[i])
 	{
 		if (input[i] == '\'' || input[i] == '\"')
