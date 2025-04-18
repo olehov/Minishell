@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:32:48 by mfedorys          #+#    #+#             */
-/*   Updated: 2025/04/18 04:48:08 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/18 06:10:40 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,42 +15,8 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-// static void	process_argument_token(t_token *tokens, t_cmd *cmd, t_minish *msh, int *i)
-// {
-// 	char	*env_applied;
-// 	char	*processed;
-// 	char	*tmp;
-
-// 	env_applied = NULL;
-// 	processed = NULL;
-// 	(void)msh;
-// 	if (tokens[*i].value[0] == '\'')
-// 		env_applied = remove_outer_quotes(tokens[*i].value);
-// 	else
-// 		env_applied = process_env(tokens[*i].value, msh->env, msh, tokens[*i].quote_char);
-// 	if (ft_strchr(tokens[*i].value, '=') && tokens[*i].quote_char != '\'')
-// 	{
-// 		processed = get_processed(env_applied, tokens, *i);
-// 	}
-// 	else
-// 	{
-// 		if (env_applied[0] == '\"')
-// 			processed = remove_outer_quotes(env_applied);
-// 		else
-// 			processed = ft_strdup(env_applied);
-// 	}
-// 	free(env_applied);
-// 	if (!processed || processed[0] == '\0')
-// 	{
-// 		free(processed);
-// 		return ;
-// 	}
-// 	tmp = remove_quotes(processed);
-// 	free(processed);
-// 	add_arg(cmd, tmp);
-// }
-
-static void	process_argument_token(t_token *tokens, t_cmd *cmd, t_minish *msh, int *i)
+static void	process_argument_token(t_token *tokens,
+	t_cmd *cmd, t_minish *msh, int *i)
 {
 	char	*processed;
 

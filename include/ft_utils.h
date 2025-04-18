@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:02:27 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/17 19:38:54 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/18 06:24:33 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ char	*get_prompt(t_minish *msh);
 char	*remove_quotes(char *str);
 char	**split_path(t_list *lst, char *key, char c);
 char	**split_outside_quotes(char *input, char delimiter);
+
+void	print_syntax_err(char *str);
 
 void	free_tokens(t_token *tokens);
 

@@ -35,6 +35,7 @@ SRC = $(SRC_DIR)/main.c \
 	$(SRC_DIR)/$(UTILS_DIR)/ft_decode_wstatus.c \
 	$(SRC_DIR)/$(UTILS_DIR)/get_prompt.c \
 	$(SRC_DIR)/$(UTILS_DIR)/ft_syntax_error.c \
+	$(SRC_DIR)/$(UTILS_DIR)/print_syntax_err.c \
 	$(SRC_DIR)/$(PARSER_DIR)/parse_input.c \
 	$(SRC_DIR)/$(PARSER_DIR)/parse_input_delimi.c \
 	$(SRC_DIR)/$(PARSER_DIR)/parse_input_tok.c \
@@ -46,6 +47,7 @@ SRC = $(SRC_DIR)/main.c \
 	$(SRC_DIR)/$(PARSER_DIR)/handle_word.c \
 	$(SRC_DIR)/$(PARSER_DIR)/parce_heredoc.c \
 	$(SRC_DIR)/$(PARSER_DIR)/free_tokens.c \
+	$(SRC_DIR)/$(PARSER_DIR)/append_part.c \
 	$(SRC_DIR)/$(ENV_DIR)/print_env_list.c \
 	$(SRC_DIR)/$(ENV_DIR)/ft_env_unset.c \
 	$(SRC_DIR)/$(ENV_DIR)/ft_set_env.c \

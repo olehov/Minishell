@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 16:18:18 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/18 04:52:14 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/18 06:16:11 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,68 +29,6 @@ void	reset_quote_state(t_tokenizer_ctx *ctx)
 	ctx->in_quotes = 0;
 	ctx->quote_char = 0;
 }
-
-char	*append_part(char *accum, char *part, t_minish *msh)
-{
-	char	*tmp;
-	char	*joined;
-	char	*processed;
-	char	*cleaned;
-	bool	is_removed;
-
-	is_removed = 0;
-	tmp = NULL;
-	joined = NULL;
-	processed = NULL;
-	if (part[0] == '\'')
-	{
-		is_removed = 1;
-		// processed = process_env(part, msh->env, msh, '\'');
-		// processed = remove_quotes(part);
-		processed = remove_outer_quotes(part);
-	}
-	else
-		processed = process_env(part, msh->env, msh, 0);
-	if (processed && !is_removed)
-	{
-		cleaned = remove_quotes(processed);
-		free(processed);
-		processed = cleaned;
-	}
-	if (accum)
-	{
-		tmp = ft_strdup(accum);
-		free(accum);
-		accum = NULL;
-		joined = ft_strjoin(tmp, processed);
-		free(tmp);
-	}
-	else
-		joined = ft_strdup(processed);
-	free(processed);
-	return (joined);
-}
-
-
-// char	*append_part(char *accum, char *part)
-// {
-// 	char	*tmp;
-// 	char	*joined;
-
-// 	tmp = NULL;
-// 	joined = NULL;
-// 	if (accum)
-// 	{
-// 		tmp = ft_strdup(accum);
-// 		free(accum);
-// 		accum = NULL;
-// 		joined = ft_strjoin(tmp, part);
-// 		free(tmp);
-// 	}
-// 	else
-// 		joined = ft_strdup(part);
-// 	return (joined);
-// }
 
 void	handle_quote(char *input, t_tokenizer_ctx *ctx, t_minish *msh)
 {
