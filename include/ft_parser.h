@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/16 12:03:31 by ogrativ           #+#    #+#             */
-/*   Updated: 2025/04/16 12:59:23 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/18 03:41:45 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,8 @@ void	handle_quote(char *input, t_tokenizer_ctx *ctx, t_minish *msh);
  * @param part The part to append.
  * @return New string with appended part.
  */
-char	*append_part(char *accum, char *part);
+// char	*append_part(char *accum, char *part);
+char	*append_part(char *accum, char *part, t_minish *msh);
 
 /**
  * @brief Resets the quote-tracking state of the tokenizer.

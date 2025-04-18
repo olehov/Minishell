@@ -6,7 +6,7 @@
 /*   By: ogrativ <ogrativ@student.42london.com>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 19:32:48 by mfedorys          #+#    #+#             */
-/*   Updated: 2025/04/18 00:53:55 by ogrativ          ###   ########.fr       */
+/*   Updated: 2025/04/18 04:48:08 by ogrativ          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,73 +15,47 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-// static void	process_argument_token(t_token *tokens,
-// 	t_cmd *cmd, t_minish *msh, int *i)
+// static void	process_argument_token(t_token *tokens, t_cmd *cmd, t_minish *msh, int *i)
 // {
-// 	char	*processed;
 // 	char	*env_applied;
+// 	char	*processed;
+// 	char	*tmp;
 
-// 	processed = NULL;
 // 	env_applied = NULL;
+// 	processed = NULL;
 // 	(void)msh;
-
-// 	if (tokens[*i].quote_char == '\'')
+// 	if (tokens[*i].value[0] == '\'')
 // 		env_applied = remove_outer_quotes(tokens[*i].value);
 // 	else
 // 		env_applied = process_env(tokens[*i].value, msh->env, msh, tokens[*i].quote_char);
-
 // 	if (ft_strchr(tokens[*i].value, '=') && tokens[*i].quote_char != '\'')
 // 	{
 // 		processed = get_processed(env_applied, tokens, *i);
 // 	}
 // 	else
 // 	{
-// 		if (tokens[*i].quote_char == '\'')
-// 			processed = ft_strdup(env_applied);
-// 		else if (tokens[*i].in_quotes)
+// 		if (env_applied[0] == '\"')
 // 			processed = remove_outer_quotes(env_applied);
 // 		else
 // 			processed = ft_strdup(env_applied);
 // 	}
-
 // 	free(env_applied);
-
 // 	if (!processed || processed[0] == '\0')
 // 	{
 // 		free(processed);
 // 		return ;
 // 	}
-// 	add_arg(cmd, processed);
+// 	tmp = remove_quotes(processed);
+// 	free(processed);
+// 	add_arg(cmd, tmp);
 // }
 
 static void	process_argument_token(t_token *tokens, t_cmd *cmd, t_minish *msh, int *i)
 {
-	char	*env_applied;
 	char	*processed;
 
-	env_applied = NULL;
-	processed = NULL;
 	(void)msh;
-
-	// Завжди пробуємо обробити змінні
-	env_applied = process_env(tokens[*i].value, msh->env, msh, tokens[*i].quote_char);
-
-	if (ft_strchr(tokens[*i].value, '=') && tokens[*i].quote_char != '\'')
-	{
-		processed = get_processed(env_applied, tokens, *i);
-	}
-	else
-	{
-		// Після розширення змінних — знімаємо лапки тільки якщо потрібно
-		if (tokens[*i].quote_char == '\'' || tokens[*i].quote_char == '"')
-			processed = remove_outer_quotes(env_applied);
-		else
-			processed = ft_strdup(env_applied);
-	}
-
-	free(env_applied);
-
-	// Якщо результат пустий — пропускаємо токен
+	processed = ft_strdup(tokens[*i].value);
 	if (!processed || processed[0] == '\0')
 	{
 		free(processed);
@@ -89,38 +63,6 @@ static void	process_argument_token(t_token *tokens, t_cmd *cmd, t_minish *msh, i
 	}
 	add_arg(cmd, processed);
 }
-
-
-
-// static void	process_argument_token(t_token *tokens,
-// 	t_cmd *cmd, t_minish *msh, int *i)
-// {
-// 	char	*processed;
-// 	char	*env_applied;
-// 	// char	*tmp;
-
-// 	processed = NULL;
-// 	env_applied = NULL;
-// 	(void)msh;
-// 	// if (tokens[*i].quote_char == '\'')
-// 	// 	env_applied = remove_outer_quotes(tokens[*i].value);
-// 	// else
-// 		env_applied = process_env(tokens[*i].value, msh->env, msh, tokens[*i].quote_char);
-// 	if (ft_strchr(tokens[*i].value, '=') && tokens[*i].quote_char != '\'')
-// 		processed = get_processed(env_applied, tokens, *i);
-// 	else
-// 	{
-// 		if (tokens[*i].quote_char == '\'')
-// 			processed = remove_outer_quotes(env_applied); // Одинарні лапки — знімаємо
-// 		else
-// 			processed = ft_strdup(env_applied); // Подвійні лапки — залишаємо лапки!
-// 	}
-// 	// tmp = process_env(processed, msh->env, msh, tokens[*i].quote_char);
-// 	free(env_applied);
-// 	// free(processed);
-// 	add_arg(cmd, processed);
-// 	// add_arg(cmd, tmp);
-// }
 
 static int	parse_single_command_from_tokens_loop(t_token *tokens,
 	t_minish *msh, int *i, t_cmd *cmd)
